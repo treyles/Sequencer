@@ -1,0 +1,112 @@
+* {
+    margin: 0px;
+    padding: 0px; 
+}
+
+body, #container, #grid {
+    background-color: #e2e2e0;
+}
+
+@font-face {
+    font-family: 'futuramedium';
+    src: url('font/futurabt-medium-webfont.woff2') format('woff2'),
+         url('font/futurabt-medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+#container {
+    width: 825px;
+    margin: auto;
+    padding-top: 120px;
+}
+
+#grid {
+    width: 825px;
+    text-align: center;
+    padding: 0px;
+}
+
+.beat {
+    z-index: 1;
+    display: inline-block;
+    background-color: #404040;
+    border-radius: 50%;
+    width: 3px;
+    height: 3px;
+    margin: 20px;
+    cursor: pointer;
+    padding: 4px;
+    background-clip: content-box;
+    transition: transform .1s cubic-bezier(.8, 0, .2, 1);
+    animation-duration: .1s;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+    animation-timing-function: steps(1.5);
+}
+
+#menu {
+    margin-top: 50px;
+    padding-right: 25px;
+    padding-left: 25px;
+    /*background-color: blue;*/
+    /*height: 400px;*/
+}
+
+.text {
+    float: left;
+    padding: 8px 0px 0px 0px;
+    /*background-color: red;*/
+    width: 24%;
+    height: 130px;
+    font-family: 'futuramedium';
+    font-size: 17px;
+    letter-spacing: .5px;
+    color: #404040;
+}
+
+#logo {
+    padding: 0px;
+    font-size: 25px !important;
+    width: 28%;
+}
+
+ul {
+    padding-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    list-style: none;
+    line-height: 25px;
+}
+
+.beat:hover {
+    transform: scale(5);
+    background-color: #404040;
+}
+
+.beat.on {
+    transform: scale(5);
+    background-color: #404040;
+    box-shadow: 0px 1px 1px #d9d9d9;
+}
+ 
+.beat.on.step {
+    box-shadow: 0px 1px 1px #d9d9d9;
+    transform: scale(12);
+}
+
+.step {
+    background-color: transparent;
+}
+
+.bullet {
+    margin: 0px 10px 0px 0px;
+}
+
+.bullet:hover {
+    transform: scale(3);
+}
+
