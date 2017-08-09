@@ -1,7 +1,7 @@
 var ticks = 16;
 var stepNum = 1;
 
-Tone.Transport.bpm.value = 120;
+Tone.Transport.bpm.value = 200;
 Tone.Transport.start();
 
 // TODO: IIFE here to run init
@@ -13,6 +13,12 @@ var sounds = [
     {name: 'mid', soundFile: 'sounds/newsounds/hat-open.mp3'},
     {name: 'bass', soundFile: 'sounds/newsounds/kick.mp3'}, 
     {name: 'snare', soundFile: 'sounds/newsounds/clap.mp3'}
+];
+
+var loopSounds = [
+    'sounds/newsounds/crackle.wav',
+    'sounds/newsounds/alicepad1.wav',
+    'sounds/newsounds/alicepad2.wav'
 ];
 
 // get soundFiles to pass as a new array in multiPlayer
@@ -51,16 +57,17 @@ for (var i = 0; i < grid.children.length; i++) {
 /**
  * Sequencer
  */
+var soundOutput = new Tone.Gain().toMaster()
 
-// tone.js effects, output audio goes through here
-var delay = new Tone.PingPongDelay("8n", 0.5).toMaster();
-
-// tone.js multiplayer, Loads samples and handles buffers
+// multiplayer for drum sounds
 var multiPlayer = new Tone.MultiPlayer(soundFileArray, function() {
     multiPlayer.start();
-}).connect(delay);
+}).connect(soundOutput);
 
-var loop = new Tone.Sequence(function(time) {
+multiPlayer.volume.value = (-10);
+
+// loop sequence
+var sequence = new Tone.Sequence(function(time) {
     var beat = document.querySelectorAll('.beat');
     
     // animate steps
@@ -95,7 +102,63 @@ var loop = new Tone.Sequence(function(time) {
     if (stepNum > ticks) {
         stepNum = 1;
     }
-}, sounds, "8n").start();
+}, sounds, '8n').start();
+
+
+/**
+ * Loop
+*/
+
+var loopPlayer = new Tone.MultiPlayer(loopSounds, function() {
+    loopPlayer.start();
+}).connect(soundOutput);
+
+var vinyl = new Tone.Loop(function(time) {
+    loopPlayer.start(0, time, 0);
+}, '2m');
+
+var melody = new Tone.Loop(function(time) {
+    loopPlayer.start(1, time, 0);
+}, '1m');
+
+
+
+// click event
+var ul = document.querySelector('ul');
+
+ul.addEventListener('click', function(e) {
+    var target = e.target.classList;
+    var hasPlay = target.contains('playing')
+    var togglePlay = target.toggle('playing');
+
+    if (target.contains('vinyl')) {
+        hasPlay ? vinyl.stop() : vinyl.start('@1m');
+        togglePlay;
+    }
+
+    if (target.contains('melody')) {
+        hasPlay ? melody.stop() : melody.start('@1m');
+        togglePlay;
+    }
+
+    if (e.target.id == 'melody') console.log('melody');
+    if (e.target.id == 'bass-line') console.log('bass-line');
+});
+
+
+
+// keypress 
+window.addEventListener("keydown", function(e) {
+    if (e.keyCode == "32") {
+        Tone.Transport.stop();
+    }
+    if (e.keyCode == "80") {
+        loopPlayer.start(2);
+    }
+});
+ 
+
+
 
 
 

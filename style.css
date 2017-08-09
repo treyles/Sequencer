@@ -80,6 +80,7 @@ ul {
     font-weight: normal;
     list-style: none;
     line-height: 25px;
+    cursor: pointer;
 }
 
 .beat:hover {
@@ -100,13 +101,5 @@ ul {
 
 .step {
     background-color: transparent;
-}
-
-.bullet {
-    margin: 0px 10px 0px 0px;
-}
-
-.bullet:hover {
-    transform: scale(3);
 }
 
