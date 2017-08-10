@@ -18,7 +18,9 @@ var sounds = [
 var loopSounds = [
     'sounds/newsounds/crackle.wav',
     'sounds/newsounds/alicepad1.wav',
-    'sounds/newsounds/alicepad2.wav'
+    'sounds/newsounds/alicepad2.wav',
+    'sounds/newsounds/bass-line1.wav',
+    'sounds/newsounds/bass-line2.wav'
 ];
 
 // get soundFiles to pass as a new array in multiPlayer
@@ -109,51 +111,82 @@ var sequence = new Tone.Sequence(function(time) {
  * Loop
 */
 
+// TODO: combine with multiPlayer and put in object?
+// sound library
 var loopPlayer = new Tone.MultiPlayer(loopSounds, function() {
     loopPlayer.start();
 }).connect(soundOutput);
 
+// vinyl loop
 var vinyl = new Tone.Loop(function(time) {
     loopPlayer.start(0, time, 0);
 }, '2m');
 
+// melody loop
 var melody = new Tone.Loop(function(time) {
     loopPlayer.start(1, time, 0);
 }, '1m');
 
+// bass loop, loops through two bass parts
+var bassPart = 0;
+var bassLine = new Tone.Sequence(function(time) {
+    if (bassPart < 1) {
+        loopPlayer.start(3, time, 0);
+        bassPart++;
+    } else {
+        loopPlayer.start(4, time, 0);
+        bassPart = 0;
+    } 
+}, [1, 2], '8m');
 
 
-// click event
+// click events
 var ul = document.querySelector('ul');
 
 ul.addEventListener('click', function(e) {
-    var target = e.target.classList;
-    var hasPlay = target.contains('playing')
-    var togglePlay = target.toggle('playing');
+    var targetClasses = e.target.classList;
+    var hasPlay = targetClasses.contains('play')
+    var togglePlay = targetClasses.toggle('play');
 
-    if (target.contains('vinyl')) {
-        hasPlay ? vinyl.stop() : vinyl.start('@1m');
+    if (targetClasses.contains('vinyl')) {
+        if (hasPlay) {
+            vinyl.stop();
+        } else {
+            vinyl.start('@1m');
+        }
         togglePlay;
     }
-
-    if (target.contains('melody')) {
-        hasPlay ? melody.stop() : melody.start('@1m');
+    if (targetClasses.contains('melody')) {
+        if (hasPlay) {
+            melody.stop()
+        } else {
+            melody.start('@1m');
+        }
         togglePlay;
     }
-
-    if (e.target.id == 'melody') console.log('melody');
-    if (e.target.id == 'bass-line') console.log('bass-line');
+    if (targetClasses.contains('bass-line')) {
+        if (hasPlay) {
+            bassLine.stop()
+            bassPart = 0;
+        } else {
+           bassLine.start('@2m') 
+        }
+        togglePlay;
+    }
 });
 
 
 
-// keypress 
+// keypress'
 window.addEventListener("keydown", function(e) {
     if (e.keyCode == "32") {
         Tone.Transport.stop();
     }
     if (e.keyCode == "80") {
         loopPlayer.start(2);
+    }
+      if (e.keyCode == "79") {
+        loopPlayer.start(1);
     }
 });
  
