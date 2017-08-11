@@ -9,6 +9,7 @@ Tone.Transport.start();
 // TODO: IIFE here to run init
 
 var sounds = [
+    // change bass name
     {name: 'bass', soundFile: 'sounds/newsounds/kick.mp3'}, 
     {name: 'snare', soundFile: 'sounds/newsounds/clap.mp3'}, 
     {name: 'low', soundFile: 'sounds/newsounds/hat.mp3'}, 
@@ -23,6 +24,19 @@ var loopSounds = [
     'sounds/newsounds/alicepad2.wav',
     'sounds/newsounds/bass-line1.wav',
     'sounds/newsounds/bass-line2.wav'
+];
+
+
+// TODO:
+
+// No Buffer named 4? Plays only first beat
+var altDrums = [
+    'sounds/newsounds/altdrum/lofikick.wav',
+    'sounds/newsounds/altdrum/lofisnare.wav',
+    'sounds/newsounds/altdrum/lofihat.wav',
+    'sounds/newsounds/hat-open.mp3',
+    'sounds/newsounds/kick.mp3',
+    'sounds/newsounds/clap.mp3'
 ];
 
 // get soundFiles to pass as a new array in multiPlayer
@@ -53,7 +67,22 @@ for (var i = 0; i < grid.children.length; i++) {
         grid.children[i].appendChild(btn);
 
         btn.addEventListener('click', function(){
+            
+            //TODO:
+            /** 
+            * Find out if any of the drum li's hasPlay
+            * if so, when clicking new .beat toggle them all off 
+            * and on when you click a new .beat, then add 
+            * alt to current .beat.
+            *
+            * Better way?: push new samples in new array, buffer conflict?
+            */
+
+            // var playingAlt = document.querySelector()
             this.classList.toggle('on');
+            // if () {
+            //     // do something     
+            // }
         });
     }
 }
@@ -70,7 +99,15 @@ var multiPlayer = new Tone.MultiPlayer(soundFileArray, function() {
 
 multiPlayer.volume.value = (-10);
 
+
+// Alternate drum sound library
+var drumPlayer = new Tone.MultiPlayer(altDrums, function() {
+    drumPlayer.start();
+}).connect(soundOutput);
+
+
 // loop sequence
+
 var sequence = new Tone.Sequence(function(time) {
     var beat = document.querySelectorAll('.beat');
     
@@ -92,10 +129,22 @@ var sequence = new Tone.Sequence(function(time) {
             // TODO: get multiple class names with .split
             var hasSoundName = beat[j].classList.contains(sounds[i].name);
             var hasStep = beat[j].classList.contains(stepNum);
-            var hasOn = beat[j].classList.contains('on'); 
+            var hasOn = beat[j].classList.contains('on');
+            var hasAlt = beat[j].classList.contains('alt'); 
             
-            if (hasSoundName && hasStep && hasOn) {
-                multiPlayer.start(i, time, 0);      
+            // TODO:
+            /** 
+             * Kick drum functionality okay.
+             * When manually setting .alt to play lofi snare
+             * it also plays original snare, figure out
+             * why !hasAlt condition doesn't work.
+             */
+
+            if (hasSoundName && hasStep && hasOn && !hasAlt) {
+                multiPlayer.start(i, time, 0);
+            }
+            if (hasSoundName && hasStep && hasOn && hasAlt) {
+                drumPlayer.start(i, time, 0);
             }
         }       
     }
@@ -114,7 +163,8 @@ var sequence = new Tone.Sequence(function(time) {
 */
 
 // TODO: combine with multiPlayer and put in object?
-// sound library
+
+// Loop sound library
 var loopPlayer = new Tone.MultiPlayer(loopSounds, function() {
     loopPlayer.start();
 }).connect(soundOutput);
@@ -142,15 +192,20 @@ var bassLine = new Tone.Sequence(function(time) {
 }, [1, 2], '8m');
 
 
-// click events
-// TODO: refactor
-var ul = document.querySelector('ul');
 
-ul.addEventListener('click', function(e) {
+
+
+
+// click events
+// TODO: refactor querySelector to combine with drums
+var loopUl = document.querySelector('#loop');
+loopUl.addEventListener('click', function(e) {
     var targetClasses = e.target.classList;
     var hasPlay = targetClasses.contains('play')
     var togglePlay = targetClasses.toggle('play');
 
+    // LOOPS
+    // TODO: refactor
     if (targetClasses.contains('vinyl')) {
         if (hasPlay) {
             vinyl.stop();
@@ -173,6 +228,40 @@ ul.addEventListener('click', function(e) {
             bassPart = 0;
         } else {
            bassLine.start('@2m') 
+        }
+        togglePlay;
+    }
+    if (targetClasses.contains('melody')) {
+        if (hasPlay) {
+            melody.stop()
+        } else {
+            melody.start('@1m');
+        }
+        togglePlay;
+    }
+
+});
+
+
+var drumsUl = document.querySelector('#drums');
+drumsUl.addEventListener('click', function(e) {
+    var targetClasses = e.target.classList;
+    var hasPlay = targetClasses.contains('play')
+    var togglePlay = targetClasses.toggle('play');
+
+    // DRUMS
+    // TODO: refactor, fix toggle for alternate kick if activated before sequencer
+    if (targetClasses.contains('kick-alt')) {
+        var activeKick = document.querySelectorAll('.beat.bass.on');
+
+        if (hasPlay) {
+            for (var i = 0; i < activeKick.length; i++) {
+                activeKick[i].classList.remove('alt');
+            }
+        } else {
+            for (var i = 0; i < activeKick.length; i++) {
+                activeKick[i].classList.add('alt');
+            }
         }
         togglePlay;
     }
@@ -204,6 +293,7 @@ window.addEventListener("keydown", function(e) {
     players[i].connect(gain);
   }
 }*/
+
 
 
 

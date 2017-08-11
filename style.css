@@ -54,11 +54,11 @@ body, #container, #grid {
 }
 
 #menu {
+    /*background-color: blue;*/
     margin-top: 50px;
     padding-right: 25px;
     padding-left: 25px;
-    /*background-color: blue;*/
-    /*height: 400px;*/
+    height: 200px;
 }
 
 .text {
