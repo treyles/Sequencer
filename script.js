@@ -1,3 +1,5 @@
+Tone.Buffer.loaded
+
 var ticks = 16;
 var stepNum = 1;
 
@@ -141,6 +143,7 @@ var bassLine = new Tone.Sequence(function(time) {
 
 
 // click events
+// TODO: refactor
 var ul = document.querySelector('ul');
 
 ul.addEventListener('click', function(e) {
@@ -185,7 +188,7 @@ window.addEventListener("keydown", function(e) {
     if (e.keyCode == "80") {
         loopPlayer.start(2);
     }
-      if (e.keyCode == "79") {
+    if (e.keyCode == "79") {
         loopPlayer.start(1);
     }
 });
@@ -193,7 +196,14 @@ window.addEventListener("keydown", function(e) {
 
 
 
-
+/*function loadSamples() {
+  for(var i=0; i<samples.length; i++) {
+    players[i] = new Tone.Sampler(samples[i], function() {
+      loadedSamples++;
+    });
+    players[i].connect(gain);
+  }
+}*/
 
 
 

@@ -8,14 +8,20 @@ body, #container, #grid {
 }
 
 @font-face {
-    font-family: 'futuramedium';
-    src: url('font/futurabt-medium-webfont.woff2') format('woff2'),
-         url('font/futurabt-medium-webfont.woff') format('woff');
+    font-family: 'futura-medium';
+    src: url('font/futurastd-medium.woff2') format('woff2'),
+         url('font/futurastd-medium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@font-face {
+    font-family: 'futura-book';
+    src: url('font/futurastd-book.woff2') format('woff2'),
+         url('font/futurastd-book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 #container {
     width: 825px;
@@ -61,7 +67,7 @@ body, #container, #grid {
     /*background-color: red;*/
     width: 24%;
     height: 130px;
-    font-family: 'futuramedium';
+    font-family: 'futura-medium';
     font-size: 17px;
     letter-spacing: .5px;
     color: #404040;
@@ -75,12 +81,17 @@ body, #container, #grid {
 
 ul {
     padding-top: 10px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 13px;
+    font-family: 'futura-book', sans-serif;
+    font-size: 14px;
     font-weight: normal;
     list-style: none;
     line-height: 25px;
     cursor: pointer;
+}
+
+u {
+    text-decoration: none;
+    border-bottom: 2px solid #636363;
 }
 
 .beat:hover {
