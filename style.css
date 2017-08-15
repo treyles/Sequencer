@@ -30,10 +30,14 @@ body, #container, #grid {
 }
 
 #grid {
+    /*border-top: 5px solid #eeeeec;*/
     width: 825px;
     text-align: center;
+    /*padding: 70px 0px 0px 0px;*/
     padding: 0px;
 }
+
+
 
 .beat {
     z-index: 1;
@@ -81,7 +85,7 @@ body, #container, #grid {
 
 ul {
     padding-top: 10px;
-    font-family: 'futura-book', sans-serif;
+    font-family: 'futura-medium', sans-serif;
     font-size: 14px;
     font-weight: normal;
     list-style: none;
