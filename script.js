@@ -88,22 +88,7 @@ for (var i = 0; i < grid.children.length; i++) {
         grid.children[i].appendChild(btn);
 
         btn.addEventListener('click', function(){
-            
-            //TODO:
-            /** 
-            * Find out if any of the drum li's hasPlay
-            * if so, when clicking new .beat toggle them all off 
-            * and on when you click a new .beat, then add 
-            * alt to current .beat.
-            *
-            * Better way?: push new samples in new array, buffer conflict?
-            */
-
-            // var playingAlt = document.querySelector()
             this.classList.toggle('on');
-            // if () {
-            //     // do something     
-            // }
         });
     }
 }
@@ -193,54 +178,95 @@ var bassLine = new Tone.Sequence(function(time) {
 
 
 
-
-
-
-// click events
-// TODO: refactor querySelector to combine with drums
+// loop menu
 var loopUl = document.querySelector('#loop');
 loopUl.addEventListener('click', function(e) {
-    var targetClasses = e.target.classList;
-    var hasPlay = targetClasses.contains('play')
-    var togglePlay = targetClasses.toggle('play');
+    var eTarget = e.target.classList;
+    var targetVinyl = eTarget.contains('vinyl');
+    var targetMelody = eTarget.contains('melody');
+    var targetBass = eTarget.contains('bass-line');
+    var hasPlay = eTarget.contains('play')
+    var togglePlay = eTarget.toggle('play');
 
-    // LOOPS
-    // TODO: refactor
-    if (targetClasses.contains('vinyl')) {
+    if (targetVinyl) {
         if (hasPlay) {
             vinyl.stop();
         } else {
             vinyl.start('@1m');
         }
-        togglePlay;
     }
-    if (targetClasses.contains('melody')) {
+    if (targetMelody) {
         if (hasPlay) {
             melody.stop()
         } else {
             melody.start('@1m');
         }
-        togglePlay;
     }
-    if (targetClasses.contains('bass-line')) {
+    if (targetBass) {
         if (hasPlay) {
             bassLine.stop()
             bassPart = 0;
         } else {
            bassLine.start('@2m') 
         }
-        togglePlay;
     }
-    if (targetClasses.contains('melody')) {
+    if (targetMelody) {
         if (hasPlay) {
             melody.stop()
         } else {
             melody.start('@1m');
         }
-        togglePlay;
     }
-
+    togglePlay;
 });
+
+
+// drum menu
+var drumsUl = document.querySelector('#drums');
+drumsUl.addEventListener('click', function(e) {
+    var eTarget = e.target.classList;
+    var targetKick = eTarget.contains('kick-alt');
+    var targetSnare = eTarget.contains('snare-alt');
+    var targetHat = eTarget.contains('hat-alt');
+    var targetSwing = eTarget.contains('swing');
+    var hasPlay = eTarget.contains('play')
+    var togglePlay = eTarget.toggle('play');
+
+    if (targetKick) {
+        if (hasPlay) {
+            mainPlayer.splice(0, 1, storeDrumSounds[0]);
+        } else {
+            mainPlayer.splice(0, 1, storeAltDrumSounds[0]);
+            this.classList.add('play')
+        }
+    }
+    if (targetSnare) {
+        if (hasPlay) {
+            mainPlayer.splice(1, 1, storeDrumSounds[1]);
+        } else {
+            mainPlayer.splice(1, 1, storeAltDrumSounds[1]);
+            this.classList.add('play')
+        }
+    }
+    if (targetHat) {
+        if (hasPlay) {
+            mainPlayer.splice(2, 1, storeDrumSounds[2]);
+        } else {
+            mainPlayer.splice(2, 1, storeAltDrumSounds[2]);
+            this.classList.add('play')
+        }
+    }
+    if (targetSwing) {
+        if (hasPlay) {
+            Tone.Transport.swing = 0;
+        } else {
+            Tone.Transport.swing = 0.6;
+            this.classList.add('play')
+        }
+    }
+    togglePlay;
+});
+
 
 
 
@@ -248,6 +274,7 @@ loopUl.addEventListener('click', function(e) {
 
 // keypress'
 window.addEventListener("keydown", function(e) {
+    console.log(e.keycode)
     if (e.keyCode == "32") {
         Tone.Transport.stop();
     }
