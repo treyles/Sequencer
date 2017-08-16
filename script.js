@@ -1,4 +1,4 @@
-Tone.Buffer.loaded
+'use strict';
 
 var ticks = 16;
 var stepNum = 1;
@@ -33,17 +33,53 @@ var altDrumSounds = [
     'sounds/newsounds/altdrum/lofihat.wav'
 ];
 
+var keySounds = [
+    [   'sounds/newsounds/keys/keyA1.wav',
+        'sounds/newsounds/keys/keyA2.wav',
+        'sounds/newsounds/keys/keyA3.wav',
+        'sounds/newsounds/keys/keyA4.wav',
+        'sounds/newsounds/keys/keyA5.wav',
+        'sounds/newsounds/keys/keyA6.wav'
+    ],
+    [   'sounds/newsounds/keys/keyB1.wav',
+        'sounds/newsounds/keys/keyB2.wav',
+        'sounds/newsounds/keys/keyB3.wav',
+        'sounds/newsounds/keys/keyB4.wav',
+        'sounds/newsounds/keys/keyB5.wav',
+        'sounds/newsounds/keys/keyB6.wav'
+    ],
+    [   'sounds/newsounds/keys/keyC1.wav',
+        'sounds/newsounds/keys/keyC2.wav',
+        'sounds/newsounds/keys/keyC3.wav',
+        'sounds/newsounds/keys/keyC4.wav',
+        'sounds/newsounds/keys/keyC5.wav',
+        'sounds/newsounds/keys/keyC6.wav'
+    ],
+    [   'sounds/newsounds/altdrum/lofisnare.wav',
+        'sounds/newsounds/altdrum/lofisnare.wav',
+        'sounds/newsounds/altdrum/lofisnare.wav',
+        'sounds/newsounds/altdrum/lofisnare.wav'
+    ]
+];
+
 // extract soundFiles
+// TODO: combine with checkoutSoundGroup with if statement (indexOf)
 var soundFileArray = drumSounds.map(function(obj) {
     return obj.soundFile;
 });
 
-// convert sounds as tone.js samples and store
-var storeDrumSounds = [];
-var storeAltDrumSounds = [];
+// store buffers
+var storeDrumsA = [];
+var storeDrumsB = [];
+var storeKeyA = [];
+var storeKeyB = [];
+var storeKeyC = [];
 
-// sounds queued for playback
-var mainPlayer = [];
+// to play
+var drumPlayer = [];
+var keyPlayer = [];
+var bassPlayer = [];
+var samplePlayer = [];
 
 
 function checkoutSoundGroup (group, toArray) {
@@ -53,16 +89,25 @@ function checkoutSoundGroup (group, toArray) {
     }
 };
 
-checkoutSoundGroup(soundFileArray, storeDrumSounds);
-checkoutSoundGroup(soundFileArray, mainPlayer);
-checkoutSoundGroup(altDrumSounds, storeAltDrumSounds);
+// drums
+checkoutSoundGroup(soundFileArray, storeDrumsA);
+checkoutSoundGroup(soundFileArray, drumPlayer);
+checkoutSoundGroup(altDrumSounds, storeDrumsB);
+
+// keys
+checkoutSoundGroup(keySounds[0], storeKeyA);
+checkoutSoundGroup(keySounds[0], keyPlayer);
+checkoutSoundGroup(keySounds[1], storeKeyB);
+checkoutSoundGroup(keySounds[2], storeKeyC);
+
+// samples
+checkoutSoundGroup(keySounds[3], samplePlayer);
+
 
 // drum volume, delete later
-for (var i = 0; i < mainPlayer.length; i++) {
-    mainPlayer[i].volume.value = -10;
+for (var i = 0; i < drumPlayer.length; i++) {
+    drumPlayer[i].volume.value = -10;
 }
-
-
 
 
 /**
@@ -127,9 +172,9 @@ var sequence = new Tone.Sequence(function(time) {
             var hasOn = beat[j].classList.contains('on');
             var hasAlt = beat[j].classList.contains('alt'); 
             
-
+            // TODO: add mute button?
             if (hasSoundName && hasStep && hasOn) {
-                mainPlayer[i].triggerAttack(0, time, 1);
+                drumPlayer[i].triggerAttack(0, time, 1);
             }
         }       
     }
@@ -149,7 +194,7 @@ var sequence = new Tone.Sequence(function(time) {
 
 // TODO: combine with multiPlayer and put in object?
 
-// Loop sound library
+// loop sound library
 var loopPlayer = new Tone.MultiPlayer(loopSounds, function() {
     loopPlayer.start();
 }).connect(soundOutput);
@@ -165,6 +210,7 @@ var melody = new Tone.Loop(function(time) {
 }, '1m');
 
 // bass loop, loops through two bass parts
+// TODO: use 'step' instead of 'bassPart'
 var bassPart = 0;
 var bassLine = new Tone.Sequence(function(time) {
     if (bassPart < 1) {
@@ -197,14 +243,14 @@ loopUl.addEventListener('click', function(e) {
     }
     if (targetMelody) {
         if (hasPlay) {
-            melody.stop()
+            melody.stop();
         } else {
             melody.start('@1m');
         }
     }
     if (targetBass) {
         if (hasPlay) {
-            bassLine.stop()
+            bassLine.stop();
             bassPart = 0;
         } else {
            bassLine.start('@2m') 
@@ -212,7 +258,7 @@ loopUl.addEventListener('click', function(e) {
     }
     if (targetMelody) {
         if (hasPlay) {
-            melody.stop()
+            melody.stop();
         } else {
             melody.start('@1m');
         }
@@ -224,35 +270,37 @@ loopUl.addEventListener('click', function(e) {
 // drum menu
 var drumsUl = document.querySelector('#drums');
 drumsUl.addEventListener('click', function(e) {
+
     var eTarget = e.target.classList;
     var targetKick = eTarget.contains('kick-alt');
     var targetSnare = eTarget.contains('snare-alt');
     var targetHat = eTarget.contains('hat-alt');
     var targetSwing = eTarget.contains('swing');
+    
     var hasPlay = eTarget.contains('play')
     var togglePlay = eTarget.toggle('play');
 
     if (targetKick) {
         if (hasPlay) {
-            mainPlayer.splice(0, 1, storeDrumSounds[0]);
+            drumPlayer.splice(0, 1, storeDrumsA[0]);
         } else {
-            mainPlayer.splice(0, 1, storeAltDrumSounds[0]);
+            drumPlayer.splice(0, 1, storeDrumsB[0]);
             this.classList.add('play')
         }
     }
     if (targetSnare) {
         if (hasPlay) {
-            mainPlayer.splice(1, 1, storeDrumSounds[1]);
+            drumPlayer.splice(1, 1, storeDrumsA[1]);
         } else {
-            mainPlayer.splice(1, 1, storeAltDrumSounds[1]);
+            drumPlayer.splice(1, 1, storeDrumsB[1]);
             this.classList.add('play')
         }
     }
     if (targetHat) {
         if (hasPlay) {
-            mainPlayer.splice(2, 1, storeDrumSounds[2]);
+            drumPlayer.splice(2, 1, storeDrumsA[2]);
         } else {
-            mainPlayer.splice(2, 1, storeAltDrumSounds[2]);
+            drumPlayer.splice(2, 1, storeDrumsB[2]);
             this.classList.add('play')
         }
     }
@@ -267,39 +315,87 @@ drumsUl.addEventListener('click', function(e) {
     togglePlay;
 });
 
+// keyboard menu
+var keyUl = document.querySelector('#keyboard');
+keyUl.addEventListener('click', function(e) {
 
+    var eTarget = e.target.classList;
+    var targetKeyA = eTarget.contains('keyA');
+    var targetKeyB = eTarget.contains('keyB');
+    var targetKeyC = eTarget.contains('keyC');
+    var targetKeyD = eTarget.contains('keyD');
 
+    var hasPlay = eTarget.contains('play')
+    var togglePlay = eTarget.toggle('play');
 
-
-
-// keypress'
-window.addEventListener("keydown", function(e) {
-    console.log(e.keycode)
-    if (e.keyCode == "32") {
-        Tone.Transport.stop();
+    if (targetKeyA) {
+        if (hasPlay) {
+            keyPlayer = storeKeyA
+        } else {
+            keyPlayer = storeKeyB
+            this.classList.add('play')
+        }
     }
-    if (e.keyCode == "80") {
-        loopPlayer.start(2);
+    if (targetKeyB) {
+        if (hasPlay) {
+            keyPlayer = storeKeyA
+        } else {
+            keyPlayer = storeKeyC
+            this.classList.add('play')
+        }
     }
-    if (e.keyCode == "79") {
-        loopPlayer.start(1);
+    if (targetKeyC) {
+        if (hasPlay) {
+            keyPlayer = storeKeyA
+        } else {
+            keyPlayer = storeKeyB
+            this.classList.add('play')
+        }
     }
+    if (targetKeyD) {
+        if (hasPlay) {
+            keyPlayer = storeKeyA
+        } else {
+            keyPlayer = storeKeyB
+            this.classList.add('play')
+        }
+    }
+    togglePlay;
 });
- 
 
 
 
-/*function loadSamples() {
-  for(var i=0; i<samples.length; i++) {
-    players[i] = new Tone.Sampler(samples[i], function() {
-      loadedSamples++;
-    });
-    players[i].connect(gain);
-  }
-}*/
-
-
-
-
-
+window.addEventListener("keydown", function(e) {
+    var soundIndex;
+    
+    switch (e.which) {
+        
+        // A - F bass
+        case 72:
+            soundIndex = 0;
+            break;
+        case 74:
+            soundIndex = 1;
+            break;
+        case 75:
+            soundIndex = 2;
+            break;
+        case 76:
+            soundIndex = 3;
+            break;
+        case 186:
+            soundIndex = 4;
+            break;
+        case 222:
+            soundIndex = 5;
+            break;   
+        default:
+            return;
+    }
+  
+  (function (soundIndex) {
+        keyPlayer[soundIndex].triggerAttack();
+    })(soundIndex);
+  
+});
 
