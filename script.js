@@ -110,6 +110,30 @@ for (var i = 0; i < drumPlayer.length; i++) {
 }
 
 
+
+
+// Animations
+
+var animateArray = [];
+
+(function animateWaves() {
+    var svgs = document.querySelectorAll('svg');
+
+    for (var i = 0; i < svgs.length; i++) {
+        animateArray[i] = new Vivus(svgs[i].id, {
+            type: 'sync', 
+            duration: 60, 
+            start: 'manual',
+            animTimingFunction: function (t) { 
+                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
+            }
+        });
+    }
+}());
+
+
+
+
 /**
  * Make Grid
  */
@@ -366,28 +390,46 @@ keyUl.addEventListener('click', function(e) {
 
 
 window.addEventListener("keydown", function(e) {
-    var soundIndex;
+    var soundIndex; 
+
+    function animateWave() {
+        var randomize = Math.floor (
+            Math.random() * animateArray.length
+        );
+
+        for (var i = 0; i < animateArray.length; i++) {
+            animateArray[i].stop();
+            animateArray[i].reset();
+        }
+        animateArray[randomize].play();
+    }
     
     switch (e.which) {
         
-        // A - F bass
-        case 72:
+        // G - " synthesizer
+        case 65:
             soundIndex = 0;
+            animateWave();
             break;
-        case 74:
+        case 83:
             soundIndex = 1;
+            animateWave();
             break;
-        case 75:
+        case 68:
             soundIndex = 2;
-            break;
-        case 76:
+            animateWave();
+            break; 
+        case 70:
             soundIndex = 3;
+            animateWave();
             break;
-        case 186:
+        case 71:
             soundIndex = 4;
+            animateWave();
             break;
-        case 222:
+        case 72:
             soundIndex = 5;
+            animateWave();
             break;   
         default:
             return;
@@ -395,7 +437,13 @@ window.addEventListener("keydown", function(e) {
   
   (function (soundIndex) {
         keyPlayer[soundIndex].triggerAttack();
-    })(soundIndex);
+    }(soundIndex));
   
 });
+
+
+
+
+
+
 

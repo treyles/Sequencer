@@ -40,7 +40,6 @@ body, #container, #grid {
 
 
 .beat {
-    z-index: 1;
     display: inline-block;
     background-color: #404040;
     border-radius: 50%;
@@ -130,3 +129,30 @@ u {
 }
 
 
+
+
+/*Animation*/
+
+#animations {
+    z-index: 1;
+    visibility: hidden;
+    position: absolute;
+    background-color: red;
+    top: 0px;
+    width: 825px;
+}
+
+#waveA1, #waveA2 {
+    position: absolute;
+    top: 215px;
+}
+
+#waveB1, #waveB2 {
+    position: absolute;
+    top: 175px;
+}
+
+#waveC1, #waveC2{
+    position: absolute;
+    top: 200px;
+}
