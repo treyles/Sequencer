@@ -442,6 +442,47 @@ window.addEventListener("keydown", function(e) {
 });
 
 
+(function inactivity() {
+    var t;
+    var counter = 0;
+    var animScreen = document.querySelector('#animations');
+    var beat = document.querySelectorAll('.beat')
+  
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onclick = function () {
+        if (counter < 5) {
+            counter++
+        }
+    }
+
+    function goAnimation() {
+        animScreen.style.visibility = 'visible';
+        
+        for (var i = 0; i < beat.length; i++) {
+            if (!beat[i].classList.contains('on')) {
+                beat[i].style.visibility = 'hidden';
+            }
+        }
+    }
+
+    function resetTimer() {
+        animScreen.style.visibility = 'hidden';
+
+        for (var i = 0; i < beat.length; i++) {
+            if (!beat[i].classList.contains('on')) {
+                beat[i].style.visibility = 'visible';
+            }
+        }
+
+        clearTimeout(t); 
+
+        if (counter >= 5) {
+            t = setTimeout(goAnimation, 2000)
+        }
+    } 
+}());
+
 
 
 
