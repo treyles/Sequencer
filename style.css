@@ -165,9 +165,11 @@ u {
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background-color: #000;
-    opacity: .07;
-    margin: auto;
+    background-color: #eee;
+    mix-blend-mode: multiply;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
 }
 
 #circleOrange {
@@ -179,8 +181,16 @@ u {
     height: 165px;
     border-radius: 50%;
     background-color: #d76e20;
-    margin: auto;
     mix-blend-mode: multiply;
+}
+
+#baton {
+    z-index: 1;
+    position: absolute;
+    top: 60px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
 }
 
 

@@ -117,10 +117,10 @@ for (var i = 0; i < drumPlayer.length; i++) {
 var animateArray = [];
 
 (function animateWaves() {
-    var svgs = document.querySelectorAll('svg');
+    var waves = document.querySelectorAll('.waves');
 
-    for (var i = 0; i < svgs.length; i++) {
-        animateArray[i] = new Vivus(svgs[i].id, {
+    for (var i = 0; i < waves.length; i++) {
+        animateArray[i] = new Vivus(waves[i].id, {
             type: 'sync', 
             duration: 60, 
             start: 'manual',
@@ -442,11 +442,32 @@ window.addEventListener("keydown", function(e) {
 });
 
 
+// fadeIn function from: http://youmightnotneedjquery.com/
+function fadeIn(el) {
+  el.style.opacity = 0;
+
+  var last = +new Date();
+  var tick = function() {
+    el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
+    last = +new Date();
+
+    if (+el.style.opacity < 1) {
+      (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+    }
+  };
+
+  tick();
+}
+
+
 (function inactivity() {
     var t;
     var counter = 0;
     var animScreen = document.querySelector('#animations');
     var beat = document.querySelectorAll('.beat')
+    var circleGray = document.querySelector('#circleGray');
+    var circleOrange = document.querySelector('#circleOrange');
+    var baton = document.querySelector('#baton');
   
     window.onload = resetTimer;
     document.onmousemove = resetTimer;
@@ -457,7 +478,21 @@ window.addEventListener("keydown", function(e) {
     }
 
     function goAnimation() {
+
+        // TODO: stay dry, make function
+        for (var i = 0; i < animateArray.length; i++) {
+            animateArray[i].stop();
+            animateArray[i].reset();
+        }
+
         animScreen.style.visibility = 'visible';
+
+        fadeIn(circleGray);
+        fadeIn(circleOrange);
+        fadeIn(baton);
+
+        // test
+        animateArray[0].play();
         
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
