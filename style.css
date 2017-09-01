@@ -173,8 +173,10 @@ u {
 }
 
 
-/*default: top: 100, left: 500*/
-/*bottom right: top: 100, left: 500*/
+/*1: top: 100, left: 530*/
+/*2: top: 520px, left: 170px*/
+/*3: top: 415px, left: 220px*/
+/*4: top: 35px, left: 15px*/
 #circleOrange {
     z-index: 1;
     position: absolute;

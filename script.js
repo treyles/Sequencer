@@ -135,22 +135,17 @@ var animCircleGray = anime({
     targets: '#circleGray',
     scale: 1.2,
     direction: 'alternate',
-    duration: 100,
+    duration: 200,
     easing: 'easeInOutCirc',
     autoplay: false,
 });
 
-var animCircleOrange = anime({
-    targets: '#circleOrange',
-    scale: 1.2,
-    direction: 'alternate',
-    duration: 100,
-    easing: 'easeInOutCirc',
-    elasticity: 200,
-    autoplay: false,
+var animBaton = anime({
+    targets: '#baton',
+    rotate: '.5turn',
+    duration: 1000,
+    autoplay: false
 });
-
-
 
 
 /**
@@ -268,11 +263,7 @@ var bassLine = new Tone.Sequence(function(time) {
 
 var circleGrayLoop = new Tone.Loop(function(time) {
     animCircleGray.restart();
-}, '4m');
-
-var circleOrangeLoop = new Tone.Loop(function(time) {
-    animCircleOrange.restart();
-}, '4m');
+}, '2m');
 
 
 
@@ -425,11 +416,16 @@ window.addEventListener("keydown", function(e) {
             Math.random() * animateArray.length
         );
 
+        // TODO: stay dry, this is repeated 3x
         for (var i = 0; i < animateArray.length; i++) {
             animateArray[i].stop();
             animateArray[i].reset();
         }
-        animateArray[randomize].play();
+
+        // only play when circleGray has animated
+        if (circleGray.style.opacity > 0) {
+            animateArray[randomize].play();
+        }
     }
     
     switch (e.which) {
@@ -472,7 +468,7 @@ window.addEventListener("keydown", function(e) {
 
 // fadeIn function from: http://youmightnotneedjquery.com/
 function fadeIn(el) {
-  el.style.opacity = 0;
+  // el.style.opacity = 0;
 
   var last = +new Date();
   var tick = function() {
@@ -489,8 +485,10 @@ function fadeIn(el) {
 
 
 (function inactivity() {
-    var t;
+    var main;
+    var delay;
     var counter = 0;
+
     var animScreen = document.querySelector('#animations');
     var beat = document.querySelectorAll('.beat')
     var circleGray = document.querySelector('#circleGray');
@@ -515,16 +513,29 @@ function fadeIn(el) {
 
         animScreen.style.visibility = 'visible';
 
-        fadeIn(circleGray);
-        fadeIn(circleOrange);
-        fadeIn(baton);
+        /**
+         * wait 500ms after setting visibility before animating 
+         * to avoid weird glitch
+        */ 
+        delay = setTimeout(function() {
+            
+            //TODO: stay dry, make function
+            for (var i = 0; i < animateArray.length; i++) {
+                animateArray[i].stop();
+                animateArray[i].reset();
+            }
 
-        // vivus, play wave on init
-        animateArray[0].play();
+            fadeIn(circleGray);
+            fadeIn(circleOrange);
+            fadeIn(baton);
 
-        // tone, animate circles
-        circleGrayLoop.start('@4m')
-        circleOrangeLoop.start('@5m')
+            // vivus, play wave on init
+            animateArray[0].play();
+
+            // tone, start animate loop
+            circleGrayLoop.start('@4m');
+
+        }, 500);
         
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
@@ -536,16 +547,24 @@ function fadeIn(el) {
     function resetTimer() {
         animScreen.style.visibility = 'hidden';
 
+        circleGray.style.opacity = 0;
+        circleOrange.style.opacity = 0;
+        baton.style.opacity = 0;
+
+        // tone, stop animate loop
+        circleGrayLoop.stop();
+
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
                 beat[i].style.visibility = 'visible';
             }
         }
 
-        clearTimeout(t); 
+        clearTimeout(main);
+        clearTimeout(delay);
 
         if (counter >= 5) {
-            t = setTimeout(goAnimation, 2000)
+            main = setTimeout(goAnimation, 2000)
         }
     } 
 }());
