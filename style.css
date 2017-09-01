@@ -161,9 +161,9 @@ u {
 #circleGray {
     z-index: 1;
     position: relative;
-    top: 90px;
-    width: 400px;
-    height: 400px;
+    top: 80px;
+    width: 410px;
+    height: 410px;
     border-radius: 50%;
     background-color: #eee;
     mix-blend-mode: multiply;
@@ -172,11 +172,14 @@ u {
     right: 0;
 }
 
+
+/*default: top: 100, left: 500*/
+/*bottom right: top: 100, left: 500*/
 #circleOrange {
     z-index: 1;
     position: absolute;
-    left: 500px;
     top: 100px;
+    left: 500px;
     width: 165px;
     height: 165px;
     border-radius: 50%;

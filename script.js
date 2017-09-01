@@ -131,6 +131,25 @@ var animateArray = [];
     }
 }());
 
+var animCircleGray = anime({
+    targets: '#circleGray',
+    scale: 1.2,
+    direction: 'alternate',
+    duration: 100,
+    easing: 'easeInOutCirc',
+    autoplay: false,
+});
+
+var animCircleOrange = anime({
+    targets: '#circleOrange',
+    scale: 1.2,
+    direction: 'alternate',
+    duration: 100,
+    easing: 'easeInOutCirc',
+    elasticity: 200,
+    autoplay: false,
+});
+
 
 
 
@@ -245,6 +264,15 @@ var bassLine = new Tone.Sequence(function(time) {
         bassPart = 0;
     } 
 }, [1, 2], '8m');
+
+
+var circleGrayLoop = new Tone.Loop(function(time) {
+    animCircleGray.restart();
+}, '4m');
+
+var circleOrangeLoop = new Tone.Loop(function(time) {
+    animCircleOrange.restart();
+}, '4m');
 
 
 
@@ -491,8 +519,12 @@ function fadeIn(el) {
         fadeIn(circleOrange);
         fadeIn(baton);
 
-        // test
+        // vivus, play wave on init
         animateArray[0].play();
+
+        // tone, animate circles
+        circleGrayLoop.start('@4m')
+        circleOrangeLoop.start('@5m')
         
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
