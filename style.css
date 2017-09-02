@@ -3,6 +3,7 @@
     padding: 0px; 
 }
 
+/*TODO: backup font*/
 body, #container, #grid {
     background-color: #e2e2e0;
 }
@@ -173,15 +174,22 @@ u {
 }
 
 
-/*1: top: 100, left: 530*/
+/*1: top: 100px, left: 530px*/
 /*2: top: 520px, left: 170px*/
 /*3: top: 415px, left: 220px*/
 /*4: top: 35px, left: 15px*/
+/*5: top: 400px, left: 515px*/
+/*6: top: 510px, left: 630px*/
+/*7: top: 100px, left: 155px*/
+/*8: top: -25px, left: 575px*/
+/*9: top: 280px, left: 100px*/
+/*10: top: 280px, left: 580px*/
+
 #circleOrange {
     z-index: 1;
     position: absolute;
     top: 100px;
-    left: 500px;
+    left: 530px;
     width: 165px;
     height: 165px;
     border-radius: 50%;

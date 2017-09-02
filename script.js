@@ -142,8 +142,8 @@ var animCircleGray = anime({
 
 var animBaton = anime({
     targets: '#baton',
-    rotate: '.5turn',
-    duration: 1000,
+    rotate: '1turn',
+    duration: 750,
     autoplay: false
 });
 
@@ -411,6 +411,7 @@ keyUl.addEventListener('click', function(e) {
 window.addEventListener("keydown", function(e) {
     var soundIndex; 
 
+    // TODO: stay dry, repeated 2x
     function animateWave() {
         var randomize = Math.floor (
             Math.random() * animateArray.length
@@ -466,7 +467,7 @@ window.addEventListener("keydown", function(e) {
 });
 
 
-// fadeIn function from: http://youmightnotneedjquery.com/
+// fadeIn script from: http://youmightnotneedjquery.com/
 function fadeIn(el) {
   // el.style.opacity = 0;
 
@@ -484,10 +485,41 @@ function fadeIn(el) {
 }
 
 
+function setCirclePosition() {
+    var circleCoords = [
+        [100, 530],
+        [460, 60],
+        [415, 220],
+        [35, 15],
+        [400, 515],
+        [510, 630],
+        [100, 155],
+        [-25, 575],
+        [280, 100],
+        [280, 580]
+    ];
+
+    // TODO: stay dry, repeated 2x
+    var circleOrange = document.querySelector('#circleOrange');
+
+    var randomPos = Math.floor (
+            Math.random() * circleCoords.length
+        );
+
+    function setPos(topPos, leftPos) {
+        circleOrange.style.top = topPos + 'px';
+        circleOrange.style.left = leftPos + 'px';
+    }
+
+    setPos.apply(null, circleCoords[randomPos]);
+}
+
+
 (function inactivity() {
     var main;
     var delay;
-    var counter = 0;
+    var countClicks = 0;
+    var cirPosChanges = 0;
 
     var animScreen = document.querySelector('#animations');
     var beat = document.querySelectorAll('.beat')
@@ -495,11 +527,11 @@ function fadeIn(el) {
     var circleOrange = document.querySelector('#circleOrange');
     var baton = document.querySelector('#baton');
   
-    window.onload = resetTimer;
+    // window.onload = resetTimer;
     document.onmousemove = resetTimer;
     document.onclick = function () {
-        if (counter < 5) {
-            counter++
+        if (countClicks < 5) {
+            countClicks++
         }
     }
 
@@ -512,6 +544,13 @@ function fadeIn(el) {
         }
 
         animScreen.style.visibility = 'visible';
+
+        // randomize orange circle after first 
+        cirPosChanges++
+        if (cirPosChanges > 1) {
+            setCirclePosition()
+        }
+
 
         /**
          * wait 500ms after setting visibility before animating 
@@ -535,7 +574,7 @@ function fadeIn(el) {
             // tone, start animate loop
             circleGrayLoop.start('@4m');
 
-        }, 500);
+        }, 600);
         
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
@@ -563,7 +602,7 @@ function fadeIn(el) {
         clearTimeout(main);
         clearTimeout(delay);
 
-        if (counter >= 5) {
+        if (countClicks >= 5) {
             main = setTimeout(goAnimation, 2000)
         }
     } 
