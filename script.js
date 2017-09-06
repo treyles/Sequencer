@@ -55,10 +55,10 @@ var keySounds = [
         'sounds/newsounds/keys/keyC5.wav',
         'sounds/newsounds/keys/keyC6.wav'
     ],
-    [   'sounds/newsounds/altdrum/lofisnare.wav',
-        'sounds/newsounds/altdrum/lofisnare.wav',
-        'sounds/newsounds/altdrum/lofisnare.wav',
-        'sounds/newsounds/altdrum/lofisnare.wav'
+    [   'sounds/newsounds/dialogue/dream.wav',
+        'sounds/newsounds/dialogue/high.wav',
+        'sounds/newsounds/dialogue/horizon.wav',
+        'sounds/newsounds/dialogue/lights.wav'
     ]
 ];
 
@@ -82,6 +82,11 @@ var bassPlayer = [];
 var samplePlayer = [];
 
 
+// TODO: change from sampler to player:
+// for buffer count (preloader, loadedSamples++) *edit: sampler can do
+// for choke
+// and can trigger queue with player.state
+// should set retrigger = true for drum sounds
 function checkoutSoundGroup (group, toArray) {
     for (var i = 0; i < group.length; i++) {
         toArray[i] = new Tone.Sampler(group[i]);
@@ -143,7 +148,8 @@ var animCircleGray = anime({
 var animBaton = anime({
     targets: '#baton',
     rotate: '1turn',
-    duration: 750,
+    // duration: 750,
+    duration: 1200,
     autoplay: false
 });
 
@@ -409,9 +415,13 @@ keyUl.addEventListener('click', function(e) {
 
 
 window.addEventListener("keydown", function(e) {
-    var soundIndex; 
+    
+    if (e.metaKey || e.ctrlKey) {
+        return;
+    }
 
     // TODO: stay dry, repeated 2x
+    // all functions outside of eventListener?
     function animateWave() {
         var randomize = Math.floor (
             Math.random() * animateArray.length
@@ -428,43 +438,65 @@ window.addEventListener("keydown", function(e) {
             animateArray[randomize].play();
         }
     }
-    
+
+    function playKeys(keyIndex) {
+        keyPlayer[keyIndex].triggerAttack();
+    };
+
+    function playSamples(keyIndex) {
+        samplePlayer[keyIndex].triggerAttack();
+    };
+
     switch (e.which) {
         
-        // G - " synthesizer
+        // A - H synthesizer
         case 65:
-            soundIndex = 0;
+            playKeys(0)
             animateWave();
             break;
         case 83:
-            soundIndex = 1;
+            playKeys(1)
             animateWave();
             break;
         case 68:
-            soundIndex = 2;
+            playKeys(2)
             animateWave();
             break; 
         case 70:
-            soundIndex = 3;
+            playKeys(3)
             animateWave();
             break;
         case 71:
-            soundIndex = 4;
+            playKeys(4)
             animateWave();
             break;
         case 72:
-            soundIndex = 5;
+            playKeys(5)
             animateWave();
-            break;   
+            break;
+        case 82:
+            playSamples(0)
+            animBaton.restart();
+            break; 
+        case 84:
+            playSamples(1)
+            animBaton.restart();
+            break; 
+        case 89:
+            playSamples(2)
+            animBaton.restart();
+            break; 
+        case 85:
+            playSamples(3)
+            animBaton.restart();
+            break;    
         default:
             return;
     }
   
-  (function (soundIndex) {
-        keyPlayer[soundIndex].triggerAttack();
-    }(soundIndex));
-  
 });
+
+
 
 
 // fadeIn script from: http://youmightnotneedjquery.com/
@@ -485,7 +517,7 @@ function fadeIn(el) {
 }
 
 
-function setCirclePosition() {
+function randomizeCirclePos() {
     var circleCoords = [
         [100, 530],
         [460, 60],
@@ -502,6 +534,7 @@ function setCirclePosition() {
     // TODO: stay dry, repeated 2x
     var circleOrange = document.querySelector('#circleOrange');
 
+    // TODO: stay dry, reapeated 2x
     var randomPos = Math.floor (
             Math.random() * circleCoords.length
         );
@@ -545,10 +578,10 @@ function setCirclePosition() {
 
         animScreen.style.visibility = 'visible';
 
-        // randomize orange circle after first 
+        // randomize orange circle after first appearance
         cirPosChanges++
         if (cirPosChanges > 1) {
-            setCirclePosition()
+            randomizeCirclePos();
         }
 
 
@@ -607,9 +640,4 @@ function setCirclePosition() {
         }
     } 
 }());
-
-
-
-
-
 
