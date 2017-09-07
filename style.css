@@ -4,7 +4,7 @@
 }
 
 /*TODO: backup font*/
-body, #container, #grid {
+body, #container, #grid, #multiplyMask {
     background-color: #e2e2e0;
 }
 
@@ -24,10 +24,22 @@ body, #container, #grid {
     font-style: normal;
 }
 
-#container {
+/*#container {
     width: 825px;
     margin: auto;
     padding-top: 120px;
+}*/
+
+#container {
+    /*background-color: blue;*/
+    width: 825px;
+    height: 540px;
+    /*padding-top: 30px;*/
+
+    position: absolute;
+    left:0; right:0;
+    top:0; bottom:0;
+    margin:auto;
 }
 
 #grid {
@@ -58,11 +70,11 @@ body, #container, #grid {
 }
 
 #menu {
-    /*background-color: blue;*/
+    /*background-color: red;*/
     margin-top: 50px;
     padding-right: 25px;
     padding-left: 25px;
-    height: 200px;
+    /*height: 200px;*/
 }
 
 .text {
@@ -135,42 +147,52 @@ u {
 /*Animation*/
 
 #animations {
+    /*background-color: yellow;*/
     visibility: hidden;
     position: absolute;
     top: 0px;
     width: 825px;
 }
 
+#multiplyMask {
+    /*background-color: green;*/
+    position: absolute;
+    top: -150px;
+    width: 825px;
+    height: 150px;
+}
+
 #waveA1, #waveA2 {
     z-index: 2;
     position: absolute;
-    top: 215px;
+    top: 95px;
 }
 
 #waveB1, #waveB2 {
     z-index: 2;
     position: absolute;
-    top: 175px;
+    top: 58px;
 }
 
 #waveC1, #waveC2{
     z-index: 2;
     position: absolute;
-    top: 200px;
+    top: 80px;
 }
 
 #circleGray {
     z-index: 1;
     position: relative;
-    top: 80px;
+    /*top: 80px;*/
+    top: -40px;
     width: 410px;
     height: 410px;
     border-radius: 50%;
     background-color: #eee;
     mix-blend-mode: multiply;
-    margin: 0 auto;
     left: 0;
     right: 0;
+    margin: 0 auto;
 }
 
 
@@ -188,7 +210,7 @@ u {
 #circleOrange {
     z-index: 1;
     position: absolute;
-    top: 100px;
+    top: -20px;
     left: 530px;
     width: 165px;
     height: 165px;
@@ -200,10 +222,10 @@ u {
 #baton {
     z-index: 1;
     position: absolute;
-    top: 60px;
-    margin: 0 auto;
+    top: -67px;
     left: 0;
     right: 0;
+    margin: 0 auto;
 }
 
 
