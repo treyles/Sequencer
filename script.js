@@ -153,6 +153,21 @@ var animBaton = anime({
     autoplay: false
 });
 
+var playQueue1 = anime({
+    targets: '.vinyl .triangle',
+    direction: 'alternate',
+    duration: 200,
+    delay: 200,
+    opacity: 0,
+    easing: 'easeInOutCubic',
+    autoplay: false,
+    loop: true
+});
+
+
+
+
+
 
 /**
  * Make Grid
@@ -271,7 +286,10 @@ var circleGrayLoop = new Tone.Loop(function(time) {
     animCircleGray.restart();
 }, '2m');
 
+// var melody = document.querySelector('.melody')
+// melody.firstChild.classList.contains('triangle')
 
+var radio = document.querySelectorAll('.radio');
 
 // loop menu
 var loopUl = document.querySelector('#loop');
@@ -280,38 +298,69 @@ loopUl.addEventListener('click', function(e) {
     var targetVinyl = eTarget.contains('vinyl');
     var targetMelody = eTarget.contains('melody');
     var targetBass = eTarget.contains('bass-line');
+    var targetSomething = eTarget.contains('something');
     var hasPlay = eTarget.contains('play')
     var togglePlay = eTarget.toggle('play');
+
+    // var tri = document.querySelectorAll('.triangle')
+    var animateQueue = 'blink 1s infinite linear';
+
+    function wait(prop, index) {
+        if (prop.state !== 'started') {
+            setTimeout(wait.bind(null, prop, index), 100);
+        } else {
+            radio[index].style.animation = '';
+            radio[index].classList.add('on')
+        }
+    }
+
 
     if (targetVinyl) {
         if (hasPlay) {
             vinyl.stop();
+            radio[0].style.animation = '';
+            radio[0].classList.remove('on')
         } else {
             vinyl.start('@1m');
+            radio[0].style.animation = animateQueue;
+            wait(vinyl, 0);
         }
     }
     if (targetMelody) {
         if (hasPlay) {
             melody.stop();
+            radio[1].style.animation = '';
+            radio[1].classList.remove('on')
         } else {
             melody.start('@1m');
+            radio[1].style.animation = animateQueue;
+            wait(melody, 1);
         }
     }
     if (targetBass) {
         if (hasPlay) {
             bassLine.stop();
             bassPart = 0;
+            radio[2].style.animation = '';
+            radio[2].classList.remove('on')
         } else {
-           bassLine.start('@2m') 
+            bassLine.start('@2m')
+            radio[2].style.animation = animateQueue;
+            wait(bassLine, 2);
         }
     }
-    if (targetMelody) {
+    if (targetSomething) {
         if (hasPlay) {
-            melody.stop();
+            // melody.stop();
+            radio[3].style.animation = '';
+            radio[3].classList.remove('on')
         } else {
-            melody.start('@1m');
+            // melody.start('@1m');
+            radio[3].style.animation = animateQueue;
+            wait(something, 3);
         }
     }
+
     togglePlay;
 });
 
@@ -329,36 +378,46 @@ drumsUl.addEventListener('click', function(e) {
     var hasPlay = eTarget.contains('play')
     var togglePlay = eTarget.toggle('play');
 
+    // var radio = document.querySelectorAll('.radio');
+
     if (targetKick) {
         if (hasPlay) {
             drumPlayer.splice(0, 1, storeDrumsA[0]);
+            radio[4].classList.remove('on');
         } else {
             drumPlayer.splice(0, 1, storeDrumsB[0]);
             this.classList.add('play')
+            radio[4].classList.add('on');
         }
     }
     if (targetSnare) {
         if (hasPlay) {
             drumPlayer.splice(1, 1, storeDrumsA[1]);
+            radio[5].classList.remove('on');
         } else {
             drumPlayer.splice(1, 1, storeDrumsB[1]);
             this.classList.add('play')
+            radio[5].classList.add('on');
         }
     }
     if (targetHat) {
         if (hasPlay) {
             drumPlayer.splice(2, 1, storeDrumsA[2]);
+            radio[6].classList.remove('on');
         } else {
             drumPlayer.splice(2, 1, storeDrumsB[2]);
             this.classList.add('play')
+            radio[6].classList.add('on');
         }
     }
     if (targetSwing) {
         if (hasPlay) {
             Tone.Transport.swing = 0;
+            radio[7].classList.remove('on');
         } else {
             Tone.Transport.swing = 0.6;
             this.classList.add('play')
+            radio[7].classList.add('on');
         }
     }
     togglePlay;
@@ -380,33 +439,41 @@ keyUl.addEventListener('click', function(e) {
     if (targetKeyA) {
         if (hasPlay) {
             keyPlayer = storeKeyA
+            radio[8].classList.remove('on')
         } else {
             keyPlayer = storeKeyB
             this.classList.add('play')
+            radio[8].classList.add('on')
         }
     }
     if (targetKeyB) {
         if (hasPlay) {
             keyPlayer = storeKeyA
+            radio[9].classList.remove('on')
         } else {
             keyPlayer = storeKeyC
             this.classList.add('play')
+            radio[9].classList.add('on')
         }
     }
     if (targetKeyC) {
         if (hasPlay) {
             keyPlayer = storeKeyA
+            radio[10].classList.remove('on')
         } else {
             keyPlayer = storeKeyB
             this.classList.add('play')
+            radio[10].classList.add('on')
         }
     }
     if (targetKeyD) {
         if (hasPlay) {
             keyPlayer = storeKeyA
+            radio[11].classList.remove('on')
         } else {
             keyPlayer = storeKeyB
             this.classList.add('play')
+            radio[11].classList.add('on')
         }
     }
     togglePlay;
