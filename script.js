@@ -164,6 +164,14 @@ var playQueue1 = anime({
     loop: true
 });
 
+var clearAnim = anime({
+    targets: '.clear',
+    rotate: '1turn',
+    // duration: 750,
+    duration: 500,
+    autoplay: false
+});
+
 
 
 
@@ -563,6 +571,16 @@ window.addEventListener("keydown", function(e) {
   
 });
 
+var clear = document.querySelector('.clear');
+var beat = document.querySelectorAll('.beat');
+
+
+clear.onclick = function() {
+    for (var i = 0; i < beat.length; i++) {
+        beat[i].classList.remove('on');
+    }
+    clearAnim.restart();
+}
 
 
 
@@ -618,6 +636,7 @@ function randomizeCirclePos() {
 (function inactivity() {
     var main;
     var delay;
+    var modal;
     var countClicks = 0;
     var cirPosChanges = 0;
 
@@ -634,6 +653,9 @@ function randomizeCirclePos() {
             countClicks++
         }
     }
+    document.onkeypress = function () {
+        keyPress = true;
+    }
 
     function goAnimation() {
 
@@ -644,6 +666,7 @@ function randomizeCirclePos() {
         }
 
         animScreen.style.visibility = 'visible';
+        clear.style.visibility = 'hidden'
 
         // randomize orange circle after first appearance
         cirPosChanges++
@@ -669,12 +692,22 @@ function randomizeCirclePos() {
             fadeIn(baton);
 
             // vivus, play wave on init
+            // TODO: delay for glitch
             animateArray[0].play();
 
             // tone, start animate loop
             circleGrayLoop.start('@4m');
 
         }, 600);
+
+
+        // modal box
+        modal = setTimeout(function() {
+            if (keyPress !== true) {
+                overlay.style.display = 'block';
+            }
+        }, 6000);
+
         
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
@@ -685,6 +718,7 @@ function randomizeCirclePos() {
 
     function resetTimer() {
         animScreen.style.visibility = 'hidden';
+        clear.style.visibility = 'visible'
 
         circleGray.style.opacity = 0;
         circleOrange.style.opacity = 0;
@@ -701,10 +735,29 @@ function randomizeCirclePos() {
 
         clearTimeout(main);
         clearTimeout(delay);
+        clearTimeout(modal);
 
         if (countClicks >= 5) {
             main = setTimeout(goAnimation, 2000)
         }
     } 
 }());
+
+var keyPress = false;
+var overlay = document.querySelector('.overlay');
+var gotIt = document.querySelector('.got-it');
+gotIt.onclick = function () {
+    overlay.style.display = 'none';
+    keyPress = true;
+}
+
+
+
+
+
+
+
+
+
+
 
