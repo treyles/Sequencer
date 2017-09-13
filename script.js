@@ -1,11 +1,25 @@
 'use strict';
 
+var ready;
+
 var ticks = 16;
 var stepNum = 1;
 
 Tone.Transport.bpm.value = 200;
 Tone.Transport.start();
 var soundOutput = new Tone.Gain().toMaster()
+
+window.onload = function() {
+    var lobby = document.querySelector('#lobby');
+    
+    function load() {
+        lobby.style.display = 'none';
+        fadeIn(document.body);
+        ready = true;
+    }
+
+    setTimeout(load, 2000);
+}
 
 // TODO: IIFE here to run init
 
@@ -291,7 +305,7 @@ var bassLine = new Tone.Sequence(function(time) {
 
 
 var circleGrayLoop = new Tone.Loop(function(time) {
-    animCircleGray.restart();
+    // animCircleGray.restart();
 }, '2m');
 
 // var melody = document.querySelector('.melody')
@@ -491,7 +505,7 @@ keyUl.addEventListener('click', function(e) {
 
 window.addEventListener("keydown", function(e) {
     
-    if (e.metaKey || e.ctrlKey) {
+    if (e.metaKey || e.ctrlKey || ready !== true) {
         return;
     }
 
@@ -579,7 +593,7 @@ clear.onclick = function() {
     for (var i = 0; i < beat.length; i++) {
         beat[i].classList.remove('on');
     }
-    clearAnim.restart();
+    // clearAnim.restart();
 }
 
 
@@ -679,6 +693,8 @@ function randomizeCirclePos() {
          * wait 500ms after setting visibility before animating 
          * to avoid weird glitch
         */ 
+
+        // TODO: CSS transition delay, instead of setTimeout?
         delay = setTimeout(function() {
             
             //TODO: stay dry, make function

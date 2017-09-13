@@ -30,6 +30,40 @@ body, #container, #grid, #multiplyMask {
     padding-top: 120px;
 }*/
 
+#lobby {
+    /*display: none;*/
+    /*z-index: 3;*/
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #e2e2e0;
+}
+
+#loader {
+    position: absolute;
+
+    width: 30px;
+    height: 30px;
+    left:0; right:0;
+    top:0; bottom:0;
+    margin:auto;
+}
+
+#spinner {
+    animation: spin 1s infinite;
+    animation-timing-function: cubic-bezier(.41,.62,.24,.99);
+
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(360deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 .clear {
     position: relative;
     float: right;
@@ -37,7 +71,7 @@ body, #container, #grid, #multiplyMask {
     height: 20px;
     background-color: #404040;
     border-radius: 50%;
-    padding: 6px;
+    padding: 8px;
     margin: 30px;
     cursor: pointer;
 
@@ -325,7 +359,6 @@ li:hover > .radio, .radio.on {
     background-color: #404040;
     font-size: 12px;
     color: #fff;
-    padding-bottom: 2px;
     font-family: 'futura-medium';
     cursor: pointer;
     outline: none;
