@@ -1,13 +1,14 @@
 'use strict';
 
 var ready;
-
 var ticks = 16;
 var stepNum = 1;
 
 Tone.Transport.bpm.value = 200;
 Tone.Transport.start();
 var soundOutput = new Tone.Gain().toMaster()
+
+var loadedSamples = 0;
 
 window.onload = function() {
     var lobby = document.querySelector('#lobby');
@@ -23,64 +24,133 @@ window.onload = function() {
 
 // TODO: IIFE here to run init
 
-var drumSounds = [
-    // change bass name
-    {name: 'bass', soundFile: 'sounds/newsounds/kick.mp3'}, 
-    {name: 'snare', soundFile: 'sounds/newsounds/clap.mp3'}, 
-    {name: 'low', soundFile: 'sounds/newsounds/hat.mp3'}, 
-    {name: 'mid', soundFile: 'sounds/newsounds/hat-open.mp3'},
-    {name: 'bass', soundFile: 'sounds/newsounds/kick.mp3'}, 
-    {name: 'snare', soundFile: 'sounds/newsounds/clap.mp3'}
+// var drumSounds = [
+//     'sounds/drums/kick.mp3', 
+//     'sounds/drums/clap.mp3', 
+//     'sounds/drums/hat.mp3', 
+//     'sounds/drums/hat-open.mp3',
+//     'sounds/drums/kick.mp3', 
+//     'sounds/drums/clap.mp3'
+// ];
+
+// var loopSounds = [
+//     'sounds/loops/crackle.wav',
+//     'sounds/loops/alicepad1.wav',
+//     'sounds/loops/alicepad2.wav',
+//     'sounds/loops/bass-line1.wav',
+//     'sounds/loops/bass-line2.wav'
+// ];
+
+// var altDrumSounds = [
+//     'sounds/alt-drums/lofikick.wav',
+//     'sounds/alt-drums/lofisnare.wav',
+//     'sounds/alt-drums/lofihat.wav'
+// ];
+
+// var keySounds = [
+//     [   'sounds/keys/keyA1.wav',
+//         'sounds/keys/keyA2.wav',
+//         'sounds/keys/keyA3.wav',
+//         'sounds/keys/keyA4.wav',
+//         'sounds/keys/keyA5.wav',
+//         'sounds/keys/keyA6.wav'
+//     ],
+//     [   'sounds/keys/keyB1.wav',
+//         'sounds/keys/keyB2.wav',
+//         'sounds/keys/keyB3.wav',
+//         'sounds/keys/keyB4.wav',
+//         'sounds/keys/keyB5.wav',
+//         'sounds/keys/keyB6.wav'
+//     ],
+//     [   'sounds/keys/keyC1.wav',
+//         'sounds/keys/keyC2.wav',
+//         'sounds/keys/keyC3.wav',
+//         'sounds/keys/keyC4.wav',
+//         'sounds/keys/keyC5.wav',
+//         'sounds/keys/keyC6.wav'
+//     ],
+//     [   'sounds/dialogues/dream.wav',
+//         'sounds/dialogues/high.wav',
+//         'sounds/dialogues/horizon.wav',
+//         'sounds/dialogues/lights.wav'
+//     ]
+// ];
+
+    // keys: [
+    //     'keysA',
+    //     'keysB',
+    //     'keysC'
+    // ],
+
+// var drumNames = ['bass', 'snare', 'low', 'mid', 'bass', 'snare'];
+
+// var sounds = {
+
+//     drums: ['kick', 'clap', 'hat', 'hat-open', 'kick', 'clap'],
+//     altDrums: ['lofikick', 'lofisnare', 'lofihat'],
+//     loops: ['crackle', 'alicepad1', 'alicepad2', 'bass-line1', 'bass-line2'],
+//     dialogues: ['dream', 'high', 'horizon', 'lights'],
+
+//     keysA: ['A1', 'A2', 'A3' 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
+//     keysB: ['B1', 'B2', 'B3' 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'],
+//     keysC: ['C1', 'C2', 'C3' 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']
+    
+// };
+
+
+
+var drumNames = [
+    'bass', 
+    'snare', 
+    'low', 
+    'mid', 
+    'bass', 
+    'snare'
 ];
 
-var loopSounds = [
-    'sounds/newsounds/crackle.wav',
-    'sounds/newsounds/alicepad1.wav',
-    'sounds/newsounds/alicepad2.wav',
-    'sounds/newsounds/bass-line1.wav',
-    'sounds/newsounds/bass-line2.wav'
-];
+var sounds = {
+    drums: [
+        'kick', 
+        'clap', 
+        'hat', 
+        'hat-open', 
+        'kick', 
+        'clap'
+    ],
 
-var altDrumSounds = [
-    'sounds/newsounds/altdrum/lofikick.wav',
-    'sounds/newsounds/altdrum/lofisnare.wav',
-    'sounds/newsounds/altdrum/lofihat.wav'
-];
+    altDrums: [
+        'lofikick',
+        'lofisnare',
+        'lofihat'
+    ],
 
-var keySounds = [
-    [   'sounds/newsounds/keys/keyA1.wav',
-        'sounds/newsounds/keys/keyA2.wav',
-        'sounds/newsounds/keys/keyA3.wav',
-        'sounds/newsounds/keys/keyA4.wav',
-        'sounds/newsounds/keys/keyA5.wav',
-        'sounds/newsounds/keys/keyA6.wav'
+    keys: [
+        'keysA',
+        'keysB',
+        'keysC'
     ],
-    [   'sounds/newsounds/keys/keyB1.wav',
-        'sounds/newsounds/keys/keyB2.wav',
-        'sounds/newsounds/keys/keyB3.wav',
-        'sounds/newsounds/keys/keyB4.wav',
-        'sounds/newsounds/keys/keyB5.wav',
-        'sounds/newsounds/keys/keyB6.wav'
+
+    loops: [
+        'crackle', 
+        'alicepad1', 
+        'alicepad2', 
+        'bass-line1', 
+        'bass-line2'
     ],
-    [   'sounds/newsounds/keys/keyC1.wav',
-        'sounds/newsounds/keys/keyC2.wav',
-        'sounds/newsounds/keys/keyC3.wav',
-        'sounds/newsounds/keys/keyC4.wav',
-        'sounds/newsounds/keys/keyC5.wav',
-        'sounds/newsounds/keys/keyC6.wav'
-    ],
-    [   'sounds/newsounds/dialogue/dream.wav',
-        'sounds/newsounds/dialogue/high.wav',
-        'sounds/newsounds/dialogue/horizon.wav',
-        'sounds/newsounds/dialogue/lights.wav'
+
+    dialogues: [
+        'dream',
+        'high',
+        'horizon',
+        'lights'
     ]
-];
+};
 
-// extract soundFiles
-// TODO: combine with checkoutSoundGroup with if statement (indexOf)
-var soundFileArray = drumSounds.map(function(obj) {
-    return obj.soundFile;
-});
+
+
+
+
+
 
 // store buffers
 var storeDrumsA = [];
@@ -89,6 +159,7 @@ var storeKeyA = [];
 var storeKeyB = [];
 var storeKeyC = [];
 
+
 // to play
 var drumPlayer = [];
 var keyPlayer = [];
@@ -96,37 +167,92 @@ var bassPlayer = [];
 var samplePlayer = [];
 
 
+
+
 // TODO: change from sampler to player:
 // for buffer count (preloader, loadedSamples++) *edit: sampler can do
 // for choke
 // and can trigger queue with player.state
 // should set retrigger = true for drum sounds
-function checkoutSoundGroup (group, toArray) {
-    for (var i = 0; i < group.length; i++) {
-        toArray[i] = new Tone.Sampler(group[i]);
+
+// function checkoutSoundGroup (group, toArray) {
+//     for (var i = 0; i < group.length; i++) {
+//         toArray[i] = new Tone.Sampler(group[i]);
+//         toArray[i].connect(soundOutput);
+//     }
+// };
+
+// 'sounds/drums/kick.mp3'
+
+// 'sounds/keys/keysA/keyA1.wav'
+
+function checkoutSounds(group, toArray) {
+    var currentGroup = sounds[group];
+    var path = 'sounds/' + group + '/';
+    
+    // checks if argument contains string
+    if (group.indexOf('keys') !== -1) {
+        var keysGroup = []
+
+        for (var i = 1; i < 10; i++) {
+            keysGroup.push(group + i) 
+        }
+
+        currentGroup = keysGroup;
+    }
+
+    for (var i = 0; i < currentGroup.length; i++) {
+        var completePath = path + currentGroup[i] + '.wav';
+
+        toArray[i] = new Tone.Player(completePath, function() {
+            loadedSamples++
+        });
+
         toArray[i].connect(soundOutput);
     }
 };
 
-// drums
-checkoutSoundGroup(soundFileArray, storeDrumsA);
-checkoutSoundGroup(soundFileArray, drumPlayer);
-checkoutSoundGroup(altDrumSounds, storeDrumsB);
 
-// keys
-checkoutSoundGroup(keySounds[0], storeKeyA);
-checkoutSoundGroup(keySounds[0], keyPlayer);
-checkoutSoundGroup(keySounds[1], storeKeyB);
-checkoutSoundGroup(keySounds[2], storeKeyC);
 
-// samples
-checkoutSoundGroup(keySounds[3], samplePlayer);
+// // drums
+// checkoutSoundGroup(drumSounds, storeDrumsA);
+// checkoutSoundGroup(drumSounds, drumPlayer);
+// checkoutSoundGroup(altDrumSounds, storeDrumsB);
+
+checkoutSounds('drums', storeDrumsA);
+checkoutSounds('drums', drumPlayer);
+checkoutSounds('altDrums', storeDrumsB);
+
+
+
+// // keys
+// checkoutSoundGroup(keySounds[0], storeKeyA);
+// checkoutSoundGroup(keySounds[0], keyPlayer);
+// checkoutSoundGroup(keySounds[1], storeKeyB);
+// checkoutSoundGroup(keySounds[2], storeKeyC);
+
+checkoutSounds('keysA', storeKeyA);
+checkoutSounds('keysA', keyPlayer);
+checkoutSounds('keysB', storeKeyB);
+checkoutSounds('keysC', storeKeyC);
+
+// // samples
+// checkoutSoundGroup(keySounds[3], samplePlayer);
+
+checkoutSounds('dialogues', samplePlayer);
+
+
+
 
 
 // drum volume, delete later
 for (var i = 0; i < drumPlayer.length; i++) {
     drumPlayer[i].volume.value = -10;
 }
+
+
+
+
 
 
 
@@ -198,10 +324,10 @@ var clearAnim = anime({
 var grid = document.getElementById('grid');
 
 // make div for each sound
-for (var i = 0; i < drumSounds.length; i++) {
+for (var i = 0; i < sounds.drums.length; i++) {
     var soundDiv = document.createElement('div');
 
-    soundDiv.setAttribute('id', drumSounds[i].name);
+    soundDiv.setAttribute('id', drumNames[i]);
     grid.appendChild(soundDiv);
 }
 
@@ -210,7 +336,7 @@ for (var i = 0; i < grid.children.length; i++) {
     for (var j = 1; j < ticks + 1; j++) {
         var btn = document.createElement('div');
 
-        btn.classList.add('beat', drumSounds[i].name, j);
+        btn.classList.add('beat', drumNames[i], j);
         grid.children[i].appendChild(btn);
 
         btn.addEventListener('click', function(){
@@ -241,21 +367,22 @@ var sequence = new Tone.Sequence(function(time) {
     }
 
     // play sounds
-    for (var i = 0; i < drumSounds.length; i++) {
+    for (var i = 0; i < sounds.drums.length; i++) {
         // loop through nodeList
         for (var j = 0; j < beat.length; j++) {
             // TODO: get multiple class names with .split
 
             // OR, just (.name.on.alt)..
             // how do sounds play simultaneously?
-            var hasSoundName = beat[j].classList.contains(drumSounds[i].name);
+            var hasSoundName = beat[j].classList.contains(drumNames[i]);
             var hasStep = beat[j].classList.contains(stepNum);
             var hasOn = beat[j].classList.contains('on');
             var hasAlt = beat[j].classList.contains('alt'); 
             
             // TODO: add mute button?
             if (hasSoundName && hasStep && hasOn) {
-                drumPlayer[i].triggerAttack(0, time, 1);
+                // drumPlayer[i].triggerAttack(0, time, 1);
+                drumPlayer[i].start(time);
             }
         }       
     }
@@ -266,12 +393,20 @@ var sequence = new Tone.Sequence(function(time) {
     if (stepNum > ticks) {
         stepNum = 1;
     }
-}, drumSounds, '8n').start();
+}, sounds.drums, '8n').start();
 
 
 /**
  * Loop
 */
+
+var loopSounds = [
+    'sounds/loops/crackle.wav',
+    'sounds/loops/alicepad1.wav',
+    'sounds/loops/alicepad2.wav',
+    'sounds/loops/bass-line1.wav',
+    'sounds/loops/bass-line2.wav'
+];
 
 // TODO: combine with multiPlayer and put in object?
 
@@ -529,11 +664,11 @@ window.addEventListener("keydown", function(e) {
     }
 
     function playKeys(keyIndex) {
-        keyPlayer[keyIndex].triggerAttack();
+        keyPlayer[keyIndex].start();
     };
 
     function playSamples(keyIndex) {
-        samplePlayer[keyIndex].triggerAttack();
+        samplePlayer[keyIndex].start();
     };
 
     switch (e.which) {
