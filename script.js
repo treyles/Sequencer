@@ -1,115 +1,63 @@
+// browser support:
+// IE9: classList.contains doesnt work?
+
 'use strict';
+
+window.onload = init;
+
+/**
+ * Helpers
+ */
+    
+// get element(s) by CSS selector
+function qs(selector) {
+    return document.querySelector(selector);
+}
+
+function qsa(selector) {
+    return document.querySelectorAll(selector);
+}
+
+// because forEach doesn't work with 
+// nodeLists in certain browsers
+function eachNode(nodeList, callback, scope) {
+    for (var i = 0; i < nodeList.length; i++) {
+        callback.call(scope, i, nodeList[i]);
+    }
+}
+
+// randomizer for animations:
+function randomize(arrayLength) {
+    return Math.floor (Math.random() * arrayLength);
+}
+
+// classList.contains()
+
 
 var ready;
 var ticks = 16;
 var stepNum = 1;
 
+var loadedSamples = 0;
+
 Tone.Transport.bpm.value = 200;
 Tone.Transport.start();
 var soundOutput = new Tone.Gain().toMaster()
 
-var loadedSamples = 0;
 
-window.onload = function() {
-    var lobby = document.querySelector('#lobby');
-    
-    function load() {
-        lobby.style.display = 'none';
+
+function init() {
+    setTimeout(function() {
+        qs('#lobby').style.display = 'none';
         fadeIn(document.body);
         ready = true;
-    }
-
-    setTimeout(load, 2000);
+    }, 3000);
 }
 
-// TODO: IIFE here to run init
-
-// var drumSounds = [
-//     'sounds/drums/kick.mp3', 
-//     'sounds/drums/clap.mp3', 
-//     'sounds/drums/hat.mp3', 
-//     'sounds/drums/hat-open.mp3',
-//     'sounds/drums/kick.mp3', 
-//     'sounds/drums/clap.mp3'
-// ];
-
-// var loopSounds = [
-//     'sounds/loops/crackle.wav',
-//     'sounds/loops/alicepad1.wav',
-//     'sounds/loops/alicepad2.wav',
-//     'sounds/loops/bass-line1.wav',
-//     'sounds/loops/bass-line2.wav'
-// ];
-
-// var altDrumSounds = [
-//     'sounds/alt-drums/lofikick.wav',
-//     'sounds/alt-drums/lofisnare.wav',
-//     'sounds/alt-drums/lofihat.wav'
-// ];
-
-// var keySounds = [
-//     [   'sounds/keys/keyA1.wav',
-//         'sounds/keys/keyA2.wav',
-//         'sounds/keys/keyA3.wav',
-//         'sounds/keys/keyA4.wav',
-//         'sounds/keys/keyA5.wav',
-//         'sounds/keys/keyA6.wav'
-//     ],
-//     [   'sounds/keys/keyB1.wav',
-//         'sounds/keys/keyB2.wav',
-//         'sounds/keys/keyB3.wav',
-//         'sounds/keys/keyB4.wav',
-//         'sounds/keys/keyB5.wav',
-//         'sounds/keys/keyB6.wav'
-//     ],
-//     [   'sounds/keys/keyC1.wav',
-//         'sounds/keys/keyC2.wav',
-//         'sounds/keys/keyC3.wav',
-//         'sounds/keys/keyC4.wav',
-//         'sounds/keys/keyC5.wav',
-//         'sounds/keys/keyC6.wav'
-//     ],
-//     [   'sounds/dialogues/dream.wav',
-//         'sounds/dialogues/high.wav',
-//         'sounds/dialogues/horizon.wav',
-//         'sounds/dialogues/lights.wav'
-//     ]
-// ];
-
-    // keys: [
-    //     'keysA',
-    //     'keysB',
-    //     'keysC'
-    // ],
-
-// var drumNames = ['bass', 'snare', 'low', 'mid', 'bass', 'snare'];
-
-// var sounds = {
-
-//     drums: ['kick', 'clap', 'hat', 'hat-open', 'kick', 'clap'],
-//     altDrums: ['lofikick', 'lofisnare', 'lofihat'],
-//     loops: ['crackle', 'alicepad1', 'alicepad2', 'bass-line1', 'bass-line2'],
-//     dialogues: ['dream', 'high', 'horizon', 'lights'],
-
-//     keysA: ['A1', 'A2', 'A3' 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'],
-//     keysB: ['B1', 'B2', 'B3' 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'],
-//     keysC: ['C1', 'C2', 'C3' 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']
-    
-// };
-
-
-
-var drumNames = [
-    'bass', 
-    'snare', 
-    'low', 
-    'mid', 
-    'bass', 
-    'snare'
-];
 
 var sounds = {
     drums: [
+        // arrays of file names
         'kick', 
         'clap', 
         'hat', 
@@ -122,12 +70,6 @@ var sounds = {
         'lofikick',
         'lofisnare',
         'lofihat'
-    ],
-
-    keys: [
-        'keysA',
-        'keysB',
-        'keysC'
     ],
 
     loops: [
@@ -143,13 +85,51 @@ var sounds = {
         'high',
         'horizon',
         'lights'
+    ],
+
+    keys: [
+        // array of directories
+        'keysA',
+        'keysB',
+        'keysC'
     ]
 };
 
 
+function checkoutSounds(group, toArray) {
+    var currentGroup = sounds[group];
+    var path = 'sounds/' + group + '/';
+    
+    // if passing in any directories,
+    // from keys property
+    if (group.indexOf('keys') !== -1) {
+        var keysGroup = []
 
+        for (var i = 1; i < 10; i++) {
+            
+            // create filenames
+            keysGroup.push(group + i) 
+        }
 
+        currentGroup = keysGroup;
+    }
 
+    // set new player class for each sound file
+    for (var i = 0; i < currentGroup.length; i++) {
+        var completePath = path + currentGroup[i] + '.wav';
+
+        toArray[i] = new Tone.Player(completePath, function() {
+            loadedSamples++
+        });
+
+        toArray[i].connect(soundOutput);
+
+        // enable looping when setting classes for loops
+        if (group.indexOf('loops') !== -1) {
+            toArray[i].loop = true;
+        }
+    }
+};
 
 
 // store buffers
@@ -165,82 +145,21 @@ var drumPlayer = [];
 var keyPlayer = [];
 var bassPlayer = [];
 var samplePlayer = [];
+var loopPlayer = [];
 
 
-
-
-// TODO: change from sampler to player:
-// for buffer count (preloader, loadedSamples++) *edit: sampler can do
-// for choke
-// and can trigger queue with player.state
-// should set retrigger = true for drum sounds
-
-// function checkoutSoundGroup (group, toArray) {
-//     for (var i = 0; i < group.length; i++) {
-//         toArray[i] = new Tone.Sampler(group[i]);
-//         toArray[i].connect(soundOutput);
-//     }
-// };
-
-// 'sounds/drums/kick.mp3'
-
-// 'sounds/keys/keysA/keyA1.wav'
-
-function checkoutSounds(group, toArray) {
-    var currentGroup = sounds[group];
-    var path = 'sounds/' + group + '/';
-    
-    // checks if argument contains string
-    if (group.indexOf('keys') !== -1) {
-        var keysGroup = []
-
-        for (var i = 1; i < 10; i++) {
-            keysGroup.push(group + i) 
-        }
-
-        currentGroup = keysGroup;
-    }
-
-    for (var i = 0; i < currentGroup.length; i++) {
-        var completePath = path + currentGroup[i] + '.wav';
-
-        toArray[i] = new Tone.Player(completePath, function() {
-            loadedSamples++
-        });
-
-        toArray[i].connect(soundOutput);
-    }
-};
-
-
-
-// // drums
-// checkoutSoundGroup(drumSounds, storeDrumsA);
-// checkoutSoundGroup(drumSounds, drumPlayer);
-// checkoutSoundGroup(altDrumSounds, storeDrumsB);
 
 checkoutSounds('drums', storeDrumsA);
 checkoutSounds('drums', drumPlayer);
 checkoutSounds('altDrums', storeDrumsB);
-
-
-
-// // keys
-// checkoutSoundGroup(keySounds[0], storeKeyA);
-// checkoutSoundGroup(keySounds[0], keyPlayer);
-// checkoutSoundGroup(keySounds[1], storeKeyB);
-// checkoutSoundGroup(keySounds[2], storeKeyC);
 
 checkoutSounds('keysA', storeKeyA);
 checkoutSounds('keysA', keyPlayer);
 checkoutSounds('keysB', storeKeyB);
 checkoutSounds('keysC', storeKeyC);
 
-// // samples
-// checkoutSoundGroup(keySounds[3], samplePlayer);
-
 checkoutSounds('dialogues', samplePlayer);
-
+checkoutSounds('loops', loopPlayer);
 
 
 
@@ -255,79 +174,17 @@ for (var i = 0; i < drumPlayer.length; i++) {
 
 
 
-
-
-// Animations
-
-var animateArray = [];
-
-(function animateWaves() {
-    var waves = document.querySelectorAll('.waves');
-
-    for (var i = 0; i < waves.length; i++) {
-        animateArray[i] = new Vivus(waves[i].id, {
-            type: 'sync', 
-            duration: 60, 
-            start: 'manual',
-            animTimingFunction: function (t) { 
-                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
-            }
-        });
-    }
-}());
-
-var animCircleGray = anime({
-    targets: '#circleGray',
-    scale: 1.2,
-    direction: 'alternate',
-    duration: 200,
-    easing: 'easeInOutCirc',
-    autoplay: false,
-});
-
-var animBaton = anime({
-    targets: '#baton',
-    rotate: '1turn',
-    // duration: 750,
-    duration: 1200,
-    autoplay: false
-});
-
-var playQueue1 = anime({
-    targets: '.vinyl .triangle',
-    direction: 'alternate',
-    duration: 200,
-    delay: 200,
-    opacity: 0,
-    easing: 'easeInOutCubic',
-    autoplay: false,
-    loop: true
-});
-
-var clearAnim = anime({
-    targets: '.clear',
-    rotate: '1turn',
-    // duration: 750,
-    duration: 500,
-    autoplay: false
-});
-
-
-
-
-
-
 /**
  * Make Grid
  */
 
-var grid = document.getElementById('grid');
+var grid = qs('#grid');
 
 // make div for each sound
 for (var i = 0; i < sounds.drums.length; i++) {
     var soundDiv = document.createElement('div');
 
-    soundDiv.setAttribute('id', drumNames[i]);
+    soundDiv.setAttribute('id', sounds.drums[i]);
     grid.appendChild(soundDiv);
 }
 
@@ -336,7 +193,7 @@ for (var i = 0; i < grid.children.length; i++) {
     for (var j = 1; j < ticks + 1; j++) {
         var btn = document.createElement('div');
 
-        btn.classList.add('beat', drumNames[i], j);
+        btn.classList.add('beat', sounds.drums[i], j);
         grid.children[i].appendChild(btn);
 
         btn.addEventListener('click', function(){
@@ -349,42 +206,38 @@ for (var i = 0; i < grid.children.length; i++) {
  * Sequencer
  */
 
-
-// loop sequence
+var beat = qsa('.beat');
 
 var sequence = new Tone.Sequence(function(time) {
-    var beat = document.querySelectorAll('.beat'); // declare at top
-    
+
     // animate steps
-    // loop through nodeList
-    for (var i = 0; i < beat.length; i++) {
+    eachNode(beat, function(i) {
         var currentBeat = beat[i].classList; 
 
         currentBeat.remove('step');
         if (currentBeat.contains(stepNum)) {
             currentBeat.add('step');
         }
-    }
+    });
 
     // play sounds
-    for (var i = 0; i < sounds.drums.length; i++) {
-        // loop through nodeList
-        for (var j = 0; j < beat.length; j++) {
+    for (var i = 0; i < sounds.drums.length; i++) {    
+        eachNode(beat, function(j) {
             // TODO: get multiple class names with .split
 
             // OR, just (.name.on.alt)..
             // how do sounds play simultaneously?
-            var hasSoundName = beat[j].classList.contains(drumNames[i]);
+            var hasSoundName = beat[j].classList.contains(sounds.drums[i]);
             var hasStep = beat[j].classList.contains(stepNum);
             var hasOn = beat[j].classList.contains('on');
-            var hasAlt = beat[j].classList.contains('alt'); 
+            // var hasAlt = beat[j].classList.contains('alt'); 
             
             // TODO: add mute button?
             if (hasSoundName && hasStep && hasOn) {
                 // drumPlayer[i].triggerAttack(0, time, 1);
                 drumPlayer[i].start(time);
             }
-        }       
+        });
     }
 
     // reset stepNum at end of sequence to repeat
@@ -392,59 +245,21 @@ var sequence = new Tone.Sequence(function(time) {
 
     if (stepNum > ticks) {
         stepNum = 1;
+
+        // animate gray circle on first step
+        animCircleGray.restart();
     }
 }, sounds.drums, '8n').start();
 
 
-/**
- * Loop
-*/
-
-var loopSounds = [
-    'sounds/loops/crackle.wav',
-    'sounds/loops/alicepad1.wav',
-    'sounds/loops/alicepad2.wav',
-    'sounds/loops/bass-line1.wav',
-    'sounds/loops/bass-line2.wav'
-];
-
-// TODO: combine with multiPlayer and put in object?
-
-// loop sound library
-var loopPlayer = new Tone.MultiPlayer(loopSounds, function() {
-    loopPlayer.start();
-}).connect(soundOutput);
-
-// vinyl loop
-var vinyl = new Tone.Loop(function(time) {
-    loopPlayer.start(0, time, 0);
-}, '2m');
-
-// melody loop
-var melody = new Tone.Loop(function(time) {
-    loopPlayer.start(1, time, 0);
-}, '1m');
-
-// bass loop, loops through two bass parts
-// TODO: use 'step' instead of 'bassPart'
-var bassPart = 0;
-var bassLine = new Tone.Sequence(function(time) {
-    if (bassPart < 1) {
-        loopPlayer.start(3, time, 0);
-        bassPart++;
-    } else {
-        loopPlayer.start(4, time, 0);
-        bassPart = 0;
-    } 
-}, [1, 2], '8m');
+// clear button
+qs('.clear').onclick = function() {
+    eachNode(beat, function(i) {
+        beat[i].classList.remove('on');
+    });
+}
 
 
-var circleGrayLoop = new Tone.Loop(function(time) {
-    // animCircleGray.restart();
-}, '2m');
-
-// var melody = document.querySelector('.melody')
-// melody.firstChild.classList.contains('triangle')
 
 var radio = document.querySelectorAll('.radio');
 
@@ -460,11 +275,11 @@ loopUl.addEventListener('click', function(e) {
     var togglePlay = eTarget.toggle('play');
 
     // var tri = document.querySelectorAll('.triangle')
-    var animateQueue = 'blink 1s infinite linear';
+    var animSettings = 'blink 1s infinite linear';
 
-    function wait(prop, index) {
+    function queueAnim(prop, index) {
         if (prop.state !== 'started') {
-            setTimeout(wait.bind(null, prop, index), 100);
+            setTimeout(queueAnim.bind(null, prop, index), 100);
         } else {
             radio[index].style.animation = '';
             radio[index].classList.add('on')
@@ -474,47 +289,46 @@ loopUl.addEventListener('click', function(e) {
 
     if (targetVinyl) {
         if (hasPlay) {
-            vinyl.stop();
+            loopPlayer[0].stop();
             radio[0].style.animation = '';
             radio[0].classList.remove('on')
         } else {
-            vinyl.start('@1m');
-            radio[0].style.animation = animateQueue;
-            wait(vinyl, 0);
+            loopPlayer[0].start('@1m');
+            radio[0].style.animation = animSettings;
+            queueAnim(loopPlayer[0], 0);
         }
     }
     if (targetMelody) {
         if (hasPlay) {
-            melody.stop();
+            loopPlayer[1].stop();
             radio[1].style.animation = '';
             radio[1].classList.remove('on')
         } else {
-            melody.start('@1m');
-            radio[1].style.animation = animateQueue;
-            wait(melody, 1);
+            loopPlayer[1].start('@1m');
+            radio[1].style.animation = animSettings;
+            queueAnim(loopPlayer[1], 1);
         }
     }
     if (targetBass) {
         if (hasPlay) {
-            bassLine.stop();
-            bassPart = 0;
+            loopPlayer[3].stop();
             radio[2].style.animation = '';
             radio[2].classList.remove('on')
         } else {
-            bassLine.start('@2m')
-            radio[2].style.animation = animateQueue;
-            wait(bassLine, 2);
+            loopPlayer[3].start('@2m');
+            radio[2].style.animation = animSettings;
+            queueAnim(loopPlayer[3], 2);
         }
     }
     if (targetSomething) {
         if (hasPlay) {
-            // melody.stop();
-            radio[3].style.animation = '';
-            radio[3].classList.remove('on')
+            // loopPlayer[2].stop();
+            radio[4].style.animation = '';
+            radio[4].classList.remove('on')
         } else {
-            // melody.start('@1m');
-            radio[3].style.animation = animateQueue;
-            wait(something, 3);
+            // loopPlayer[3].start('@1m');
+            radio[4].style.animation = animSettings;
+            queueAnim(loopPlayer[4], 4);
         }
     }
 
@@ -638,31 +452,81 @@ keyUl.addEventListener('click', function(e) {
 
 
 
+
+// Animations
+
+var animateArray = [];
+
+(function wavesInit() {
+    var waves = document.querySelectorAll('.waves');
+
+    for (var i = 0; i < waves.length; i++) {
+        animateArray[i] = new Vivus(waves[i].id, {
+            type: 'sync', 
+            duration: 60, 
+            start: 'manual',
+            animTimingFunction: function (t) {
+                // easing script from: https://gist.github.com/gre/1650294
+                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
+            }
+        });
+    }
+}());
+
+function resetWaveAnim() {
+    for (var i = 0; i < animateArray.length; i++) {
+        animateArray[i].stop();
+        animateArray[i].reset();
+    }
+}
+
+
+
+
+var animCircleGray = anime({
+    targets: '#circleGray',
+    scale: 1.2,
+    direction: 'alternate',
+    duration: 200,
+    easing: 'easeInOutCirc',
+    autoplay: false,
+});
+
+var animBaton = anime({
+    targets: '#baton',
+    rotate: '1turn',
+    // duration: 750,
+    duration: 1200,
+    autoplay: false
+});
+
+
+
+
+function animateWave() {
+    var index = randomize(animateArray.length)
+
+    resetWaveAnim();
+
+    // only play when circleGray has appeared
+    if (circleGray.style.opacity > 0) {
+        animateArray[index].play();
+    }
+}
+
+// function hitPlay(type, index) {
+//     type == 'key' ? keyPlayer[index].start() : samplePlayer[index].start()
+// }
+
+
 window.addEventListener("keydown", function(e) {
     
     if (e.metaKey || e.ctrlKey || ready !== true) {
         return;
     }
 
-    // TODO: stay dry, repeated 2x
-    // all functions outside of eventListener?
-    function animateWave() {
-        var randomize = Math.floor (
-            Math.random() * animateArray.length
-        );
 
-        // TODO: stay dry, this is repeated 3x
-        for (var i = 0; i < animateArray.length; i++) {
-            animateArray[i].stop();
-            animateArray[i].reset();
-        }
-
-        // only play when circleGray has animated
-        if (circleGray.style.opacity > 0) {
-            animateArray[randomize].play();
-        }
-    }
-
+    // combine in one function 
     function playKeys(keyIndex) {
         keyPlayer[keyIndex].start();
     };
@@ -720,16 +584,10 @@ window.addEventListener("keydown", function(e) {
   
 });
 
-var clear = document.querySelector('.clear');
-var beat = document.querySelectorAll('.beat');
 
 
-clear.onclick = function() {
-    for (var i = 0; i < beat.length; i++) {
-        beat[i].classList.remove('on');
-    }
-    // clearAnim.restart();
-}
+
+
 
 
 
@@ -768,17 +626,14 @@ function randomizeCirclePos() {
     // TODO: stay dry, repeated 2x
     var circleOrange = document.querySelector('#circleOrange');
 
-    // TODO: stay dry, reapeated 2x
-    var randomPos = Math.floor (
-            Math.random() * circleCoords.length
-        );
+    var index = randomize(circleCoords.length)
 
     function setPos(topPos, leftPos) {
         circleOrange.style.top = topPos + 'px';
         circleOrange.style.left = leftPos + 'px';
     }
 
-    setPos.apply(null, circleCoords[randomPos]);
+    setPos.apply(null, circleCoords[index]);
 }
 
 
@@ -790,7 +645,7 @@ function randomizeCirclePos() {
     var cirPosChanges = 0;
 
     var animScreen = document.querySelector('#animations');
-    var beat = document.querySelectorAll('.beat')
+    // var beat = document.querySelectorAll('.beat')
     var circleGray = document.querySelector('#circleGray');
     var circleOrange = document.querySelector('#circleOrange');
     var baton = document.querySelector('#baton');
@@ -808,14 +663,10 @@ function randomizeCirclePos() {
 
     function goAnimation() {
 
-        // TODO: stay dry, make function
-        for (var i = 0; i < animateArray.length; i++) {
-            animateArray[i].stop();
-            animateArray[i].reset();
-        }
+        resetWaveAnim();
 
         animScreen.style.visibility = 'visible';
-        clear.style.visibility = 'hidden'
+        qs('.clear').style.visibility = 'hidden'
 
         // randomize orange circle after first appearance
         cirPosChanges++
@@ -832,11 +683,7 @@ function randomizeCirclePos() {
         // TODO: CSS transition delay, instead of setTimeout?
         delay = setTimeout(function() {
             
-            //TODO: stay dry, make function
-            for (var i = 0; i < animateArray.length; i++) {
-                animateArray[i].stop();
-                animateArray[i].reset();
-            }
+            resetWaveAnim();
 
             fadeIn(circleGray);
             fadeIn(circleOrange);
@@ -846,8 +693,8 @@ function randomizeCirclePos() {
             // TODO: delay for glitch
             animateArray[0].play();
 
-            // tone, start animate loop
-            circleGrayLoop.start('@4m');
+            // // tone, start animate loop
+            // circleGrayLoop.start('@4m');
 
         }, 600);
 
@@ -869,14 +716,14 @@ function randomizeCirclePos() {
 
     function resetTimer() {
         animScreen.style.visibility = 'hidden';
-        clear.style.visibility = 'visible'
+        qs('.clear').style.visibility = 'visible'
 
         circleGray.style.opacity = 0;
         circleOrange.style.opacity = 0;
         baton.style.opacity = 0;
 
-        // tone, stop animate loop
-        circleGrayLoop.stop();
+        // // tone, stop animate loop
+        // circleGrayLoop.stop();
 
         for (var i = 0; i < beat.length; i++) {
             if (!beat[i].classList.contains('on')) {
