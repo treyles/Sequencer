@@ -46,7 +46,7 @@ var soundOutput = new Tone.Gain().toMaster()
 
 
 
-function init() {
+function init() { 
     setTimeout(function() {
         qs('#lobby').style.display = 'none';
         fadeIn(document.body);
@@ -261,7 +261,7 @@ qs('.clear').onclick = function() {
 
 
 
-var radio = document.querySelectorAll('.radio');
+// var radio = document.querySelectorAll('.radio');
 
 // loop menu
 var loopUl = document.querySelector('#loop');
@@ -349,7 +349,7 @@ drumsUl.addEventListener('click', function(e) {
     var hasPlay = eTarget.contains('play')
     var togglePlay = eTarget.toggle('play');
 
-    // var radio = document.querySelectorAll('.radio');
+    var radio = document.querySelectorAll('.radio');
 
     if (targetKick) {
         if (hasPlay) {
