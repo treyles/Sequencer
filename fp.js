@@ -267,14 +267,14 @@ function getIndexFromEl(el) {
 function handleLoopClick() {
 	var index = getIndexFromEl(this);
 
-	if (!this.classList.contains('play')) {
+    if (!this.classList.contains('play')) {
         // play loop, and quantize two measures
         loopPlayers[index].start('@2m');
         animateLoopButton(true, index)
-	} else {
+    } else {
         loopPlayers[index].stop();
         animateLoopButton(false, index)
-	}
+    }
 
 	this.classList.toggle('play');
 }
