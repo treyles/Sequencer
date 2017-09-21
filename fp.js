@@ -265,7 +265,7 @@ function getIndexFromEl(el) {
 }
 
 function handleLoopClick() {
-	var index = getIndexFromEl(this);
+    var index = getIndexFromEl(this);
 
     if (!this.classList.contains('play')) {
         // play loop, and quantize two measures
@@ -276,7 +276,7 @@ function handleLoopClick() {
         animateLoopButton(false, index)
     }
 
-	this.classList.toggle('play');
+    this.classList.toggle('play');
 }
 
 function handleDrumsClick() {
