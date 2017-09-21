@@ -1,11 +1,13 @@
 // browser support: 
 // IE11: classList
+var lobby = document.querySelector('#lobby');
+lobby.style.display = 'none';
 
 'use strict';
 
 // window.onload = init;
 
-var ready;
+var ready;       // use loadedSamples: loadedSamples <= 24 ?
 var ticks = 16;
 var stepNum = 1;
 var loadedSamples = 0;
@@ -32,10 +34,16 @@ function qsa(select) {
 /**
  * Handle Sounds
  */
-var drumPlayers = [],
-	loopPlayers = [],
-	dialoguePlayers = [],
-	keysPlayers = [];
+var drumPlayers,
+	loopPlayers,
+	dialoguePlayers,
+	keysPlayers;
+
+var defaultDrums,
+    alternateDrums,
+    defaultKeys,
+    alternateKeysB,
+    alternateKeysC;
 
 var sounds = {
     drums: [
@@ -92,6 +100,7 @@ function createPaths(group, keys) {
         currentGroup = keysGroup;
     }
 
+    // returns array of complete paths
     return currentGroup.map(function(el) {
         return path + el + '.wav';
     });
@@ -111,7 +120,16 @@ function createBuffers(array, loop) {
         return currentBuffer;  
     });
 
+    // returns new array of buffers
     return buffers;   
+}
+
+function changeDrumSound(array, index) {
+    if (array === alternateDrums) {
+        drumPlayers[index] = alternateDrums[index];
+    } else {
+        drumPlayers[index] = defaultDrums[index];
+    }
 }
 
 function initTransport() {
@@ -120,15 +138,16 @@ function initTransport() {
 }
 
 function initSounds() {
-    var drums = createPaths('drums');          // TODO: bugs, not explicitly setting false?
-    var loops = createPaths('loops');
-    var dialogues = createPaths('dialogues');
-    var keys = createPaths('keysA', true);			// true, to handle keys directories
+    drumPlayers = createBuffers(createPaths('drums'));
+    loopPlayers = createBuffers(createPaths('loops'), true);
+    dialoguePlayers = createBuffers(createPaths('dialogues'));
+    keysPlayers = createBuffers(createPaths('keysA', true));
 
-    drumPlayers = createBuffers(drums);
-    loopPlayers = createBuffers(loops, true);		// true, to enable looping
-    dialoguePlayers = createBuffers(dialogues);
-    keysPlayers = createBuffers(keys);
+    defaultDrums = createBuffers(createPaths('drums'));
+    alternateDrums = createBuffers(createPaths('altDrums'));
+    defaultKeys = createBuffers(createPaths('keysA', true));
+    alternateKeysB = createBuffers(createPaths('keysB', true));
+    alternateKeysC = createBuffers(createPaths('keysC', true));
 
     initTransport();
 }
@@ -183,7 +202,7 @@ function sequenceEvent(time) {
             var hasSoundName = beat[j].classList.contains(sounds.drums[i]);
             var hasStep = beat[j].classList.contains(stepNum);
             var hasOn = beat[j].classList.contains('on');
-        
+            
             if (hasSoundName && hasStep && hasOn) {
                 drumPlayers[i].start(time);
             }
@@ -208,7 +227,7 @@ function initSequencer() {
  */
 function initControls() {
 
-	// sequencer click
+	// sequencer clicks
 	eachNode(qsa('.beat'), function(node) {
 		node.addEventListener('click', handleBeatToggle);
 	});
@@ -216,48 +235,71 @@ function initControls() {
 	// loop menu
 	qs('.vinyl').addEventListener('click', handleLoopClick);
 	qs('.melody').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
+	qs('.bass-line').addEventListener('click', handleLoopClick);
 	qs('.vinyl').addEventListener('click', handleLoopClick);
 
 	// drums menu
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
+	qs('.kick-alt').addEventListener('click', handleDrumsClick);
+	qs('.snare-alt').addEventListener('click', handleDrumsClick);
+	qs('.hat-alt').addEventListener('click', handleDrumsClick);
+	qs('.swing').addEventListener('click', handleDrumsClick);
 
 	// keybaord menu
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
+	// qs('.vinyl').addEventListener('click', handleLoopClick);
+	// qs('.vinyl').addEventListener('click', handleLoopClick);
+	// qs('.vinyl').addEventListener('click', handleLoopClick);
+	// qs('.vinyl').addEventListener('click', handleLoopClick);
 
 	// keyboard presses
-	window.addEventListener('keydown', handleLoopClick);
+	// window.addEventListener('keydown', handleLoopClick);
+}
+
+/**
+ * returns index of element in context of it's parentNode
+ * index of element corresponds to index of sound in player arrays
+ * we need to use call because 'children' is a nodelist
+ */
+function getIndexFromEl(el) {
+	var children = el.parentNode.children;
+	return Array.prototype.indexOf.call(children, el);
 }
 
 function handleLoopClick() {
-	var targetClass = this.classList;
-	var parent = this.parentNode.children;
+	var index = getIndexFromEl(this);
 
-	/**
- 	 * find index of 'this' in context of it's parentNode
- 	 * index of 'this' correlates to index of sound in loopPlayers array
- 	 * use call because 'parent' is a nodelist
- 	 */
-	var index = Array.prototype.indexOf.call(parent, this);
-
-	if (targetClass.contains('play')) {
-		loopPlayers[index].stop();
-		// more stuff
+	if (!this.classList.contains('play')) {
+        // play loop, and quantize two measures
+        loopPlayers[index].start('@2m');
+        animateLoopButton(true, index)
 	} else {
-		// more stuff
-
-		// play loop, and quantize two measures
-		loopPlayers[index].start('@2m');
+        loopPlayers[index].stop();
+        animateLoopButton(false, index)
 	}
 
-	targetClass.toggle('play');
+	this.classList.toggle('play');
 }
+
+function handleDrumsClick() {
+    var radio = qsa('.radio');
+    var index = getIndexFromEl(this);
+    var radioIndex = index + 4;
+
+    if (!this.classList.contains('play')) {
+        radio[radioIndex].classList.toggle('on');
+
+        // replace drum sound
+        changeDrumSound(alternateDrums, index)
+    } else {
+        radio[radioIndex].classList.toggle('on');
+
+        // swap drum sound to default
+        changeDrumSound(defaultDrums, index)
+    }
+
+    this.classList.toggle('play');
+}
+
+
 
 function handleBeatToggle() {          // e.target or this?
 	this.classList.toggle('on');
@@ -274,7 +316,52 @@ initControls();
 
 
 
+/**
+ * Handle Animations
+ */
+function animateLoopButton(play, index) {
+    var radio = qsa('.radio');
+    var animSettings = 'blink 1s infinite linear';
 
+    if (play) {
+        // starts queue by blinking
+        radio[index].style.animation = animSettings;
+
+        // run handleQueue() to stop blinking when sound has started
+        handleQueue(index);
+    } else {
+        radio[index].style.animation = '';
+        radio[index].classList.remove('on');
+    }
+
+    // calls itself every 100ms until play state returns 'started'
+    // then disable blinking and set
+    function handleQueue(index) {
+        if (loopPlayers[index].state !== 'started') {
+            setTimeout(handleQueue.bind(null, index), 100);
+        } else {
+            radio[index].style.animation = '';
+            radio[index].classList.add('on')
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+// function detectPlay(el, callback) {
+//     if (el.state !== 'started') {
+//         setTimeout(detectPlay.bind(null, el), 100);
+//     } else {
+//         callback();
+//     }
+// }
 
 
 

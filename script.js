@@ -289,10 +289,12 @@ loopUl.addEventListener('click', function(e) {
 
     if (targetVinyl) {
         if (hasPlay) {
+            //stop
             loopPlayer[0].stop();
             radio[0].style.animation = '';
             radio[0].classList.remove('on')
         } else {
+            //play
             loopPlayer[0].start('@1m');
             radio[0].style.animation = animSettings;
             queueAnim(loopPlayer[0], 0);

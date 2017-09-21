@@ -95,9 +95,6 @@
 		    Tone.Transport.start();
 		},
 
-
-
-
 		changeSounds: function(group, loop, toChange) {
 			var current = createPath(group);             // current, really?
 		    return createBuffers(current, loop);
