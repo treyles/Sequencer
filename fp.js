@@ -7,7 +7,7 @@ lobby.style.display = 'none';
 
 // window.onload = init;
 
-var ready;       // use loadedSamples: loadedSamples <= 24 ?
+var isReady;       // use loadedSamples: loadedSamples <= 24 ?
 var ticks = 16;
 var stepNum = 1;
 var loadedSamples = 0;
@@ -17,7 +17,7 @@ var loadedSamples = 0;
  */
 // because forEach doesn't work with nodelists in certain browsers
 function eachNode(nodeList, callback, scope) {
-	for (var i = 0; i < nodeList.length; i++) {
+    for (var i = 0; i < nodeList.length; i++) {
         callback.call(scope, nodeList[i], i);
     }
 }
@@ -40,8 +40,8 @@ var dialoguePlayers;
 var keysPlayers;
 
 var defaultDrums;
-var defaultKeys; 
 var alternateDrums;
+var defaultKeys; 
 var alternateKeysB;
 var alternateKeysC;
 
@@ -169,37 +169,37 @@ function initSounds() {
  * Handle Sequencer
  */
 function createGrid() {
-	var grid = qs('#grid');
+    var grid = qs('#grid');
 
-	// make div for each sound
-	for (var i = 0; i < sounds.drums.length; i++) {
-	    var soundDiv = document.createElement('div');
+    // make div for each sound
+    for (var i = 0; i < sounds.drums.length; i++) {
+        var soundDiv = document.createElement('div');
 
-	    soundDiv.setAttribute('id', sounds.drums[i]);
-	    grid.appendChild(soundDiv);
-	}
+        soundDiv.setAttribute('id', sounds.drums[i]);
+        grid.appendChild(soundDiv);
+    }
 
-	// make ticks.length row of beats for each sound
-	for (var i = 0; i < grid.children.length; i++) {
-	    for (var j = 1; j < ticks + 1; j++) {
-	        var btn = document.createElement('div');
+    // make ticks.length row of beats for each sound
+    for (var i = 0; i < grid.children.length; i++) {
+        for (var j = 1; j < ticks + 1; j++) {
+            var btn = document.createElement('div');
 
-	        btn.classList.add('beat', sounds.drums[i], j);
-	        grid.children[i].appendChild(btn);
-	    }
-	}
+            btn.classList.add('beat', sounds.drums[i], j);
+            grid.children[i].appendChild(btn);
+        }
+    }
 }
 
 function createSequence() {
-	var sequence = new Tone.Sequence(sequenceEvent, sounds.drums, '8n');
-	sequence.start();
+    var sequence = new Tone.Sequence(sequenceEvent, sounds.drums, '8n');
+    sequence.start();
 }
 
 function sequenceEvent(time) {
-	var beat = qsa('.beat');
+    var beat = qsa('.beat');
 
-	// animate steps
-	for (var i = 0; i < beat.length; i++) {
+    // animate steps
+    for (var i = 0; i < beat.length; i++) {
         var currentBeat = beat[i].classList; 
 
         currentBeat.remove('step');
@@ -225,14 +225,12 @@ function sequenceEvent(time) {
     // reset stepNum at end of sequence to repeat
     stepNum++
 
-    if (stepNum > ticks) {
-        stepNum = 1;
-    }
+    if (stepNum > ticks) stepNum = 1;
 }
 
 function initSequencer() {
-	createGrid();
-	createSequence(); 
+    createGrid();
+    createSequence(); 
 }
 
 /**
@@ -241,18 +239,22 @@ function initSequencer() {
 function initControls() {
     var liElements = document.getElementsByTagName('li');
 
-	// sequencer clicks
-	eachNode(qsa('.beat'), function(node) {
-		node.addEventListener('click', handleBeatToggle);
-	});
+    // sequencer clicks
+    eachNode(qsa('.beat'), function(node) {
+        node.addEventListener('click', handleBeatToggle);
+    });
 
     // menu clicks
     eachNode(liElements, function(node) {
         node.addEventListener('click', handleMenuClicks);
     });
 
-	// keyboard presses
-	// window.addEventListener('keydown', handleLoopClick);
+    // keyboard presses
+    window.addEventListener('keydown', handleKeyPress);
+}
+
+function handleBeatToggle() { 
+    this.classList.toggle('on');
 }
 
 /**
@@ -261,12 +263,8 @@ function initControls() {
  * we need to use call because 'children' is a nodelist
  */
 function getIndexFromEl(el) {
-	var children = el.parentNode.children;
-	return Array.prototype.indexOf.call(children, el);
-}
-
-function handleBeatToggle() {          // e.target or this?
-    this.classList.toggle('on');
+    var children = el.parentNode.children;
+    return Array.prototype.indexOf.call(children, el);
 }
 
 function handleMenuClicks() {
@@ -315,26 +313,10 @@ function handleMenuClicks() {
     this.classList.toggle('play');
 }
 
-
-
-initSounds();
-initTransport();
-initSequencer();
-initControls();
-
-
-
-
-
-/**
- * Handle Animations
- */
 function animateRadioButton(play, index, radios) {
-    var animSettings = 'blink 1s infinite linear';
-
     if (play) {
         // starts queue by blinking
-        radios[index].style.animation = animSettings;
+        radios[index].style.animation = 'blink 1s infinite linear';
 
         // run handleQueue() to stop blinking when sound has started
         handleQueue(index);
@@ -355,6 +337,111 @@ function animateRadioButton(play, index, radios) {
     }
 }
 
+function handleKeyPress(e) {
+    if (e.metaKey || e.ctrlKey) return;         // ready !== true
+
+    switch (e.which) {
+        // A - L notes
+        case 65: triggerKey(keysPlayers, 0); break;
+        case 83: triggerKey(keysPlayers, 1); break;
+        case 68: triggerKey(keysPlayers, 2); break;
+        case 70: triggerKey(keysPlayers, 3); break;
+        case 71: triggerKey(keysPlayers, 4); break;
+        case 72: triggerKey(keysPlayers, 5); break;
+
+        // R - U samples
+        case 82: triggerKey(dialoguePlayers, 0); break;
+        case 84: triggerKey(dialoguePlayers, 1); break;
+        case 89: triggerKey(dialoguePlayers, 2); break;
+        case 85: triggerKey(dialoguePlayers, 3); break;
+        default:
+            return;
+    }
+}
+
+// triggers sound and corresponding animation
+function triggerKey(array, index, animation) {
+    array[index].start();
+    
+    if (animation === 'animBaton') {
+        animation.restart();
+    }
+
+    if (animation === 'animBaton') {
+        animation.restart();
+    }
+}
+
+/**
+ * Handle Animations
+ */
+var animateArray = [];
+
+function createWaves() {
+    var waves = qsa('.waves');
+
+    eachNode(waves, function(el, index) {
+        animateArray[index] = new Vivus(waves[index].id, {
+            type: 'sync', 
+            duration: 60, 
+            start: 'manual',
+            animTimingFunction: function (t) {
+                // TODO: check if this script is messing things up
+                // easing script from: https://gist.github.com/gre/1650294
+                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
+            }
+        });
+    });
+}
+
+function resetWaveAnim() {
+    animateArray.forEach(function(wave) {
+        wave.stop();
+        wave.reset();
+    });
+}
+
+// fadeIn script from http://youmightnotneedjquery.com/
+function fadeIn(el) {
+    // el.style.opacity = 0;
+    var last = +new Date();
+    
+    function tick() {
+        el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
+        last = +new Date();
+
+        if (+el.style.opacity < 1) {
+            (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+        }
+    };
+
+    tick();
+}
+
+function randomize(arrayLength) {
+    return Math.floor (Math.random() * arrayLength);
+}
+
+function setOrangeCircle() {
+    var circleOrange = qs('#circleOrange');
+    
+    var circleCoords = [[-20, 530], [340, 60], [295, 220], [-85, 15], [280, 515], [375, 630], [-20, 155], [-145, 575], [160, 100], [160, 580]];
+    var index = randomize(circleCoords.length)
+
+    function setPosition(topPosition, leftPosition) {
+        circleOrange.style.top = topPosition + 'px';
+        circleOrange.style.left = leftPosition + 'px';
+    }
+
+    setPosition.apply(null, circleCoords[index]);
+}
+
+
+initSounds();
+initTransport();
+initSequencer();
+initControls();
+createWaves();
 
 
 
@@ -364,13 +451,6 @@ function animateRadioButton(play, index, radios) {
 
 
 
-// function detectPlay(el, callback) {
-//     if (el.state !== 'started') {
-//         setTimeout(detectPlay.bind(null, el), 100);
-//     } else {
-//         callback();
-//     }
-// }
 
 
 
@@ -389,5 +469,5 @@ function animateRadioButton(play, index, radios) {
 
 
 
-// var index = Array.from(this.parentNode.children).indexOf(this);
+
 

@@ -196,6 +196,7 @@ u {
 }
 
 .radio {
+    position: relative;
     display: inline-block;
     /*float: left;*/
     opacity: 0;
@@ -209,6 +210,18 @@ u {
 
 li:hover > .radio, .radio.on {
     opacity: 1;
+    animation: anime .3s ease-out;
+}
+
+@keyframes anime {
+    0% { 
+        /*left: 10px;*/
+        opacity: 0;
+    }
+    100% {
+        /*left: 0px;*/ 
+        opacity: 1;
+    }
 }
 
 /*.triangle {
