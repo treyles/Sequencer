@@ -62,8 +62,8 @@ var sounds = {
         'clap', 
         'hat', 
         'hat-open', 
-        'kick', 
-        'clap'
+        'tom-1', 
+        'tom-2'
     ],
 
     altDrums: [
@@ -236,6 +236,7 @@ var sequence = new Tone.Sequence(function(time) {
             if (hasSoundName && hasStep && hasOn) {
                 // drumPlayer[i].triggerAttack(0, time, 1);
                 drumPlayer[i].start(time);
+                console.log('hi');
             }
         });
     }
@@ -476,7 +477,7 @@ var animateArray = [];
 }());
 
 function resetWaveAnim() {
-    for (var i = 0; i < animateArray.length; i++) {
+    for (var i = 0; i < animateArray.length; i++) {  // forEach
         animateArray[i].stop();
         animateArray[i].reset();
     }
@@ -485,7 +486,7 @@ function resetWaveAnim() {
 
 
 
-var animCircleGray = anime({
+var s  = anime({
     targets: '#circleGray',
     scale: 1.2,
     direction: 'alternate',

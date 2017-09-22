@@ -34,16 +34,16 @@ function qsa(select) {
 /**
  * Handle Sounds
  */
-var drumPlayers,
-	loopPlayers,
-	dialoguePlayers,
-	keysPlayers;
+var drumPlayers;
+var loopPlayers;
+var dialoguePlayers;
+var keysPlayers;
 
-var defaultDrums,
-    alternateDrums,
-    defaultKeys,
-    alternateKeysB,
-    alternateKeysC;
+var defaultDrums;
+var defaultKeys; 
+var alternateDrums;
+var alternateKeysB;
+var alternateKeysC;
 
 var sounds = {
     drums: [
@@ -52,8 +52,8 @@ var sounds = {
         'clap', 
         'hat', 
         'hat-open', 
-        'kick', 
-        'clap'
+        'tom-1', 
+        'tom-2'
     ],
 
     altDrums: [
@@ -89,11 +89,12 @@ function createPaths(group, keys) {
     var currentGroup = sounds[group];
     var path = 'sounds/' + group + '/';
 
-    // create file names before making paths
+    // if directory from 'keys'
     if (keys) {
         var keysGroup = [];
 
         for (var i = 1; i < 10; i++) {
+            // create file names
             keysGroup.push(group + i ) 
         }
 
@@ -120,7 +121,7 @@ function createBuffers(array, loop) {
         return currentBuffer;  
     });
 
-    // returns new array of buffers
+    // returns array of buffers
     return buffers;   
 }
 
@@ -132,20 +133,32 @@ function changeDrumSound(array, index) {
     }
 }
 
+function changeKeysSound(change, index) {
+    if (change && index == 0) keysPlayers = alternateKeysB;
+    if (change && index == 1) keysPlayers = alternateKeysC;
+    if (!change) keysPlayers = defaultKeys;
+}
+
 function initTransport() {
-	Tone.Transport.bpm.value = 200;
-	Tone.Transport.start();
+    Tone.Transport.bpm.value = 200;
+    Tone.Transport.start();
 }
 
 function initSounds() {
+    /**
+     * copy 'drumsPlayers' and 'keysPlayers' arrays
+     * with slice to restore defaults instantly without 
+     * having to re-load buffers
+     */
     drumPlayers = createBuffers(createPaths('drums'));
+    defaultDrums = drumPlayers.slice(0);
+    keysPlayers = createBuffers(createPaths('keysA', true));
+    defaultKeys = keysPlayers.slice(0);
     loopPlayers = createBuffers(createPaths('loops'), true);
     dialoguePlayers = createBuffers(createPaths('dialogues'));
-    keysPlayers = createBuffers(createPaths('keysA', true));
-
-    defaultDrums = createBuffers(createPaths('drums'));
+    
+    // store alternate sound buffers
     alternateDrums = createBuffers(createPaths('altDrums'));
-    defaultKeys = createBuffers(createPaths('keysA', true));
     alternateKeysB = createBuffers(createPaths('keysB', true));
     alternateKeysC = createBuffers(createPaths('keysC', true));
 
@@ -226,29 +239,17 @@ function initSequencer() {
  * Handle Events
  */
 function initControls() {
+    var liElements = document.getElementsByTagName('li');
 
 	// sequencer clicks
 	eachNode(qsa('.beat'), function(node) {
 		node.addEventListener('click', handleBeatToggle);
 	});
 
-	// loop menu
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-	qs('.melody').addEventListener('click', handleLoopClick);
-	qs('.bass-line').addEventListener('click', handleLoopClick);
-	qs('.vinyl').addEventListener('click', handleLoopClick);
-
-	// drums menu
-	qs('.kick-alt').addEventListener('click', handleDrumsClick);
-	qs('.snare-alt').addEventListener('click', handleDrumsClick);
-	qs('.hat-alt').addEventListener('click', handleDrumsClick);
-	qs('.swing').addEventListener('click', handleDrumsClick);
-
-	// keybaord menu
-	// qs('.vinyl').addEventListener('click', handleLoopClick);
-	// qs('.vinyl').addEventListener('click', handleLoopClick);
-	// qs('.vinyl').addEventListener('click', handleLoopClick);
-	// qs('.vinyl').addEventListener('click', handleLoopClick);
+    // menu clicks
+    eachNode(liElements, function(node) {
+        node.addEventListener('click', handleMenuClicks);
+    });
 
 	// keyboard presses
 	// window.addEventListener('keydown', handleLoopClick);
@@ -264,45 +265,54 @@ function getIndexFromEl(el) {
 	return Array.prototype.indexOf.call(children, el);
 }
 
-function handleLoopClick() {
-    var index = getIndexFromEl(this);
-
-    if (!this.classList.contains('play')) {
-        // play loop, and quantize two measures
-        loopPlayers[index].start('@2m');
-        animateLoopButton(true, index)
-    } else {
-        loopPlayers[index].stop();
-        animateLoopButton(false, index)
-    }
-
-    this.classList.toggle('play');
-}
-
-function handleDrumsClick() {
-    var radio = qsa('.radio');
-    var index = getIndexFromEl(this);
-    var radioIndex = index + 4;
-
-    if (!this.classList.contains('play')) {
-        radio[radioIndex].classList.toggle('on');
-
-        // replace drum sound
-        changeDrumSound(alternateDrums, index)
-    } else {
-        radio[radioIndex].classList.toggle('on');
-
-        // swap drum sound to default
-        changeDrumSound(defaultDrums, index)
-    }
-
-    this.classList.toggle('play');
-}
-
-
-
 function handleBeatToggle() {          // e.target or this?
-	this.classList.toggle('on');
+    this.classList.toggle('on');
+}
+
+function handleMenuClicks() {
+    var index = getIndexFromEl(this);
+    var radios = this.parentNode.getElementsByTagName('span');
+
+    var loopUl = this.parentNode.id == 'loop-ul';
+    var drumsUl = this.parentNode.id == 'drums-ul';
+    var keysUl = this.parentNode.id == 'keys-ul';
+
+    if (!this.classList.contains('play')) {     
+        if (loopUl) {
+            // play loop to start at second measure
+            loopPlayers[index].start('@2m');
+            animateRadioButton(true, index, radios);
+        }
+
+        if (drumsUl) {
+            // change to 'alternateDrums' sound
+            changeDrumSound(alternateDrums, index)
+            radios[index].classList.toggle('on');
+        }
+
+        if (keysUl) {
+            // keysPlayers = alternateKeysB;
+            changeKeysSound(true, index);
+            radios[index].classList.toggle('on');
+        }
+    } else {
+        if (loopUl) {
+            loopPlayers[index].stop();
+            animateRadioButton(false, index, radios);
+        }
+
+        if (drumsUl) {
+            changeDrumSound(defaultDrums, index);
+            radios[index].classList.toggle('on');
+        }
+
+        if (keysUl) {
+            changeKeysSound(false);
+            radios[index].classList.toggle('on');
+        }
+    }
+
+    this.classList.toggle('play');
 }
 
 
@@ -319,19 +329,18 @@ initControls();
 /**
  * Handle Animations
  */
-function animateLoopButton(play, index) {
-    var radio = qsa('.radio');
+function animateRadioButton(play, index, radios) {
     var animSettings = 'blink 1s infinite linear';
 
     if (play) {
         // starts queue by blinking
-        radio[index].style.animation = animSettings;
+        radios[index].style.animation = animSettings;
 
         // run handleQueue() to stop blinking when sound has started
         handleQueue(index);
     } else {
-        radio[index].style.animation = '';
-        radio[index].classList.remove('on');
+        radios[index].style.animation = '';
+        radios[index].classList.remove('on');
     }
 
     // calls itself every 100ms until play state returns 'started'
@@ -340,8 +349,8 @@ function animateLoopButton(play, index) {
         if (loopPlayers[index].state !== 'started') {
             setTimeout(handleQueue.bind(null, index), 100);
         } else {
-            radio[index].style.animation = '';
-            radio[index].classList.add('on')
+            radios[index].style.animation = '';
+            radios[index].classList.add('on')
         }
     }
 }

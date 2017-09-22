@@ -140,7 +140,7 @@ body, #container, #grid, #multiplyMask {
 }
 
 /*TODO: all font-family in one*/
-.text {
+.loop, .drums, .keyboard, #logo {
     /*background-color: red;*/
     float: left;
     padding: 8px 0px 0px 0px;
