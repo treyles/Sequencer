@@ -52,14 +52,13 @@ body, #container, #grid, #multiplyMask {
 }
 
 #spinner {
-    animation: spin 1s infinite;
-    animation-timing-function: cubic-bezier(.41,.62,.24,.99);
+    animation: spin .4s linear infinite;
+    /*animation-timing-function: cubic-bezier(.41,.62,.24,.99);*/
 
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
-    50% { transform: rotate(360deg); }
     100% { transform: rotate(360deg); }
 }
 
@@ -210,7 +209,7 @@ u {
 
 li:hover > .radio, .radio.on {
     opacity: 1;
-    animation: anime .3s ease-out;
+    animation: anime .2s ease-out;
 }
 
 @keyframes anime {
@@ -328,6 +327,57 @@ li:hover > .radio, .radio.on {
     left: 0;
     right: 0;
     margin: 0 auto;
+}
+
+/*FADES*/
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity:0;
+        /*visibility: visible;*/
+    }
+    100% {opacity:1;}
+}
+@keyframes fadeIn {
+    0% {
+        opacity:0;
+        /*visibility: visible;*/
+    }
+    100% {opacity:1;}
+}
+.fadeIn {
+  opacity:0;
+  -moz-animation   : fadeIn .5s forwards linear;
+  -webkit-animation: fadeIn .5s forwards linear;
+  animation        : fadeIn .5s forwards linear;
+}
+
+
+@-webkit-keyframes fadeout {
+    0% {opacity:1;}
+    100% {
+        opacity:0;
+        visibility: hidden;
+    }
+}
+@keyframes fadeout {
+    0% {opacity:1;}
+    100% {
+        opacity:0;
+        visibility: hidden;
+    }
+}
+.fadeOut {
+  opacity:0;
+  -moz-animation   : fadeout .5s forwards linear;
+  -webkit-animation: fadeout .5s forwards linear;
+  animation        : fadeout .5s forwards linear;
+}
+
+.fadeOutLobby {
+  opacity:0;
+  -moz-animation   : fadeout .2s forwards linear;
+  -webkit-animation: fadeout .2s forwards linear;
+  animation        : fadeout .2s forwards linear;
 }
 
 

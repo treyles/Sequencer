@@ -486,7 +486,7 @@ function resetWaveAnim() {
 
 
 
-var s  = anime({
+var circleGray = anime({
     targets: '#circleGray',
     scale: 1.2,
     direction: 'alternate',
@@ -498,7 +498,6 @@ var s  = anime({
 var animBaton = anime({
     targets: '#baton',
     rotate: '1turn',
-    // duration: 750,
     duration: 1200,
     autoplay: false
 });
@@ -640,19 +639,25 @@ function randomizeCirclePos() {
 }
 
 
+// clicking 10 times initializers TIMER
+
+
 (function inactivity() {
     var main;
-    var delay;
-    var modal;
-    var countClicks = 0;
-    var cirPosChanges = 0;
+    // var delay;
+    // var modal;
 
-    var animScreen = document.querySelector('#animations');
-    // var beat = document.querySelectorAll('.beat')
-    var circleGray = document.querySelector('#circleGray');
-    var circleOrange = document.querySelector('#circleOrange');
-    var baton = document.querySelector('#baton');
+    var countClicks = 0;
+    var cirPosChanges = 0; // should be boolean 
+
+    // var animScreen = document.querySelector('#animations');
+    // // var beat = document.querySelectorAll('.beat')
+    // var circleGray = document.querySelector('#circleGray');
+    // var circleOrange = document.querySelector('#circleOrange');
+    // var baton = document.querySelector('#baton');
   
+
+
     // window.onload = resetTimer;
     document.onmousemove = resetTimer;
     document.onclick = function () {
@@ -660,16 +665,25 @@ function randomizeCirclePos() {
             countClicks++
         }
     }
-    document.onkeypress = function () {
-        keyPress = true;
-    }
+    // document.onkeypress = function () {
+    //     keyPress = true;
+    // }
 
+
+    document.addEventListener('mousemove', resetTimer);
+    document.addEventListener('keydown', function() {   // inside animations state?
+        keyPress = true;
+    }); 
+
+
+
+    // show animation
     function goAnimation() {
 
         resetWaveAnim();
 
         animScreen.style.visibility = 'visible';
-        qs('.clear').style.visibility = 'hidden'
+        // qs('.clear').style.visibility = 'hidden'
 
         // randomize orange circle after first appearance
         cirPosChanges++
@@ -678,28 +692,29 @@ function randomizeCirclePos() {
         }
 
 
-        /**
-         * wait 500ms after setting visibility before animating 
-         * to avoid weird glitch
-        */ 
 
-        // TODO: CSS transition delay, instead of setTimeout?
-        delay = setTimeout(function() {
+    //     *
+    //      * wait 500ms after setting visibility before animating 
+    //      * to avoid weird glitch
+         
+
+    //     // TODO: CSS transition delay, instead of setTimeout?
+    //     delay = setTimeout(function() {
             
-            resetWaveAnim();
+    //         resetWaveAnim();
 
-            fadeIn(circleGray);
-            fadeIn(circleOrange);
-            fadeIn(baton);
+    //         fadeIn(circleGray);
+    //         fadeIn(circleOrange);
+    //         fadeIn(baton);
 
-            // vivus, play wave on init
-            // TODO: delay for glitch
-            animateArray[0].play();
+    //         // vivus, play wave on init
+    //         // TODO: delay for glitch
+    //         animateArray[0].play();
 
-            // // tone, start animate loop
-            // circleGrayLoop.start('@4m');
+    //         // // tone, start animate loop
+    //         // circleGrayLoop.start('@4m');
 
-        }, 600);
+    //     }, 600);
 
 
         // modal box
@@ -710,16 +725,23 @@ function randomizeCirclePos() {
         }, 6000);
 
         
-        for (var i = 0; i < beat.length; i++) {
-            if (!beat[i].classList.contains('on')) {
-                beat[i].style.visibility = 'hidden';
-            }
-        }
-    }
+        // for (var i = 0; i < beat.length; i++) {
+        //     if (!beat[i].classList.contains('on')) {
+        //         beat[i].style.visibility = 'hidden';
+        //     }
+        // }
+    // }
 
+
+
+
+
+
+
+    // show grid REVERT
     function resetTimer() {
         animScreen.style.visibility = 'hidden';
-        qs('.clear').style.visibility = 'visible'
+        // qs('.clear').style.visibility = 'visible'
 
         circleGray.style.opacity = 0;
         circleOrange.style.opacity = 0;
@@ -734,15 +756,24 @@ function randomizeCirclePos() {
             }
         }
 
+        ////
+
         clearTimeout(main);
-        clearTimeout(delay);
+        // clearTimeout(delay);
         clearTimeout(modal);
 
-        if (countClicks >= 5) {
+        // if (countClicks >= 5) {
             main = setTimeout(goAnimation, 2000)
-        }
+        // }
     } 
 }());
+
+clearTimeout(main);
+toggleAnimation(false);
+
+main = setTimeout(toggleAnimation(true), 2000);
+
+
 
 var keyPress = false;
 var overlay = document.querySelector('.overlay');

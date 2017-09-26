@@ -1,21 +1,23 @@
 // browser support: 
 // IE11: classList
-var lobby = document.querySelector('#lobby');
-lobby.style.display = 'none';
+// BUGS: cmd key turns off animation
+
 
 'use strict';
 
-// window.onload = init;
+window.onload = init;
 
 var isReady;       // use loadedSamples: loadedSamples <= 24 ?
 var ticks = 16;
 var stepNum = 1;
-var loadedSamples = 0;
+var samplesLoaded = 0;
+var countClicks = 0;
+var keysPressed = false;
 
 /**
- * Helper functions
+ * Helper Functions
  */
-// because forEach doesn't work with nodelists in certain browsers
+// because forEach doesn't work with nodelists in Safari
 function eachNode(nodeList, callback, scope) {
     for (var i = 0; i < nodeList.length; i++) {
         callback.call(scope, nodeList[i], i);
@@ -30,6 +32,8 @@ function qs(select) {
 function qsa(select) {
     return document.querySelectorAll(select);
 }
+
+// qs('#lobby').style.display = 'none';
 
 /**
  * Handle Sounds
@@ -46,8 +50,8 @@ var alternateKeysB;
 var alternateKeysC;
 
 var sounds = {
-    drums: [
-        // arrays of file names
+    // arrays of file names
+    drums: [             
         'kick', 
         'clap', 
         'hat', 
@@ -77,8 +81,8 @@ var sounds = {
         'lights'
     ],
 
-    keys: [
-        // array of directories
+    // array of directories
+    keys: [             
         'keysA',
         'keysB',
         'keysC'
@@ -110,7 +114,7 @@ function createPaths(group, keys) {
 function createBuffers(array, loop) {
     var buffers = array.map(function(el) {
         var currentBuffer = new Tone.Player(el, function() {
-            loadedSamples++
+            samplesLoaded++;
         });
 
         if (loop) {
@@ -134,8 +138,8 @@ function changeDrumSound(array, index) {
 }
 
 function changeKeysSound(change, index) {
-    if (change && index == 0) keysPlayers = alternateKeysB;
-    if (change && index == 1) keysPlayers = alternateKeysC;
+    if (change && index === 0) keysPlayers = alternateKeysB;
+    if (change && index === 1) keysPlayers = alternateKeysC;
     if (!change) keysPlayers = defaultKeys;
 }
 
@@ -250,7 +254,10 @@ function initControls() {
     });
 
     // keyboard presses
-    window.addEventListener('keydown', handleKeyPress);
+    document.addEventListener('keydown', handleKeyPress);
+
+    // let's have user play around first before triggering animations!
+    document.addEventListener('click', handleTransition);
 }
 
 function handleBeatToggle() { 
@@ -271,9 +278,9 @@ function handleMenuClicks() {
     var index = getIndexFromEl(this);
     var radios = this.parentNode.getElementsByTagName('span');
 
-    var loopUl = this.parentNode.id == 'loop-ul';
-    var drumsUl = this.parentNode.id == 'drums-ul';
-    var keysUl = this.parentNode.id == 'keys-ul';
+    var loopUl = this.parentNode.id === 'loop-ul';
+    var drumsUl = this.parentNode.id === 'drums-ul';
+    var keysUl = this.parentNode.id === 'keys-ul';
 
     if (!this.classList.contains('play')) {     
         if (loopUl) {
@@ -316,7 +323,7 @@ function handleMenuClicks() {
 function animateRadioButton(play, index, radios) {
     if (play) {
         // starts queue by blinking
-        radios[index].style.animation = 'blink 1s infinite linear';
+        radios[index].style.animation = 'blink 1s infinite linear';      // change to class
 
         // run handleQueue() to stop blinking when sound has started
         handleQueue(index);
@@ -325,7 +332,7 @@ function animateRadioButton(play, index, radios) {
         radios[index].classList.remove('on');
     }
 
-    // calls itself every 100ms until play state returns 'started'
+    // recursively call every 100ms until play state returns 'started'
     // then disable blinking and set
     function handleQueue(index) {
         if (loopPlayers[index].state !== 'started') {
@@ -342,18 +349,21 @@ function handleKeyPress(e) {
 
     switch (e.which) {
         // A - L notes
-        case 65: triggerKey(keysPlayers, 0); break;
-        case 83: triggerKey(keysPlayers, 1); break;
-        case 68: triggerKey(keysPlayers, 2); break;
-        case 70: triggerKey(keysPlayers, 3); break;
-        case 71: triggerKey(keysPlayers, 4); break;
-        case 72: triggerKey(keysPlayers, 5); break;
+        case 65: triggerKey(keysPlayers, 0, 'waves'); break;
+        case 83: triggerKey(keysPlayers, 1, 'waves'); break;
+        case 68: triggerKey(keysPlayers, 2, 'waves'); break;
+        case 70: triggerKey(keysPlayers, 3, 'waves'); break;
+        case 71: triggerKey(keysPlayers, 4, 'waves'); break;
+        case 72: triggerKey(keysPlayers, 5, 'waves'); break;
+        case 74: triggerKey(keysPlayers, 6, 'waves'); break;
+        case 75: triggerKey(keysPlayers, 7, 'waves'); break;
+        case 76: triggerKey(keysPlayers, 8, 'waves'); break;
 
         // R - U samples
-        case 82: triggerKey(dialoguePlayers, 0); break;
-        case 84: triggerKey(dialoguePlayers, 1); break;
-        case 89: triggerKey(dialoguePlayers, 2); break;
-        case 85: triggerKey(dialoguePlayers, 3); break;
+        case 82: triggerKey(dialoguePlayers, 0, 'animBaton'); break;
+        case 84: triggerKey(dialoguePlayers, 1, 'animBaton'); break;
+        case 89: triggerKey(dialoguePlayers, 2, 'animBaton'); break;
+        case 85: triggerKey(dialoguePlayers, 3, 'animBaton'); break;
         default:
             return;
     }
@@ -363,63 +373,64 @@ function handleKeyPress(e) {
 function triggerKey(array, index, animation) {
     array[index].start();
     
-    if (animation === 'animBaton') {
-        animation.restart();
+    if (animation === 'waves') {
+        animateWave();
     }
 
     if (animation === 'animBaton') {
-        animation.restart();
+        animBaton.restart()
+    }
+
+    // for modal
+    keysPressed = true;
+}
+
+function handleTransition() {
+    countClicks++;
+    if (countClicks > 5) {
+        initTransition();
+        createWaves();
     }
 }
 
 /**
  * Handle Animations
  */
-var animateArray = [];
+var wavesArray = new Array();
 
-function createWaves() {
+function randomize(arrayLength) {
+    return Math.floor (Math.random() * arrayLength);
+}
+
+function createWaves() {                                    // name createWaveAnimations
     var waves = qsa('.waves');
 
     eachNode(waves, function(el, index) {
-        animateArray[index] = new Vivus(waves[index].id, {
+        wavesArray[index] = new Vivus(waves[index].id, {
             type: 'sync', 
-            duration: 60, 
+            duration: 200, 
             start: 'manual',
-            animTimingFunction: function (t) {
-                // TODO: check if this script is messing things up
-                // easing script from: https://gist.github.com/gre/1650294
-                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
-            }
+            animTimingFunction: Vivus.EASE                  // test default for firefox
         });
     });
 }
 
-function resetWaveAnim() {
-    animateArray.forEach(function(wave) {
-        wave.stop();
-        wave.reset();
+function resetWaves() {
+    wavesArray.forEach(function(el) {
+        el.stop();
+        el.reset();
     });
 }
 
-// fadeIn script from http://youmightnotneedjquery.com/
-function fadeIn(el) {
-    // el.style.opacity = 0;
-    var last = +new Date();
-    
-    function tick() {
-        el.style.opacity = +el.style.opacity + (new Date() - last) / 400;
-        last = +new Date();
+function animateWave() {
+    var index = randomize(wavesArray.length)
 
-        if (+el.style.opacity < 1) {
-            (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
-        }
-    };
+    resetWaves();
 
-    tick();
-}
-
-function randomize(arrayLength) {
-    return Math.floor (Math.random() * arrayLength);
+    // only play when circleGray has appeared
+    // if (circleGray.style.opacity > 0) {
+        wavesArray[index].play(4);
+    // }
 }
 
 function setOrangeCircle() {
@@ -436,15 +447,148 @@ function setOrangeCircle() {
     setPosition.apply(null, circleCoords[index]);
 }
 
+var circleGray = anime({
+    targets: '#circleGray',
+    scale: 1.2,
+    direction: 'alternate',
+    duration: 200,
+    easing: 'easeInOutCirc',
+    autoplay: false,
+});
 
-initSounds();
-initTransport();
-initSequencer();
-initControls();
-createWaves();
+var animBaton = anime({
+    targets: '#baton',
+    rotate: '1turn',
+    duration: 1200,
+    autoplay: false
+});
+
+/**
+ * Handle Idle Transition
+ */
+function initTransition() {
+    var main;
+    var delay;
+    var modal;
+    var animationDiv = qs('#animations');
+
+    document.addEventListener('mousemove', resetTimers);
+
+    function resetTimers() {
+        clearTimeout(main);
+        clearTimeout(delay);
+        clearTimeout(modal);
+
+        toggleAnimationElements(false);
+        main = setTimeout(toggleAnimationElements, 2500, true);
+    }
+
+    function toggleAnimationElements(show) {
+        if (show) {
+            resetWaves();
+            setOrangeCircle();
+            animationDiv.style.visibility = 'visible';
+            toggleGrid('hidden');
+
+            delay = setTimeout(toggleIntroduction, 600, true);
+            modal = setTimeout(initModal, 6000);
+        } else {
+            toggleIntroduction(false);
+
+            animationDiv.style.visibility = 'hidden';
+            toggleGrid('visible');
+        }
+    }
+}
+
+function toggleGrid(visibility) {
+    eachNode(qsa('.beat'), function(el) {
+        if (!el.classList.contains('on')) {
+            el.style.visibility = visibility;
+        }
+    });
+}
+
+function toggleIntroduction(on) {
+    var intro = qsa('.intro');
+
+    if (on) {
+        eachNode(intro, function(el) {
+            el.classList.add('fadeIn');
+        });;
+
+        wavesArray[0].play(4);
+    } else {
+        eachNode(intro, function(el) {
+            el.style.opacity = 0;
+            el.classList.remove('fadeIn');
+        });
+    }
+}
+
+function initModal() {                                  // change name?
+    var overlay = qs('.overlay');
+    var gotIt = qs('.got-it');
+
+    if (!keysPressed) {
+        overlay.style.display = 'block';
+    }
+
+    gotIt.addEventListener('click', function() {
+        overlay.style.display = 'none';
+        keysPressed = true;                             // change name?
+    });
+}
+
+/**
+ * Handle Loader
+ */
+function init() {
+    var lobby = qs('#lobby');
+    
+    initSounds();
+    initTransport();
+    initSequencer();
+    initControls();
+
+    loadApp();
+
+    function loadApp() {
+        if (samplesLoaded !== 45) {                          // needs to be changed when adding sounds
+            setTimeout(loadApp, 2000);
+        } else {
+            lobby.classList.add('fadeOutLobby');
+            isReady = true;
+        }
+    }
+}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// // INIT
+// initSounds();
+// initTransport();
+
+
+// // initTransport
+// initSequencer();
+
+// // initTimoutTransition (TBD)
+// createWaves(); // initWaves -- initBuffers?
+
+
+// initControls();
 
 
 
