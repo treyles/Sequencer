@@ -24,6 +24,8 @@ body, #container, #grid, #multiplyMask {
     font-style: normal;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
 /*#container {
     width: 825px;
     margin: auto;
@@ -146,6 +148,7 @@ body, #container, #grid, #multiplyMask {
     width: 24%;
     height: 130px;
     font-family: 'futura-medium';
+    /*font-size: 17px;*/
     font-size: 17px;
     letter-spacing: .5px;
     color: #404040;
@@ -153,7 +156,8 @@ body, #container, #grid, #multiplyMask {
 
 #logo {
     padding: 0px;
-    font-size: 25px !important;
+    /*font-size: 25px !important;*/
+    font-size: 28px !important;
     width: 28%;
 }
 
@@ -162,7 +166,7 @@ ul {
     padding-top: 10px;
     font-family: 'futura-medium', sans-serif;
     font-size: 14px;
-    font-weight: normal;
+    /*font-weight: normal;*/
     list-style: none;
     line-height: 25px;
     cursor: pointer;
@@ -170,7 +174,8 @@ ul {
 
 u {
     text-decoration: none;
-    border-bottom: 2px solid #636363;
+    /*border-bottom: 2px solid #636363;*/
+    border-bottom: 1px solid #636363;
     margin-left: 23px;
 }
 
@@ -203,8 +208,10 @@ u {
 
     background-color: #404040;
     border-radius: 50%;
-    width: 6px;
-    height: 6px;
+    /*width: 6px;
+    height: 6px;*/
+    width: 5px;
+    height: 5px;
 }
 
 li:hover > .radio, .radio.on {
@@ -331,21 +338,16 @@ li:hover > .radio, .radio.on {
 
 /*FADES*/
 @-webkit-keyframes fadeIn {
-    0% {
-        opacity:0;
-        /*visibility: visible;*/
-    }
-    100% {opacity:1;}
+    0% { opacity:0; }
+    100% { opacity:1; }
 }
 @keyframes fadeIn {
-    0% {
-        opacity:0;
-        /*visibility: visible;*/
-    }
-    100% {opacity:1;}
+    0% { opacity:0; }
+    100% { opacity:1; }
 }
+
 .fadeIn {
-  opacity:0;
+  opacity:1;
   -moz-animation   : fadeIn .5s forwards linear;
   -webkit-animation: fadeIn .5s forwards linear;
   animation        : fadeIn .5s forwards linear;
@@ -402,6 +404,7 @@ li:hover > .radio, .radio.on {
     background-color: #fff;
     border-radius: 10px;
     padding: 15px;
+    font-size: 14px;
     font-family: 'futura-medium';
     color: #404040;
     text-align: center;

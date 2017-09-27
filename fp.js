@@ -2,7 +2,6 @@
 // IE11: classList
 // BUGS: cmd key turns off animation
 
-
 'use strict';
 
 window.onload = init;
@@ -32,8 +31,6 @@ function qs(select) {
 function qsa(select) {
     return document.querySelectorAll(select);
 }
-
-// qs('#lobby').style.display = 'none';
 
 /**
  * Handle Sounds
@@ -219,7 +216,7 @@ function sequenceEvent(time) {
             var hasSoundName = beat[j].classList.contains(sounds.drums[i]);
             var hasStep = beat[j].classList.contains(stepNum);
             var hasOn = beat[j].classList.contains('on');
-            
+
             if (hasSoundName && hasStep && hasOn) {
                 drumPlayers[i].start(time);
             }
@@ -229,7 +226,12 @@ function sequenceEvent(time) {
     // reset stepNum at end of sequence to repeat
     stepNum++
 
-    if (stepNum > ticks) stepNum = 1;
+    if (stepNum > ticks) {
+        stepNum = 1;
+
+        // animate gray circle every measure
+        circleGray.restart();
+    }
 }
 
 function initSequencer() {
@@ -345,7 +347,7 @@ function animateRadioButton(play, index, radios) {
 }
 
 function handleKeyPress(e) {
-    if (e.metaKey || e.ctrlKey) return;         // ready !== true
+    if (e.metaKey || e.ctrlKey || isReady !== true) return;
 
     switch (e.which) {
         // A - L notes
@@ -360,10 +362,10 @@ function handleKeyPress(e) {
         case 76: triggerKey(keysPlayers, 8, 'waves'); break;
 
         // R - U samples
-        case 82: triggerKey(dialoguePlayers, 0, 'animBaton'); break;
-        case 84: triggerKey(dialoguePlayers, 1, 'animBaton'); break;
-        case 89: triggerKey(dialoguePlayers, 2, 'animBaton'); break;
-        case 85: triggerKey(dialoguePlayers, 3, 'animBaton'); break;
+        case 82: triggerKey(dialoguePlayers, 0, 'baton'); break;
+        case 84: triggerKey(dialoguePlayers, 1, 'baton'); break;
+        case 89: triggerKey(dialoguePlayers, 2, 'baton'); break;
+        case 85: triggerKey(dialoguePlayers, 3, 'baton'); break;
         default:
             return;
     }
@@ -377,11 +379,11 @@ function triggerKey(array, index, animation) {
         animateWave();
     }
 
-    if (animation === 'animBaton') {
-        animBaton.restart()
+    if (animation === 'baton') {
+        animBaton.restart();
     }
 
-    // for modal
+    // modal gets canceled when keys are pressed
     keysPressed = true;
 }
 
@@ -389,7 +391,7 @@ function handleTransition() {
     countClicks++;
     if (countClicks > 5) {
         initTransition();
-        createWaves();
+        createWaves();           // good place for inits?
     }
 }
 
@@ -407,10 +409,9 @@ function createWaves() {                                    // name createWaveAn
 
     eachNode(waves, function(el, index) {
         wavesArray[index] = new Vivus(waves[index].id, {
-            type: 'sync', 
-            duration: 200, 
+            type: 'sync',
             start: 'manual',
-            animTimingFunction: Vivus.EASE                  // test default for firefox
+            animTimingFunction: Vivus.EASE             
         });
     });
 }
@@ -427,17 +428,17 @@ function animateWave() {
 
     resetWaves();
 
-    // only play when circleGray has appeared
-    // if (circleGray.style.opacity > 0) {
-        wavesArray[index].play(4);
-    // }
+    // only play when 'baton' has appeared
+    if (qs('#baton').classList.contains('fadeIn')) {
+        wavesArray[index].play(3);
+    }
 }
 
 function setOrangeCircle() {
     var circleOrange = qs('#circleOrange');
     
     var circleCoords = [[-20, 530], [340, 60], [295, 220], [-85, 15], [280, 515], [375, 630], [-20, 155], [-145, 575], [160, 100], [160, 580]];
-    var index = randomize(circleCoords.length)
+    var index = randomize(circleCoords.length);
 
     function setPosition(topPosition, leftPosition) {
         circleOrange.style.top = topPosition + 'px';
@@ -447,7 +448,7 @@ function setOrangeCircle() {
     setPosition.apply(null, circleCoords[index]);
 }
 
-var circleGray = anime({
+var circleGray = anime({                     
     targets: '#circleGray',
     scale: 1.2,
     direction: 'alternate',
@@ -517,7 +518,7 @@ function toggleIntroduction(on) {
             el.classList.add('fadeIn');
         });;
 
-        wavesArray[0].play(4);
+        wavesArray[0].play(3);
     } else {
         eachNode(intro, function(el) {
             el.style.opacity = 0;
