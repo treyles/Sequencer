@@ -156,8 +156,9 @@ body, #container, #grid, #multiplyMask {
 #logo {
     padding: 0px;
     /*font-size: 25px !important;*/
-    font-size: 28px !important;
+    font-size: 27px !important;
     width: 28%;
+    letter-spacing: 0.04em;
 }
 
 ul {

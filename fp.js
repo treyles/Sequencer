@@ -137,6 +137,8 @@ function changeDrumSound(array, index) {
 function changeKeysSound(change, index) {
     if (change && index === 0) keysPlayers = alternateKeysB;
     if (change && index === 1) keysPlayers = alternateKeysC;
+    if (change && index === 2) keysPlayers = defaultKeys;
+    if (change && index === 3) keysPlayers = defaultKeys;
     if (!change) keysPlayers = defaultKeys;
 }
 
@@ -292,12 +294,16 @@ function handleMenuClicks() {
         }
 
         if (drumsUl) {
+            makeSwing(true, index);
+
             // change to 'alternateDrums' sound
             changeDrumSound(alternateDrums, index)
             radios[index].classList.toggle('on');
         }
 
         if (keysUl) {
+            keysMenuReset();
+
             // keysPlayers = alternateKeysB;
             changeKeysSound(true, index);
             radios[index].classList.toggle('on');
@@ -309,6 +315,8 @@ function handleMenuClicks() {
         }
 
         if (drumsUl) {
+            makeSwing(false);
+
             changeDrumSound(defaultDrums, index);
             radios[index].classList.toggle('on');
         }
@@ -320,6 +328,19 @@ function handleMenuClicks() {
     }
 
     this.classList.toggle('play');
+}
+
+function makeSwing(on, index) {
+    index > 2 && on ? Tone.Transport.swing = 0.6 : Tone.Transport.swing = 0;
+}
+
+function keysMenuReset() {
+    var keysChildren = document.querySelector('#keys-ul').children;
+
+    eachNode(keysChildren, function(el) {
+        el.classList.remove('play');
+        el.firstChild.classList.remove('on');
+    });
 }
 
 function animateRadioButton(play, index, radios) {
