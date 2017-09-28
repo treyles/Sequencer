@@ -438,7 +438,7 @@ function setOrangeCircle() {
     var circleOrange = qs('#circleOrange');
     
     var circleCoords = [[-20, 530], [340, 60], [295, 220], [-85, 15], [280, 515], [375, 630], [-20, 155], [-145, 575], [160, 100], [160, 580]];
-    var index = randomize(circleCoords.length);
+    var index = randomize(circleCoords.length)
 
     function setPosition(topPosition, leftPosition) {
         circleOrange.style.top = topPosition + 'px';

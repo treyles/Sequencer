@@ -24,8 +24,6 @@ body, #container, #grid, #multiplyMask {
     font-style: normal;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:300');
-
 /*#container {
     width: 825px;
     margin: auto;
@@ -151,7 +149,8 @@ body, #container, #grid, #multiplyMask {
     /*font-size: 17px;*/
     font-size: 17px;
     letter-spacing: .5px;
-    color: #404040;
+    /*color: #404040;*/
+    color: #333333;
 }
 
 #logo {
@@ -170,6 +169,18 @@ ul {
     list-style: none;
     line-height: 25px;
     cursor: pointer;
+}
+
+li {
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  transition:.2s;
+}
+
+li:hover:not(.play) {
+    color: #828080;
 }
 
 u {
@@ -214,19 +225,23 @@ u {
     height: 5px;
 }
 
-li:hover > .radio, .radio.on {
+.radio.on{
     opacity: 1;
-    animation: anime .2s ease-out;
 }
 
-@keyframes anime {
+/*li:hover > .radio:not(.on) {
+    opacity: .3;
+    animation: hoverFade .3s ease-out;
+}*/
+
+@keyframes hoverFade {
     0% { 
         /*left: 10px;*/
         opacity: 0;
     }
     100% {
         /*left: 0px;*/ 
-        opacity: 1;
+        opacity: .3;
     }
 }
 
