@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Troy's Sequencer</title>
-	<link rel="stylesheet" href="style.css">
+	<title>sequencer</title>
+	<link rel="stylesheet" href="style/style.css">
 	<script src="third-party/Tone.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.2/vivus.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+	<script src="third-party/vivus.min.js"></script>
+	<script src="third-party/anime.min.js"></script>
 </head>
 <body>
 
@@ -58,10 +58,6 @@
 	</div>
 </div>
 
-<!-- <div class="clear">
-	<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px"><path d="M86.78,19.22,98,8V41H65L76.1,29.9A33,33,0,1,0,82.43,56H97.56A48,48,0,1,1,86.78,19.22Z" fill="#e2e2e0"/></svg>
-</div> -->
-
 <!-- TODO: make ids -->
 <div class="overlay">
 	<div class="modal">
@@ -75,10 +71,16 @@
 	<div id="loader">
 		<img id="spinner" src="images/spinner.png" width="30px" height="30px"></img>
 	</div>
+	<div id="on-mobile">
+		<div id="splash">
+			<svg id="splash-logo" width="300" viewBox="0 0 84.58 23.62"xmlns=http://www.w3.org/2000/svg><text fill=#404040 font-family="Sofia Pro"font-size=21.4 transform="translate(0 18.07)">P<tspan x=12.18 y=0>o</tspan><tspan x=24.42 y=0>l</tspan><tspan x=30.56 y=0>y</tspan><tspan x=41.84 y=0>t</tspan><tspan x=49.31 y=0>on</tspan><tspan x=72.74 y=0>e</tspan></text></svg>
+			<p id="splash-text">Sorry, mobile app in progress!</p>
+		</div>
+	</div>
 </div>
 
 
-
-<script type="text/javascript" src="fp.js"></script>
+<script type="text/javascript" src="src/helpers.js"></script>
+<script type="text/javascript" src="src/app.js"></script>
 </body>
 </html>

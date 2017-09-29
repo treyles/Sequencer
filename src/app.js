@@ -1,36 +1,14 @@
-// browser support: 
-// IE11: classList
-// BUGS: cmd key turns off animation
-
 'use strict';
 
 window.onload = init;
 
-var isReady;       // use loadedSamples: loadedSamples <= 24 ?
+var isReady;       // use another variable?
 var ticks = 16;
 var stepNum = 1;
 var samplesLoaded = 0;
 var countClicks = 0;
 var keysPressed = false;
-
-/**
- * Helper Functions
- */
-// because forEach doesn't work with nodelists in Safari
-function eachNode(nodeList, callback, scope) {
-    for (var i = 0; i < nodeList.length; i++) {
-        callback.call(scope, nodeList[i], i);
-    }
-}
-
-// get elements(s) by CSS selector
-function qs(select) {
-    return document.querySelector(select);
-}
-
-function qsa(select) {
-    return document.querySelectorAll(select);
-}
+var onMobile = false;
 
 /**
  * Handle Sounds
@@ -576,8 +554,17 @@ function initModal() {                                  // change name?
 /**
  * Handle Loader
  */
+
+// detect if on mobile device
+if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
+    onMobile = true;
+}
+
 function init() {
     var lobby = qs('#lobby');
+    var mobile = qs('#on-mobile');
+
+    if (onMobile) mobile.style.display = 'block';
     
     initSounds();
     initTransport();
@@ -587,7 +574,7 @@ function init() {
     loadApp();
 
     function loadApp() {
-        if (samplesLoaded !== 45) {                          // needs to be changed when adding sounds
+        if (samplesLoaded !== 45 || onMobile !== false) {                          // needs to be changed when adding sounds
             setTimeout(loadApp, 2000);
         } else {
             lobby.classList.add('fadeOutLobby');
@@ -609,6 +596,18 @@ function init() {
 
 
 
+
+
+
+
+
+
+
+
+// BUGS: cmd key turns off animation
+
+
+
 // // INIT
 // initSounds();
 // initTransport();
@@ -622,29 +621,3 @@ function init() {
 
 
 // initControls();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
