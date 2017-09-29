@@ -127,6 +127,8 @@ function createBuffers(array, loop) {
 }
 
 function changeDrumSound(array, index) {
+    if (index === 3) return;
+
     if (array === alternateDrums) {
         drumPlayers[index] = alternateDrums[index];
     } else {
@@ -294,7 +296,7 @@ function handleMenuClicks() {
         }
 
         if (drumsUl) {
-            makeSwing(true, index);
+            makeTempoSwing(true, index);
 
             // change to 'alternateDrums' sound
             changeDrumSound(alternateDrums, index)
@@ -315,7 +317,7 @@ function handleMenuClicks() {
         }
 
         if (drumsUl) {
-            makeSwing(false);
+            makeTempoSwing(false, index);
 
             changeDrumSound(defaultDrums, index);
             radios[index].classList.toggle('on');
@@ -330,8 +332,14 @@ function handleMenuClicks() {
     this.classList.toggle('play');
 }
 
-function makeSwing(on, index) {
-    index > 2 && on ? Tone.Transport.swing = 0.6 : Tone.Transport.swing = 0;
+function makeTempoSwing(on, index) {
+    if (index !== 3) return;
+
+    if (index === 3 && on) {
+        Tone.Transport.swing = 0.6;
+    } else {
+        Tone.Transport.swing = 0;
+    }
 }
 
 function keysMenuReset() {
@@ -432,7 +440,10 @@ function createWaves() {                                    // name createWaveAn
         wavesArray[index] = new Vivus(waves[index].id, {
             type: 'sync',
             start: 'manual',
-            animTimingFunction: Vivus.EASE             
+            animTimingFunction: function (t) {
+                // easing script from: https://gist.github.com/gre/1650294
+                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
+            }           
         });
     });
 }
