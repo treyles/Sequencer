@@ -3,11 +3,6 @@
     padding: 0px; 
 }
 
-/*TODO: backup font*/
-body, #container, #grid, #multiplyMask {
-    background-color: #e2e2e0;
-}
-
 @font-face {
     font-family: 'futura-medium';
     src: url('font/futurastd-medium.woff2') format('woff2'),
@@ -16,55 +11,28 @@ body, #container, #grid, #multiplyMask {
     font-style: normal;
 }
 
-@font-face {
+/*@font-face {
     font-family: 'futura-book';
     src: url('font/futurastd-book.woff2') format('woff2'),
          url('font/futurastd-book.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}
-
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-/*#container {
-    width: 825px;
-    margin: auto;
-    padding-top: 120px;
 }*/
 
-#lobby {
-    /*display: none;*/
-    /*z-index: 3;*/
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
+/*TODO: backup font*/
+body,
+#grid,
+#container,
+#multiplyMask {
     background-color: #e2e2e0;
 }
 
-#loader {
-    position: absolute;
-
-    width: 30px;
-    height: 30px;
-    left:0; right:0;
-    top:0; bottom:0;
-    margin:auto;
-}
-
-#spinner {
-    animation: spin .4s linear infinite;
-    /*animation-timing-function: cubic-bezier(.41,.62,.24,.99);*/
-
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-#container, #on-mobile, #splash {    /*add more that use center*/
+/*centering elements*/
+.modal,
+#loader,
+#splash,
+#container,
+#on-mobile {
     position: absolute;
     left:0; right:0;
     top:0; bottom:0;
@@ -72,106 +40,175 @@ body, #container, #grid, #multiplyMask {
 }
 
 #container {
-    /*background-color: blue;*/
-    width: 825px;
+    width: 830px;
     height: 540px;
-    /*padding-top: 30px;*/
+}
+
+
+
+
+
+
+/*LOADER STUFF*/
+#lobby {
+    position: fixed;
+    background-color: #e2e2e0;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#loader {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+}
+
+#spinner {
+    -webkit-animation: spin .4s linear infinite;
+    animation: spin .4s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
 }
 
 #on-mobile {
     display: none;
-
     position: absolute;
     background-color: #e2e2e0;
-    /*background-color: red;*/
     width: 300px;
     height: 200px;
     text-align: center;
 }
 
-#splash-text {
-    font-size: 17px;
-    color: #404040;
-    margin-top: 20px;
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
-}
 
+
+
+
+
+
+
+/*GRID STUFF*/
 #grid {
-    /*background-color: blue;*/
-    /*border-top: 5px solid #eeeeec;*/
-    width: 825px;
+    width: 830px;
     text-align: center;
-    /*padding: 70px 0px 0px 0px;*/
     padding: 0px;
 }
 
-
-
+/*prefixes*/
 .beat {
     display: inline-block;
     background-color: #404040;
-    border-radius: 50%;
     width: 3px;
     height: 3px;
+    border-radius: 50%;
     margin: 20px;
-    cursor: pointer;
     padding: 4px;
+    cursor: pointer;
     background-clip: content-box;
+
+    -webkit-transition: -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
+    transition: -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
     transition: transform .1s cubic-bezier(.8, 0, .2, 1);
-    animation-duration: .1s;
-    animation-direction: normal;
-    animation-iteration-count: 1;
-    animation-timing-function: steps(1.5);
+    transition: transform .1s cubic-bezier(.8, 0, .2, 1), -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
+
+    -webkit-animation: 1s 1 normal;
+    animation: 1s 1 normal;
 }
 
+/*.beat {
+    display: inline-block;
+    background-color: #404040;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    margin: 20px;
+    padding: 4px;
+    cursor: pointer;
+    background-clip: content-box;
+
+    transition: transform .1s ease;
+    
+    animation: 1s 1 normal;
+}*/
+
+.beat:hover {
+    -webkit-transform: scale(5);
+    transform: scale(5);
+}
+
+.beat.on {
+    -webkit-transform: scale(5);
+    transform: scale(5);
+    background-color: #404040;
+    box-shadow: 0px 1px 1px #d9d9d9;
+}
+
+.beat.on.step {
+    -webkit-transform: scale(12);
+    transform: scale(12);
+}
+
+.step {
+    background-color: transparent;
+}
+
+
+
+
+
+
+
+
+
+/*MENU STUFF*/
 #menu {
-    /*background-color: red;*/
     margin-top: 50px;
     padding-right: 25px;
     padding-left: 25px;
-    /*height: 200px;*/
 }
 
 /*TODO: all font-family in one*/
 .loop, .drums, .keyboard, #logo {
-    /*background-color: red;*/
     float: left;
-    padding: 8px 0px 0px 0px;
     width: 24%;
     height: 130px;
+    padding: 8px 0px 0px 0px;
     font-family: 'futura-medium';
-    /*font-size: 17px;*/
     font-size: 17px;
     letter-spacing: .5px;
-    /*color: #404040;*/
     color: #404040;
 }
 
 #logo {
-    padding: 0px;
-    /*font-size: 25px !important;*/
-    font-size: 27px !important;
     width: 28%;
-    /*letter-spacing: 0.04em;*/
+    padding: 0px;
+    font-size: 27px !important;
 }
 
 ul {
-    /*background-color: red;*/
     padding-top: 10px;
     font-family: 'futura-medium', sans-serif;
     font-size: 14px;
-    /*font-weight: normal;*/
     list-style: none;
     line-height: 25px;
     cursor: pointer;
 }
 
 li {
-  -o-transition:.2s;
-  -ms-transition:.2s;
-  -moz-transition:.2s;
-  -webkit-transition:.2s;
-  transition:.2s;
+    -o-transition:.2s;
+    -ms-transition:.2s;
+    -moz-transition:.2s;
+    -webkit-transition:.2s;
+    transition:.2s;
 }
 
 li:hover:not(.play) {
@@ -181,75 +218,39 @@ li:hover:not(.play) {
 u {
     text-decoration: none;
     border-bottom: 2px solid #636363;
-    /*border-bottom: 1px solid #636363;*/
     margin-left: 23px;
-}
-
-.beat:hover {
-    transform: scale(5);
-    background-color: #404040;
-}
-
-.beat.on {
-    transform: scale(5);
-    background-color: #404040;
-    box-shadow: 0px 1px 1px #d9d9d9;
-}
- 
-.beat.on.step {
-    box-shadow: 0px 1px 1px #d9d9d9;
-    transform: scale(12);
-}
-
-.step {
-    background-color: transparent;
 }
 
 .radio {
     position: relative;
     display: inline-block;
-    /*float: left;*/
-    opacity: 0;
-    margin: 0px 17px 3px 0px;
-
     background-color: #404040;
-    border-radius: 50%;
-    /*width: 6px;
-    height: 6px;*/
     width: 5px;
     height: 5px;
+    margin: 0px 17px 3px 0px;
+    border-radius: 50%;
+    opacity: 0;
 }
 
 .radio.on{
     opacity: 1;
 }
 
-/*li:hover > .radio:not(.on) {
-    opacity: .3;
-    animation: hoverFade .3s ease-out;
-}*/
-
-@keyframes hoverFade {
-    0% { 
-        /*left: 10px;*/
-        opacity: 0;
-    }
-    100% {
-        /*left: 0px;*/ 
-        opacity: .3;
-    }
+@-webkit-keyframes hoverFade {
+    0% { opacity: 0; }
+    100% { opacity: .3; }
 }
 
-/*.triangle {
-    opacity: 0;
-    display: inline-block;
-    width: 0px;
-    height: 0px;
-    border-top: 4px solid transparent;
-    border-left: 7px solid #404040;
-    border-bottom: 4px solid transparent;
-    margin: 0px 15px 2px 0px;
-}*/
+@keyframes hoverFade {
+    0% { opacity: 0; }
+    100% { opacity: .3; }
+}
+
+@-webkit-keyframes blink {
+    0% { opacity: 0;}
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
 
 @keyframes blink {
     0% { opacity: 0;}
@@ -257,27 +258,30 @@ u {
     100% { opacity: 0; }
 }
 
-/*li:hover > .triangle, .triangle.on {
-    opacity: 1;
-}*/
 
 
-/*Animation*/
 
+
+
+
+
+
+
+
+
+/*ANIMATION STUFF*/
 #animations {
-    /*background-color: yellow;*/
     visibility: hidden;
     position: absolute;
+    width: 830px;
     top: 0px;
-    width: 825px;
 }
 
 #multiplyMask {
-    /*background-color: green;*/
     position: absolute;
-    top: -150px;
-    width: 825px;
+    width: 830px;
     height: 150px;
+    top: -150px;
 }
 
 #waveA1, #waveA2 {
@@ -301,16 +305,15 @@ u {
 #circleGray {
     z-index: 1;
     position: relative;
-    /*top: 80px;*/
-    top: -40px;
+    background-color: #eee;
     width: 410px;
     height: 410px;
+    top: -40px;
     border-radius: 50%;
-    background-color: #eee;
-    mix-blend-mode: multiply;
     left: 0;
     right: 0;
     margin: 0 auto;
+    mix-blend-mode: multiply;
 }
 
 
@@ -328,12 +331,12 @@ u {
 #circleOrange {
     z-index: 1;
     position: absolute;
-    top: -20px;
-    left: 530px;
+    background-color: #d76e20;
     width: 165px;
     height: 165px;
+    top: -20px;
+    left: 530px;
     border-radius: 50%;
-    background-color: #d76e20;
     mix-blend-mode: multiply;
 }
 
@@ -346,7 +349,18 @@ u {
     margin: 0 auto;
 }
 
-/*FADES*/
+
+
+
+
+
+/*FADE STUFF*/
+.fadeIn {
+    opacity: 1;
+    -webkit-animation: fadeIn .5s forwards linear;
+    animation: fadeIn .5s forwards linear;
+}
+
 @-webkit-keyframes fadeIn {
     0% { opacity:0; }
     100% { opacity:1; }
@@ -356,62 +370,56 @@ u {
     100% { opacity:1; }
 }
 
-.fadeIn {
-  opacity:1;
-  -moz-animation   : fadeIn .5s forwards linear;
-  -webkit-animation: fadeIn .5s forwards linear;
-  animation        : fadeIn .5s forwards linear;
-}
-
-
-@-webkit-keyframes fadeout {
-    0% {opacity:1;}
-    100% {
-        opacity:0;
-        visibility: hidden;
-    }
-}
-@keyframes fadeout {
-    0% {opacity:1;}
-    100% {
-        opacity:0;
-        visibility: hidden;
-    }
-}
 .fadeOut {
-  opacity:0;
-  -moz-animation   : fadeout .5s forwards linear;
+  opacity: 0;
   -webkit-animation: fadeout .5s forwards linear;
-  animation        : fadeout .5s forwards linear;
+  animation: fadeout .5s forwards linear;
 }
 
 .fadeOutLobby {
-  opacity:0;
-  -moz-animation   : fadeout .2s forwards linear;
+  opacity: 0;
   -webkit-animation: fadeout .2s forwards linear;
-  animation        : fadeout .2s forwards linear;
+  animation: fadeout .2s forwards linear;
+}
+
+@-webkit-keyframes fadeout {
+    0% { opacity:1; }
+    100% {
+        opacity:0;
+        visibility: hidden;
+    }
+}
+
+@keyframes fadeout {
+    0% { opacity:1; }
+    100% {
+        opacity:0;
+        visibility: hidden;
+    }
 }
 
 
-/*Modal*/
 
 
+
+
+/*MODAL STUFF*/
 .overlay {
-    display: none;
     z-index: 3;
+    display: none;
     position: fixed;
+    background-color: rgba(0,0,0, .25);
+    width: 100%;
+    height: 100%;
     left: 0;
     top: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0, .25);
 }
 
 .modal {
     position: absolute;
+    background-color: #fff;
     width: 300px;
     height: 135px;
-    background-color: #fff;
     border-radius: 10px;
     padding: 15px;
     font-size: 14px;
@@ -419,34 +427,26 @@ u {
     color: #404040;
     text-align: center;
     line-height: 40px;
-
-    left:0; right:0;
-    top:0; bottom:0;
-    margin:auto;
 }
 
 .got-it {
     position: relative;
+    background-color: #404040;
     width: 70px;
     height: 28px;
     margin-top: 15px;
     margin-left: auto;
     margin-right: auto;
-    background-color: #404040;
     font-size: 12px;
     color: #fff;
     font-family: 'futura-medium';
     cursor: pointer;
     outline: none;
-
     border-radius: 50px; 
-    -moz-border-radius: 50px; 
-    -webkit-border-radius: 50px; 
     border: none;
-
+    -webkit-transition: background-color .1s ease-out;
     transition: background-color .1s ease-out;
 }
-
 
 .got-it:hover {
     background-color: #e6e6e6;

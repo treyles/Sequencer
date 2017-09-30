@@ -8,7 +8,7 @@ var stepNum = 1;
 var samplesLoaded = 0;
 var countClicks = 0;
 var keysPressed = false;
-var onMobile = false;
+var isCompatible = true;
 
 /**
  * Handle Sounds
@@ -405,7 +405,7 @@ function handleTransition() {
 /**
  * Handle Animations
  */
-var wavesArray = new Array();
+var wavesArray = [];
 
 function randomize(arrayLength) {
     return Math.floor (Math.random() * arrayLength);
@@ -414,16 +414,27 @@ function randomize(arrayLength) {
 function createWaves() {                                    // name createWaveAnimations
     var waves = qsa('.waves');
 
-    eachNode(waves, function(el, index) {
-        wavesArray[index] = new Vivus(waves[index].id, {
+    // eachNode(waves, function(el, index) {
+    //     wavesArray[index] = new Vivus(waves[index].id, {
+    //         type: 'sync',
+    //         start: 'manual',
+    //         animTimingFunction: function (t) {
+    //             // easing script from: https://gist.github.com/gre/1650294
+    //             return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
+    //         }           
+    //     });
+    // });
+
+    for (var i = 0; i < waves.length; i++) {
+        wavesArray[i] = new Vivus(waves[i].id, {
             type: 'sync',
             start: 'manual',
             animTimingFunction: function (t) {
                 // easing script from: https://gist.github.com/gre/1650294
                 return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
-            }           
+            }
         });
-    });
+    }
 }
 
 function resetWaves() {
@@ -554,17 +565,10 @@ function initModal() {                                  // change name?
 /**
  * Handle Loader
  */
-
-// detect if on mobile device
-if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
-    onMobile = true;
-}
-
 function init() {
     var lobby = qs('#lobby');
-    var mobile = qs('#on-mobile');
 
-    if (onMobile) mobile.style.display = 'block';
+    checkCompatibility();
     
     initSounds();
     initTransport();
@@ -574,12 +578,29 @@ function init() {
     loadApp();
 
     function loadApp() {
-        if (samplesLoaded !== 45 || onMobile !== false) {                          // needs to be changed when adding sounds
+        if (samplesLoaded !== 45 || isCompatible !== true) {                          // needs to be changed when adding sounds
             setTimeout(loadApp, 2000);
         } else {
             lobby.classList.add('fadeOutLobby');
             isReady = true;
         }
+    }
+}
+
+function checkCompatibility() {
+    var mobile = qs('#on-mobile');
+
+    // check for incompatible browsers
+    if (/Edge/.test(navigator.userAgent) || document.documentMode) {
+        alert('Uh oh, I cannot load this application on Internet Explorer or Microsoft Edge. '
+            + 'Please give it a go with Chrome, Firefox, or Safari');
+        isCompatible = false;
+    }
+    
+    // detect if on mobile device
+    if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
+        mobile.style.display = 'block';
+        isCompatible = false;
     }
 }
 
