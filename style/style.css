@@ -11,20 +11,20 @@
     font-style: normal;
 }
 
-/*@font-face {
-    font-family: 'futura-book';
-    src: url('font/futurastd-book.woff2') format('woff2'),
-         url('font/futurastd-book.woff') format('woff');
+@font-face {
+    font-family: 'sofiapro-book';
+    src: url('font/sofiapro-book.woff2') format('woff2'),
+         url('font/sofiapro-book.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}*/
+}
 
 /*TODO: backup font*/
 body,
 #grid,
 #container,
 #multiplyMask {
-    background-color: #e2e2e0;
+    background-color: #edebed;
 }
 
 /*centering elements*/
@@ -40,7 +40,7 @@ body,
 }
 
 #container {
-    width: 830px;
+    width: 835px;
     height: 540px;
 }
 
@@ -52,7 +52,7 @@ body,
 /*LOADER STUFF*/
 #lobby {
     position: fixed;
-    background-color: #e2e2e0;
+    background-color: #edebed;
     width: 100%;
     height: 100%;
     left: 0;
@@ -83,7 +83,7 @@ body,
 #on-mobile {
     display: none;
     position: absolute;
-    background-color: #e2e2e0;
+    background-color: #edebed;
     width: 300px;
     height: 200px;
     text-align: center;
@@ -98,7 +98,8 @@ body,
 
 /*GRID STUFF*/
 #grid {
-    width: 830px;
+    /*background-color: gray;*/
+    width: 835px;
     text-align: center;
     padding: 0px;
 }
@@ -106,12 +107,14 @@ body,
 /*prefixes*/
 .beat {
     display: inline-block;
-    background-color: #404040;
-    width: 3px;
-    height: 3px;
+    position: relative;
+    /*background-color: #909090;*/
+    background-color: #b1b1b1;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
-    margin: 20px;
-    padding: 4px;
+    margin: 19px;
+    padding: 5px;
     cursor: pointer;
     background-clip: content-box;
 
@@ -142,19 +145,21 @@ body,
 
 .beat:hover {
     -webkit-transform: scale(5);
-    transform: scale(5);
+    transform: scale(4);
+    background-color: #404040;
 }
 
 .beat.on {
-    -webkit-transform: scale(5);
-    transform: scale(5);
+    -webkit-transform: scale(4);
+    transform: scale(4);
     background-color: #404040;
-    box-shadow: 0px 1px 1px #d9d9d9;
+    box-shadow: 0px 1px 1px #e4e1e1 ;
 }
 
 .beat.on.step {
-    -webkit-transform: scale(12);
-    transform: scale(12);
+    -webkit-transform: scale(10);
+    transform: scale(10);
+    background-color: #404040;
 }
 
 .step {
@@ -182,24 +187,25 @@ body,
     width: 24%;
     height: 130px;
     padding: 8px 0px 0px 0px;
-    font-family: 'futura-medium';
-    font-size: 17px;
+    font-family: 'futura-medium', sans-serif ;
+    font-size: 18px;
     letter-spacing: .5px;
-    color: #404040;
+    color: #3c3c3c;
 }
 
 #logo {
+    font-family: 'sofiapro-book', sans-serif;
     width: 28%;
     padding: 0px;
-    font-size: 27px !important;
+    font-size: 30px !important;
 }
 
 ul {
     padding-top: 10px;
     font-family: 'futura-medium', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     list-style: none;
-    line-height: 25px;
+    line-height: 27px;
     cursor: pointer;
 }
 
@@ -273,13 +279,13 @@ u {
 #animations {
     visibility: hidden;
     position: absolute;
-    width: 830px;
+    width: 835px;
     top: 0px;
 }
 
 #multiplyMask {
     position: absolute;
-    width: 830px;
+    width: 835px;
     height: 150px;
     top: -150px;
 }
@@ -354,6 +360,7 @@ u {
 
 
 
+
 /*FADE STUFF*/
 .fadeIn {
     opacity: 1;
@@ -362,12 +369,12 @@ u {
 }
 
 @-webkit-keyframes fadeIn {
-    0% { opacity:0; }
-    100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 @keyframes fadeIn {
-    0% { opacity:0; }
-    100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .fadeOut {

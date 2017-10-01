@@ -588,18 +588,15 @@ function init() {
 }
 
 function checkCompatibility() {
-    var mobile = qs('#on-mobile');
-
-    // check for incompatible browsers
+    // detect Internet Explorer and Edge
     if (/Edge/.test(navigator.userAgent) || document.documentMode) {
-        alert('Uh oh, I cannot load this application on Internet Explorer or Microsoft Edge. '
-            + 'Please give it a go with Chrome, Firefox, or Safari');
+        alert('Uh-oh, this application only works with Chrome, Firefox, or Safari.');
         isCompatible = false;
     }
     
     // detect if on mobile device
     if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
-        mobile.style.display = 'block';
+        qs('#on-mobile').style.display = 'block';
         isCompatible = false;
     }
 }
