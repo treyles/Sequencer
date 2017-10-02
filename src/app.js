@@ -42,7 +42,7 @@ var sounds = {
     ],
 
     loops: [
-        'crackle', 
+        'reverse', 
         'alicepad1', 
         'alicepad2', 
         'bass-line1', 
@@ -180,6 +180,8 @@ function createSequence() {
 
 function sequenceEvent(time) {
     var beat = qsa('.beat');
+
+    animateCounter();
 
     // animate steps
     for (var i = 0; i < beat.length; i++) {
@@ -407,6 +409,37 @@ function handleTransition() {
  */
 var wavesArray = [];
 
+function animateCounter() {
+    var counters = qs('.count-div').children;
+
+    switch (stepNum) {
+        case 1:
+            resetCount();
+            counters[0].classList.add('on');
+            break;
+        case 5:
+            resetCount();
+            counters[1].classList.add('on');
+            break;
+        case 9: 
+            resetCount();
+            counters[2].classList.add('on');
+            break;
+        case 13:
+            resetCount();
+            counters[3].classList.add('on');
+            break;
+        default:
+            return;
+    }
+
+    function resetCount() {
+        eachNode(counters, function(el) {
+            el.classList.remove('on');
+        });    
+    }
+}
+
 function randomize(arrayLength) {
     return Math.floor (Math.random() * arrayLength);
 }
@@ -524,6 +557,14 @@ function initTransition() {
 }
 
 function toggleGrid(visibility) {
+    var counterDiv = qs('.count-div');
+
+    if (visibility === 'hidden') {
+        counterDiv.style.opacity = 0;
+    } else {
+        counterDiv.style.opacity = 1;
+    }
+
     eachNode(qsa('.beat'), function(el) {
         if (!el.classList.contains('on')) {
             el.style.visibility = visibility;

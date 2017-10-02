@@ -4,9 +4,9 @@
 }
 
 @font-face {
-    font-family: 'futura-medium';
-    src: url('font/futurastd-medium.woff2') format('woff2'),
-         url('font/futurastd-medium.woff') format('woff');
+    font-family: 'sofiapro-extralight';
+    src: url('font/sofiapro-extralight.woff2') format('woff2'),
+         url('font/sofiapro-extralight.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -30,8 +30,8 @@ body,
 /*centering elements*/
 .modal,
 #loader,
-#splash,
 #container,
+#splash,
 #on-mobile {
     position: absolute;
     left:0; right:0;
@@ -41,7 +41,7 @@ body,
 
 #container {
     width: 835px;
-    height: 540px;
+    height: 600px;
 }
 
 
@@ -60,9 +60,21 @@ body,
 }
 
 #loader {
+    /*background-color: yellow;*/
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 220px;
+    height: 120px;
+    text-align: center;
+}
+
+p {
+    background-color: white;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-family: 'sofiapro-light', sans-serif;
+    font-size: 13px;
+    color: #8e8e8e;
 }
 
 #spinner {
@@ -93,15 +105,47 @@ body,
 
 
 
+.count-div {
+    /*background-color: gray;*/
+    position: relative;
+    height: 55px;
+    padding: 0px;
+    margin-bottom: 10px;
+    font-family: 'sofiapro-extralight', sans-serif;
+    /*font-size: 36px;*/
+    font-size: 50px;
+    color: #c7c7c7;
+}
+
+.count-div > * {
+    position: relative;
+    display: inline-block;
+
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+
+.count:nth-child(1) {
+    margin-left: 23px;
+    margin-right: 173px;
+}
+
+.count:nth-child(n+2):nth-child(-n+3) {
+    margin-right: 167px;
+}
+
+.count.on {
+    color: #3c3c3c;
+    /*color: #edebed;*/
+}
 
 
 
 /*GRID STUFF*/
 #grid {
-    /*background-color: gray;*/
     width: 835px;
     text-align: center;
-    padding: 0px;
 }
 
 /*prefixes*/
@@ -187,7 +231,7 @@ body,
     width: 24%;
     height: 130px;
     padding: 8px 0px 0px 0px;
-    font-family: 'futura-medium', sans-serif ;
+    font-family: 'sofiapro-book', sans-serif ;
     font-size: 18px;
     letter-spacing: .5px;
     color: #3c3c3c;
@@ -197,13 +241,13 @@ body,
     font-family: 'sofiapro-book', sans-serif;
     width: 28%;
     padding: 0px;
-    font-size: 30px !important;
+    font-size: 29px !important;
 }
 
 ul {
     padding-top: 10px;
-    font-family: 'futura-medium', sans-serif;
-    font-size: 15px;
+    font-family: 'sofiapro-book', sans-serif;
+    font-size: 16px;
     list-style: none;
     line-height: 27px;
     cursor: pointer;
@@ -228,11 +272,11 @@ u {
 }
 
 .radio {
-    position: relative;
     display: inline-block;
+    position: relative;
     background-color: #404040;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     margin: 0px 17px 3px 0px;
     border-radius: 50%;
     opacity: 0;
@@ -263,12 +307,6 @@ u {
     50% { opacity: 1; }
     100% { opacity: 0; }
 }
-
-
-
-
-
-
 
 
 
@@ -354,6 +392,12 @@ u {
     right: 0;
     margin: 0 auto;
 }
+
+
+
+
+
+
 
 
 
