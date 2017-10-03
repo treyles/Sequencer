@@ -67,7 +67,7 @@ body,
     text-align: center;
 }
 
-p {
+.loader-text {
     background-color: white;
     padding: 10px;
     margin-top: 20px;
@@ -75,6 +75,14 @@ p {
     font-family: 'sofiapro-light', sans-serif;
     font-size: 13px;
     color: #8e8e8e;
+}
+
+#splash {
+    text-align: center;
+}
+
+.logo.mobile {
+    font-size: 100%;
 }
 
 #spinner {
@@ -226,7 +234,7 @@ p {
 }
 
 /*TODO: all font-family in one*/
-.loop, .drums, .keyboard, #logo {
+.loop, .drums, .keyboard, .logo {
     float: left;
     width: 24%;
     height: 130px;
@@ -237,7 +245,7 @@ p {
     color: #3c3c3c;
 }
 
-#logo {
+.logo {
     font-family: 'sofiapro-book', sans-serif;
     width: 28%;
     padding: 0px;
@@ -318,7 +326,7 @@ u {
     visibility: hidden;
     position: absolute;
     width: 835px;
-    top: 0px;
+    top: 55px;
 }
 
 #multiplyMask {

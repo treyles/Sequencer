@@ -609,7 +609,7 @@ function initModal() {                                  // change name?
 function init() {
     var lobby = qs('#lobby');
 
-    checkCompatibility();
+    // checkCompatibility();
     
     initSounds();
     initTransport();
@@ -619,7 +619,7 @@ function init() {
     loadApp();
 
     function loadApp() {
-        if (samplesLoaded !== 45 || isCompatible !== true) {                          // needs to be changed when adding sounds
+        if (samplesLoaded !== 45) {                          // needs to be changed when adding sounds
             setTimeout(loadApp, 2000);
         } else {
             lobby.classList.add('fadeOutLobby');
@@ -628,19 +628,21 @@ function init() {
     }
 }
 
-function checkCompatibility() {
-    // detect Internet Explorer and Edge
-    if (/Edge/.test(navigator.userAgent) || document.documentMode) {
-        alert('Uh-oh, this application only works with Chrome, Firefox, or Safari.');
-        isCompatible = false;
-    }
+// || isCompatible !== true
+
+// function checkCompatibility() {
+//     // detect Internet Explorer and Edge
+//     if (/Edge/.test(navigator.userAgent) || document.documentMode) {
+//         alert('Uh-oh, this application only works with Chrome, Firefox, or Safari.');
+//         isCompatible = false;
+//     }
     
-    // detect if on mobile device
-    if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
-        qs('#on-mobile').style.display = 'block';
-        isCompatible = false;
-    }
-}
+//     // detect if on mobile device
+//     if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
+//         qs('#on-mobile').style.display = 'block';
+//         isCompatible = false;
+//     }
+// }
 
 
 
