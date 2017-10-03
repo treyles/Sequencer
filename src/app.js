@@ -642,7 +642,7 @@ function init() {
 //         qs('#on-mobile').style.display = 'block';
 //         isCompatible = false;
 //     }
-// }
+/// }
 
 
 
