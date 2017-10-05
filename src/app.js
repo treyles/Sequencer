@@ -180,12 +180,13 @@ function createSequence() {
 
 function sequenceEvent(time) {
     var beat = qsa('.beat');
+    // var beatOn = qsa('.beat.on');
 
     animateCounter();
 
     // animate steps
     for (var i = 0; i < beat.length; i++) {
-        var currentBeat = beat[i].classList; 
+        var currentBeat = beat[i].classList;
 
         currentBeat.remove('step');
         if (currentBeat.contains(stepNum)) {               // TODO: should be handled with controller
@@ -230,13 +231,13 @@ function initControls() {
     var liElements = document.getElementsByTagName('li');
 
     // sequencer clicks
-    eachNode(qsa('.beat'), function(node) {
-        node.addEventListener('click', handleBeatToggle);
+    eachNode(qsa('.beat'), function(el) {
+        el.addEventListener('click', handleBeatToggle);
     });
 
     // menu clicks
-    eachNode(liElements, function(node) {
-        node.addEventListener('click', handleMenuClicks);
+    eachNode(liElements, function(el) {
+        el.addEventListener('click', handleMenuClicks);
     });
 
     // keyboard presses
@@ -245,6 +246,7 @@ function initControls() {
     // let's have user play around first before triggering animations!
     document.addEventListener('click', handleTransition);
 }
+
 
 function handleBeatToggle() { 
     this.classList.toggle('on');
@@ -608,18 +610,18 @@ function initModal() {                                  // change name?
  */
 function init() {
     var lobby = qs('#lobby');
-
-    // checkCompatibility();
     
     initSounds();
     initTransport();
     initSequencer();
     initControls();
 
+    handleCompatibility();
+
     loadApp();
 
     function loadApp() {
-        if (samplesLoaded !== 45) {                          // needs to be changed when adding sounds
+        if (samplesLoaded !== 45 || isCompatible !== true) {                          // needs to be changed when adding sounds
             setTimeout(loadApp, 2000);
         } else {
             lobby.classList.add('fadeOutLobby');
@@ -628,34 +630,27 @@ function init() {
     }
 }
 
-// || isCompatible !== true
-
-// function checkCompatibility() {
-//     // detect Internet Explorer and Edge
-//     if (/Edge/.test(navigator.userAgent) || document.documentMode) {
-//         alert('Uh-oh, this application only works with Chrome, Firefox, or Safari.');
-//         isCompatible = false;
-//     }
+function handleCompatibility() {
+    // detect Internet Explorer and Edge, then display message
+    if (/Edge/.test(navigator.userAgent) || document.documentMode) {
+        qs('.loader-text').innerHTML = 'Sorry, this application uses features that your browser does not support at the moment...';
+        isCompatible = false;
+    }
     
-//     // detect if on mobile device
-//     if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
-//         qs('#on-mobile').style.display = 'block';
-//         isCompatible = false;
-//     }
-/// }
+    // detect if on mobile device, then display message
+    if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
+        qs('#on-mobile').style.display = 'block';
+        isCompatible = false;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // detect if on Safari, then turn off transition property on beats
+    if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        eachNode(qsa('.beat'), function(el) {
+            el.style.transition = 'none';
+            el.style.webkitTransition = 'none';
+        });
+    }
+}
 
 
 

@@ -77,12 +77,10 @@ body,
     color: #8e8e8e;
 }
 
-#splash {
-    text-align: center;
-}
-
-.logo.mobile {
-    font-size: 100%;
+.loader-text.mobile {
+    margin-top: 50px;
+    font-family: 'sofiapro-light', sans-serif;
+    font-size: 200%;
 }
 
 #spinner {
@@ -104,9 +102,13 @@ body,
     display: none;
     position: absolute;
     background-color: #edebed;
-    width: 300px;
-    height: 200px;
+    width: 80%;
+    height: 20%;
     text-align: center;
+}
+
+#mobile-logo {
+    width: 90%;
 }
 
 
@@ -156,29 +158,6 @@ body,
     text-align: center;
 }
 
-/*prefixes*/
-.beat {
-    display: inline-block;
-    position: relative;
-    /*background-color: #909090;*/
-    background-color: #b1b1b1;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    margin: 19px;
-    padding: 5px;
-    cursor: pointer;
-    background-clip: content-box;
-
-    -webkit-transition: -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
-    transition: -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
-    transition: transform .1s cubic-bezier(.8, 0, .2, 1);
-    transition: transform .1s cubic-bezier(.8, 0, .2, 1), -webkit-transform .1s cubic-bezier(.8, 0, .2, 1);
-
-    -webkit-animation: 1s 1 normal;
-    animation: 1s 1 normal;
-}
-
 /*.beat {
     display: inline-block;
     background-color: #404040;
@@ -195,8 +174,31 @@ body,
     animation: 1s 1 normal;
 }*/
 
+/*prefixes*/
+.beat {
+    display: inline-block;
+    position: relative;
+    /*background-color: #909090;*/
+    background-color: #b1b1b1;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    margin: 19px;
+    padding: 5px;
+    cursor: pointer;
+    background-clip: content-box;
+
+    -webkit-transition: -webkit-transform .1s ease;
+    transition: transform .1s ease;
+
+    /*-webkit-animation: 1s 1 normal;
+    animation: 1s 1 normal;*/
+}
+
+
+
 .beat:hover {
-    -webkit-transform: scale(5);
+    -webkit-transform: scale(4);
     transform: scale(4);
     background-color: #404040;
 }
@@ -205,7 +207,11 @@ body,
     -webkit-transform: scale(4);
     transform: scale(4);
     background-color: #404040;
-    box-shadow: 0px 1px 1px #e4e1e1 ;
+
+    -webkit-box-shadow: 0px 1px 2.5px .5px #e4e1e1; 
+    -moz-box-shadow: 0px 1px 2.5px .5px #e4e1e1;  
+    box-shadow: 0px 1px 2.5px .5px #e4e1e1;   
+    /*blur radius, spread radius*/
 }
 
 .beat.on.step {
@@ -482,7 +488,7 @@ u {
     border-radius: 10px;
     padding: 15px;
     font-size: 14px;
-    font-family: 'futura-medium';
+    font-family: 'sofiapro-book', sans-serif;
     color: #404040;
     text-align: center;
     line-height: 40px;
@@ -498,7 +504,7 @@ u {
     margin-right: auto;
     font-size: 12px;
     color: #fff;
-    font-family: 'futura-medium';
+    font-family: 'sofiapro-book', sans-serif;
     cursor: pointer;
     outline: none;
     border-radius: 50px; 
