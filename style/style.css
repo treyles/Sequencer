@@ -6,7 +6,7 @@
 @font-face {
     font-family: 'sofiapro-extralight';
     src: url('font/sofiapro-extralight.woff2') format('woff2'),
-         url('font/sofiapro-extralight.woff') format('woff');
+    url('font/sofiapro-extralight.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -14,7 +14,7 @@
 @font-face {
     font-family: 'sofiapro-book';
     src: url('font/sofiapro-book.woff2') format('woff2'),
-         url('font/sofiapro-book.woff') format('woff');
+    url('font/sofiapro-book.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -23,7 +23,7 @@
 body,
 #grid,
 #container,
-#multiplyMask {
+#multiply-mask {
     background-color: #edebed;
 }
 
@@ -44,6 +44,12 @@ body,
     height: 600px;
 }
 
+#multiply-mask {
+    position: absolute;
+    width: 835px;
+    height: 100px;
+    top: -100px;
+}
 
 
 
@@ -79,6 +85,7 @@ body,
 
 .loader-text.mobile {
     margin-top: 50px;
+    padding: 30px;
     font-family: 'sofiapro-light', sans-serif;
     font-size: 200%;
 }
@@ -335,33 +342,34 @@ u {
     top: 55px;
 }
 
-#multiplyMask {
-    position: absolute;
-    width: 835px;
-    height: 150px;
-    top: -150px;
-}
 
-#waveA1, #waveA2 {
-    z-index: 2;
+
+#wave-a1, 
+#wave-a2 {
+    /*z-index: 2;*/
+    z-index: 1;
     position: absolute;
     top: 95px;
 }
 
-#waveB1, #waveB2 {
-    z-index: 2;
+#wave-b1, 
+#wave-b2 {
+    /*z-index: 2;*/
+    z-index: 1;
     position: absolute;
     top: 58px;
 }
 
-#waveC1, #waveC2{
-    z-index: 2;
+#wave-c1, 
+#wave-c2{
+    /*z-index: 2;*/
+    z-index: 1;
     position: absolute;
     top: 80px;
 }
 
 #circleGray {
-    z-index: 1;
+    /*z-index: 1;*/
     position: relative;
     background-color: #eee;
     width: 410px;
@@ -387,7 +395,7 @@ u {
 /*10: top: 280px, left: 580px*/
 
 #circleOrange {
-    z-index: 1;
+    /*z-index: 1;*/
     position: absolute;
     background-color: #d76e20;
     width: 165px;
@@ -399,7 +407,7 @@ u {
 }
 
 #baton {
-    z-index: 1;
+    /*z-index: 1;*/
     position: absolute;
     top: -67px;
     left: 0;

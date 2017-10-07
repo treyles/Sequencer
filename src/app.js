@@ -336,11 +336,13 @@ function keysMenuReset() {
 function animateRadioButton(play, index, radios) {
     if (play) {
         // starts queue by blinking
+        radios[index].style.webkitAnimation = 'blink 1s infinite linear';
         radios[index].style.animation = 'blink 1s infinite linear';      // change to class
 
         // run handleQueue() to stop blinking when sound has started
         handleQueue(index);
     } else {
+        radios[index].style.webkitAnimation = '';
         radios[index].style.animation = '';
         radios[index].classList.remove('on');
     }
@@ -351,6 +353,7 @@ function animateRadioButton(play, index, radios) {
         if (loopPlayers[index].state !== 'started') {
             setTimeout(handleQueue.bind(null, index), 100);
         } else {
+            radios[index].style.webkitAnimation = '';
             radios[index].style.animation = '';
             radios[index].classList.add('on')
         }
@@ -411,6 +414,7 @@ function handleTransition() {
  */
 var wavesArray = [];
 
+// use tone loop
 function animateCounter() {
     var counters = qs('.count-div').children;
 
@@ -639,11 +643,12 @@ function handleCompatibility() {
     
     // detect if on mobile device, then display message
     if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
+        qs('#loader').style.display = 'none';
         qs('#on-mobile').style.display = 'block';
         isCompatible = false;
     }
 
-    // detect if on Safari, then turn off transition property on beats
+    // detect Safari, then turn off transition property on beats
     if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
         eachNode(qsa('.beat'), function(el) {
             el.style.transition = 'none';
