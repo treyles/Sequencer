@@ -2,7 +2,7 @@
 
 window.onload = init;
 
-var isReady;       // use another variable?
+var allowKeypress;       // use another variable?
 var ticks = 16;
 var stepNum = 1;
 var samplesLoaded = 0;
@@ -87,7 +87,7 @@ function createPaths(group, keys) {
 }
 
 function createBuffers(array, loop) {
-    var buffers = array.map(function(el) {
+    var buffers = array.map(function(el, i) {
         var currentBuffer = new Tone.Player(el, function() {
             samplesLoaded++;
         });
@@ -180,7 +180,6 @@ function createSequence() {
 
 function sequenceEvent(time) {
     var beat = qsa('.beat');
-    // var beatOn = qsa('.beat.on');
 
     animateCounter();
 
@@ -188,8 +187,9 @@ function sequenceEvent(time) {
     for (var i = 0; i < beat.length; i++) {
         var currentBeat = beat[i].classList;
 
+        // TODO: handled by controller?
         currentBeat.remove('step');
-        if (currentBeat.contains(stepNum)) {               // TODO: should be handled with controller
+        if (currentBeat.contains(stepNum)) {
             currentBeat.add('step');
         }
     }
@@ -215,7 +215,7 @@ function sequenceEvent(time) {
         stepNum = 1;
 
         // animate gray circle every measure
-        circleGray.restart();
+        grayCircle.restart();
     }
 }
 
@@ -333,11 +333,12 @@ function keysMenuReset() {
     });
 }
 
+// TODO: make class to avoid repetitive prefix nonsense
 function animateRadioButton(play, index, radios) {
     if (play) {
         // starts queue by blinking
         radios[index].style.webkitAnimation = 'blink 1s infinite linear';
-        radios[index].style.animation = 'blink 1s infinite linear';      // change to class
+        radios[index].style.animation = 'blink 1s infinite linear';
 
         // run handleQueue() to stop blinking when sound has started
         handleQueue(index);
@@ -361,7 +362,7 @@ function animateRadioButton(play, index, radios) {
 }
 
 function handleKeyPress(e) {
-    if (e.metaKey || e.ctrlKey || isReady !== true) return;
+    if (e.metaKey || e.ctrlKey || allowKeypress !== true) return;
 
     switch (e.which) {
         // A - L notes
@@ -405,7 +406,7 @@ function handleTransition() {
     countClicks++;
     if (countClicks > 5) {
         initTransition();
-        createWaves();           // good place for inits?
+        createWaveAnimations();
     }
 }
 
@@ -414,7 +415,7 @@ function handleTransition() {
  */
 var wavesArray = [];
 
-// use tone loop
+// TODO: use tone.js loop?
 function animateCounter() {
     var counters = qs('.count-div').children;
 
@@ -450,66 +451,59 @@ function randomize(arrayLength) {
     return Math.floor (Math.random() * arrayLength);
 }
 
-function createWaves() {                                    // name createWaveAnimations
-    var waves = qsa('.waves');
-
-    // eachNode(waves, function(el, index) {
-    //     wavesArray[index] = new Vivus(waves[index].id, {
-    //         type: 'sync',
-    //         start: 'manual',
-    //         animTimingFunction: function (t) {
-    //             // easing script from: https://gist.github.com/gre/1650294
-    //             return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
-    //         }           
-    //     });
-    // });
-
-    for (var i = 0; i < waves.length; i++) {
-        wavesArray[i] = new Vivus(waves[i].id, {
-            type: 'sync',
-            start: 'manual',
-            animTimingFunction: function (t) {
-                // easing script from: https://gist.github.com/gre/1650294
-                return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; 
-            }
+function createWaveAnimations() {
+    eachNode(qsa('.waves'), function (el, index) {
+        wavesArray[index] = anime({
+            targets: '#' + el.id + ' path',
+            strokeDashoffset: [anime.setDashoffset, 0],
+            easing: 'easeInOutQuad',
+            duration: 800,
+            direction: 'normal',
+            autoplay: false
         });
-    }
-}
-
-function resetWaves() {
-    wavesArray.forEach(function(el) {
-        el.stop();
-        el.reset();
     });
 }
 
-function animateWave() {
-    var index = randomize(wavesArray.length)
+function resetWaves() {
+    eachNode(qsa('.waves'), function(el) {
+        el.style.opacity = 0;
+    });
+}
+
+function animateWave(intro) {
+    var index;
+
+    if (intro) {
+        index = 0;
+    } else {
+        index = randomize(wavesArray.length)
+    }
 
     resetWaves();
 
     // only play when 'baton' has appeared
     if (qs('#baton').classList.contains('fadeIn')) {
-        wavesArray[index].play(3);
+        qsa('.waves')[index].style.opacity = 1;
+        wavesArray[index].restart();
     }
 }
 
 function setOrangeCircle() {
-    var circleOrange = qs('#circleOrange');
+    var orangeCircle = qs('#orange-circle');
     
     var circleCoords = [[-20, 530], [340, 60], [295, 220], [-85, 15], [280, 515], [375, 630], [-20, 155], [-145, 575], [160, 100], [160, 580]];
     var index = randomize(circleCoords.length)
 
     function setPosition(topPosition, leftPosition) {
-        circleOrange.style.top = topPosition + 'px';
-        circleOrange.style.left = leftPosition + 'px';
+        orangeCircle.style.top = topPosition + 'px';
+        orangeCircle.style.left = leftPosition + 'px';
     }
 
     setPosition.apply(null, circleCoords[index]);
 }
 
-var circleGray = anime({                     
-    targets: '#circleGray',
+var grayCircle = anime({                     
+    targets: '#gray-circle',
     scale: 1.2,
     direction: 'alternate',
     duration: 200,
@@ -534,6 +528,7 @@ function initTransition() {
     var animationDiv = qs('#animations');
 
     document.addEventListener('mousemove', resetTimers);
+    document.addEventListener('click', resetTimers);
 
     function resetTimers() {
         clearTimeout(main);
@@ -586,7 +581,7 @@ function toggleIntroduction(on) {
             el.classList.add('fadeIn');
         });;
 
-        wavesArray[0].play(3);
+        animateWave(true);
     } else {
         eachNode(intro, function(el) {
             el.style.opacity = 0;
@@ -595,17 +590,17 @@ function toggleIntroduction(on) {
     }
 }
 
-function initModal() {                                  // change name?
-    var overlay = qs('.overlay');
-    var gotIt = qs('.got-it');
+// TODO: function name change?
+function initModal() {
+    var overlay = qs('#overlay');
 
     if (!keysPressed) {
         overlay.style.display = 'block';
     }
 
-    gotIt.addEventListener('click', function() {
+    qs('.got-it').addEventListener('click', function() {
         overlay.style.display = 'none';
-        keysPressed = true;                             // change name?
+        keysPressed = true;
     });
 }
 
@@ -613,14 +608,14 @@ function initModal() {                                  // change name?
  * Handle Loader
  */
 function init() {
-    var lobby = qs('#lobby');
-    
+    handleCompatibility();
+
     initSounds();
     initTransport();
     initSequencer();
     initControls();
 
-    handleCompatibility();
+    handleBrowserStyles();
 
     loadApp();
 
@@ -628,57 +623,8 @@ function init() {
         if (samplesLoaded !== 45 || isCompatible !== true) {                          // needs to be changed when adding sounds
             setTimeout(loadApp, 2000);
         } else {
-            lobby.classList.add('fadeOutLobby');
-            isReady = true;
+            qs('#lobby').classList.add('fadeOutLobby');
+            allowKeypress = true;
         }
     }
 }
-
-function handleCompatibility() {
-    // detect Internet Explorer and Edge, then display message
-    if (/Edge/.test(navigator.userAgent) || document.documentMode) {
-        qs('.loader-text').innerHTML = 'Sorry, this application uses features that your browser does not support at the moment...';
-        isCompatible = false;
-    }
-    
-    // detect if on mobile device, then display message
-    if (/Mobi/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) {
-        qs('#loader').style.display = 'none';
-        qs('#on-mobile').style.display = 'block';
-        isCompatible = false;
-    }
-
-    // detect Safari, then turn off transition property on beats
-    if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-        eachNode(qsa('.beat'), function(el) {
-            el.style.transition = 'none';
-            el.style.webkitTransition = 'none';
-        });
-    }
-}
-
-
-
-
-
-
-
-
-
-// BUGS: cmd key turns off animation
-
-
-
-// // INIT
-// initSounds();
-// initTransport();
-
-
-// // initTransport
-// initSequencer();
-
-// // initTimoutTransition (TBD)
-// createWaves(); // initWaves -- initBuffers?
-
-
-// initControls();
