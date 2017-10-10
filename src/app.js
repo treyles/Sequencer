@@ -2,13 +2,13 @@
 
 window.onload = init;
 
-var allowKeypress;       // use another variable?
 var ticks = 16;
 var stepNum = 1;
 var samplesLoaded = 0;
 var countClicks = 0;
 var keysPressed = false;
 var isCompatible = true;
+var allowKeypress;
 
 /**
  * Handle Sounds
