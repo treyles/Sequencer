@@ -1,6 +1,6 @@
 # Polytone
 
-A minimal drum/sound sequencer and animation experiment. My first javascript app.
+A minimal sound sequencer and animation experiment. My first javascript app.
 
 Inspired by:
 * [Patatap](http://www.patatap.com)
