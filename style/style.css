@@ -3,10 +3,12 @@
     padding: 0; 
 }
 
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
 @font-face {
-    font-family: 'sofiapro-extralight';
-    src: url('font/sofiapro-extralight.woff2') format('woff2'),
-         url('font/sofiapro-extralight.woff') format('woff');
+    font-family: 'sofiapro-light';
+    src: url('font/sofiapro-light.woff2') format('woff2'),
+         url('font/sofiapro-light.woff') format('woff');
 }
 
 @font-face {
@@ -36,14 +38,14 @@ body,
 
 #container {
     width: 835px;
-    height: 600px;
+    height: 580px;
 }
 
 #multiply-mask {
     position: absolute;
     width: 835px;
-    height: 100px;
-    top: -100px;
+    height: 120px;
+    top: -120px;
 }
 
 /**
@@ -73,6 +75,8 @@ body,
     font-family: 'sofiapro-light', sans-serif;
     font-size: 13px;
     color: #8e8e8e;
+    -webkit-animation: fadeText 1s ease-in;
+    animation: fadeText 1s ease-in;
 }
 
 .loader-text.mobile {
@@ -80,6 +84,15 @@ body,
     padding: 30px;
     font-family: 'sofiapro-light', sans-serif;
     font-size: 200%;
+}
+
+@-webkit-keyframes fadeText {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes fadeText {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 #on-mobile {
@@ -114,17 +127,16 @@ body,
  * Counter
  */
 .count-div {
-    position: relative;
-    height: 55px;
+    /*position: relative;*/
+    height: 40px;
     padding: 0px;
-    margin-bottom: 10px;
-    font-family: 'sofiapro-extralight', sans-serif;
-    font-size: 50px;
-    color: #c7c7c7;
+    font-family: 'PT Mono', monospace;
+    font-size: 24px;
+    color: #a2a2a2;
 }
 
 .count-div > * {
-    position: relative;
+    /*position: relative;*/
     display: inline-block;
     -moz-transition: .5s;
     -webkit-transition: .5s;
@@ -133,15 +145,20 @@ body,
 
 .count:nth-child(1) {
     margin-left: 23px;
-    margin-right: 173px;
+    margin-right: 178px;
 }
 
-.count:nth-child(n+2):nth-child(-n+3) {
-    margin-right: 167px;
+.count:nth-child(2),
+.count:nth-child(3) {
+    margin-right: 179px;
+}
+
+.count:nth-child(4) {
+    margin: 0;
 }
 
 .count.on {
-    color: #3c3c3c;
+    color: transparent;
 }
 
 /**
@@ -149,7 +166,7 @@ body,
  */
 #grid {
     width: 835px;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .beat {
@@ -188,15 +205,15 @@ body,
     background-color: #404040;
 }
 
-.step {
+/*.step {
     background-color: transparent;
-}
+}*/
 
 /**
  * Menu
  */
 #menu {
-    margin-top: 50px;
+    margin-top: 40px;
     padding-right: 25px;
     padding-left: 25px;
 }
@@ -209,14 +226,15 @@ body,
     padding: 8px 0px 0px 0px;
     font-family: 'sofiapro-book', sans-serif ;
     font-size: 18px;
-    letter-spacing: .5px;
     color: #3c3c3c;
 }
 
 .logo {
+    font-family: 'sofiapro-book', sans-serif;
     width: 28%;
     padding: 0px;
-    font-size: 29px;
+    font-size: 27px;
+    letter-spacing: .4px;
 }
 
 ul {
@@ -297,7 +315,7 @@ u {
 #wave-a2 {
     z-index: 1;
     position: absolute;
-    top: 95px;
+    top: 85px;
     opacity: 0;
 }
 
@@ -305,7 +323,7 @@ u {
 #wave-b2 {
     z-index: 1;
     position: absolute;
-    top: 58px;
+    top: 48px;
     opacity: 0;
 }
 
@@ -313,7 +331,7 @@ u {
 #wave-c2{
     z-index: 1;
     position: absolute;
-    top: 80px;
+    top: 70px;
     opacity: 0;
 }
 
@@ -322,7 +340,7 @@ u {
     background-color: #eee;
     width: 410px;
     height: 410px;
-    top: -40px;
+    top: -60px;
     border-radius: 50%;
     left: 0;
     right: 0;
@@ -348,7 +366,7 @@ u {
     background-color: #d76e20;
     width: 165px;
     height: 165px;
-    top: -20px;
+    top: -30px;
     left: 530px;
     border-radius: 50%;
     mix-blend-mode: multiply;
@@ -356,7 +374,7 @@ u {
 
 #baton {
     position: absolute;
-    top: -67px;
+    top: -77px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -438,6 +456,18 @@ u {
     color: #404040;
     text-align: center;
     line-height: 40px;
+    -webkit-animation: showModal .2s ease-in;
+    animation: showModal .3s ease-in;
+}
+
+@-webkit-keyframes showModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes showModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .got-it {

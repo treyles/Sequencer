@@ -179,38 +179,35 @@ function createSequence() {
 }
 
 function sequenceEvent(time) {
-    var beat = qsa('.beat');
+    var beatOn = qsa('.beat.on');
 
     animateCounter();
 
-    // animate steps
-    for (var i = 0; i < beat.length; i++) {
-        var currentBeat = beat[i].classList;
+    for (var i = 0; i < beatOn.length; i++) {
+        var currentBeat = beatOn[i].classList;
 
-        // TODO: handled by controller?
+        // animate steps
         currentBeat.remove('step');
         if (currentBeat.contains(stepNum)) {
             currentBeat.add('step');
         }
     }
 
-    // play sounds
     for (var i = 0; i < sounds.drums.length; i++) {    
-        for (var j = 0; j < beat.length; j++) {
+        for (var j = 0; j < beatOn.length; j++) {
             
-            var hasSoundName = beat[j].classList.contains(sounds.drums[i]);
-            var hasStep = beat[j].classList.contains(stepNum);
-            var hasOn = beat[j].classList.contains('on');
+            var hasStep = beatOn[j].classList.contains(stepNum);
+            var hasSoundName = beatOn[j].classList.contains(sounds.drums[i]);
 
-            if (hasSoundName && hasStep && hasOn) {
+            // play sounds
+            if (hasSoundName && hasStep) {
                 drumPlayers[i].start(time);
             }
         }
     }
-
+    
     // reset stepNum at end of sequence to repeat
     stepNum++
-
     if (stepNum > ticks) {
         stepNum = 1;
 
@@ -491,7 +488,19 @@ function animateWave(intro) {
 function setOrangeCircle() {
     var orangeCircle = qs('#orange-circle');
     
-    var circleCoords = [[-20, 530], [340, 60], [295, 220], [-85, 15], [280, 515], [375, 630], [-20, 155], [-145, 575], [160, 100], [160, 580]];
+    var circleCoords = [
+        [-20, 530],
+        [340, 60],
+        [295, 220],
+        [-85, 15],
+        [280, 515],
+        [320, 630],
+        [-20, 155],
+        [-145, 575],
+        [160, 100],
+        [160, 580]
+    ];
+
     var index = randomize(circleCoords.length)
 
     function setPosition(topPosition, leftPosition) {
@@ -620,7 +629,7 @@ function init() {
     loadApp();
 
     function loadApp() {
-        if (samplesLoaded !== 45 || isCompatible !== true) {                          // needs to be changed when adding sounds
+        if (samplesLoaded !== 45 || isCompatible !== true) {
             setTimeout(loadApp, 2000);
         } else {
             qs('#lobby').classList.add('fadeOutLobby');
