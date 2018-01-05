@@ -275,7 +275,7 @@ u {
 }
 
 .radio {
-    display: inline-block;
+    display: inline-block;      /*remove? span is default inline apparently*/
     position: relative;
     background-color: #404040;
     width: 6px;

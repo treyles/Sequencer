@@ -20,4 +20,4 @@ Inspired by:
 ## Todo
 
 * Replace placeholder sounds
-* Build mobile friendly version of app
+* Build mobile version of app
