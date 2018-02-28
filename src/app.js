@@ -20,48 +20,28 @@ var keysPlayers;
 
 var defaultDrums;
 var alternateDrums;
-var defaultKeys; 
+var defaultKeys;
 var alternateKeysB;
 var alternateKeysC;
 
 var sounds = {
     // arrays of file names
-    drums: [             
-        'kick', 
-        'clap', 
-        'hat', 
-        'hat-open', 
-        'tom-1', 
-        'tom-2'
-    ],
+    drums: ['kick', 'clap', 'hat', 'hat-open', 'tom-1', 'tom-2'],
 
-    altDrums: [
-        'lofikick',
-        'lofisnare',
-        'lofihat'
-    ],
+    altDrums: ['lofikick', 'lofisnare', 'lofihat'],
 
     loops: [
-        'reverse', 
-        'alicepad1', 
-        'alicepad2', 
-        'bass-line1', 
+        'reverse',
+        'alicepad1',
+        'alicepad2',
+        'bass-line1',
         'bass-line2'
     ],
 
-    dialogues: [
-        'dream',
-        'high',
-        'horizon',
-        'lights'
-    ],
+    dialogues: ['dream', 'high', 'horizon', 'lights'],
 
     // array of directories
-    keys: [             
-        'keysA',
-        'keysB',
-        'keysC'
-    ]
+    keys: ['keysA', 'keysB', 'keysC']
 };
 
 function createPaths(group, keys) {
@@ -74,7 +54,7 @@ function createPaths(group, keys) {
 
         for (var i = 1; i < 10; i++) {
             // create file names
-            keysGroup.push(group + i ) 
+            keysGroup.push(group + i);
         }
 
         currentGroup = keysGroup;
@@ -97,11 +77,11 @@ function createBuffers(array, loop) {
         }
 
         currentBuffer.toMaster();
-        return currentBuffer;  
+        return currentBuffer;
     });
 
     // returns array of buffers
-    return buffers;   
+    return buffers;
 }
 
 function changeDrumSound(array, index) {
@@ -130,7 +110,7 @@ function initTransport() {
 function initSounds() {
     /**
      * copy 'drumsPlayers' and 'keysPlayers' arrays
-     * with slice to restore defaults instantly without 
+     * with slice to restore defaults instantly without
      * having to re-load buffers
      */
     drumPlayers = createBuffers(createPaths('drums'));
@@ -139,7 +119,7 @@ function initSounds() {
     defaultKeys = keysPlayers.slice(0);
     loopPlayers = createBuffers(createPaths('loops'), true);
     dialoguePlayers = createBuffers(createPaths('dialogues'));
-    
+
     // store alternate sound buffers
     alternateDrums = createBuffers(createPaths('altDrums'));
     alternateKeysB = createBuffers(createPaths('keysB', true));
@@ -193,11 +173,12 @@ function sequenceEvent(time) {
         }
     }
 
-    for (var i = 0; i < sounds.drums.length; i++) {    
+    for (var i = 0; i < sounds.drums.length; i++) {
         for (var j = 0; j < beatOn.length; j++) {
-            
             var hasStep = beatOn[j].classList.contains(stepNum);
-            var hasSoundName = beatOn[j].classList.contains(sounds.drums[i]);
+            var hasSoundName = beatOn[j].classList.contains(
+                sounds.drums[i]
+            );
 
             // play sounds
             if (hasSoundName && hasStep) {
@@ -205,9 +186,9 @@ function sequenceEvent(time) {
             }
         }
     }
-    
+
     // reset stepNum at end of sequence to repeat
-    stepNum++
+    stepNum++;
     if (stepNum > ticks) {
         stepNum = 1;
 
@@ -218,7 +199,7 @@ function sequenceEvent(time) {
 
 function initSequencer() {
     createGrid();
-    createSequence(); 
+    createSequence();
 }
 
 /**
@@ -226,6 +207,9 @@ function initSequencer() {
  */
 function initControls() {
     var liElements = document.getElementsByTagName('li');
+
+    // clear
+    qs('.clear').addEventListener('click', handleClear);
 
     // sequencer clicks
     eachNode(qsa('.beat'), function(el) {
@@ -244,8 +228,13 @@ function initControls() {
     document.addEventListener('click', handleTransition);
 }
 
+function handleClear() {
+    eachNode(qsa('.beat'), function(el) {
+        el.classList.remove('on');
+    });
+}
 
-function handleBeatToggle() { 
+function handleBeatToggle() {
     this.classList.toggle('on');
 }
 
@@ -267,7 +256,7 @@ function handleMenuClicks() {
     var drumsUl = this.parentNode.id === 'drums-ul';
     var keysUl = this.parentNode.id === 'keys-ul';
 
-    if (!this.classList.contains('play')) {     
+    if (!this.classList.contains('play')) {
         if (loopUl) {
             // play loop to start at second measure
             loopPlayers[index].start('@2m');
@@ -278,7 +267,7 @@ function handleMenuClicks() {
             makeTempoSwing(true, index);
 
             // change to 'alternateDrums' sound
-            changeDrumSound(alternateDrums, index)
+            changeDrumSound(alternateDrums, index);
             radios[index].classList.toggle('on');
         }
 
@@ -353,7 +342,7 @@ function animateRadioButton(play, index, radios) {
         } else {
             radios[index].style.webkitAnimation = '';
             radios[index].style.animation = '';
-            radios[index].classList.add('on')
+            radios[index].classList.add('on');
         }
     }
 }
@@ -363,21 +352,47 @@ function handleKeyPress(e) {
 
     switch (e.which) {
         // A - L notes
-        case 65: triggerKey(keysPlayers, 0, 'waves'); break;
-        case 83: triggerKey(keysPlayers, 1, 'waves'); break;
-        case 68: triggerKey(keysPlayers, 2, 'waves'); break;
-        case 70: triggerKey(keysPlayers, 3, 'waves'); break;
-        case 71: triggerKey(keysPlayers, 4, 'waves'); break;
-        case 72: triggerKey(keysPlayers, 5, 'waves'); break;
-        case 74: triggerKey(keysPlayers, 6, 'waves'); break;
-        case 75: triggerKey(keysPlayers, 7, 'waves'); break;
-        case 76: triggerKey(keysPlayers, 8, 'waves'); break;
+        case 65:
+            triggerKey(keysPlayers, 0, 'waves');
+            break;
+        case 83:
+            triggerKey(keysPlayers, 1, 'waves');
+            break;
+        case 68:
+            triggerKey(keysPlayers, 2, 'waves');
+            break;
+        case 70:
+            triggerKey(keysPlayers, 3, 'waves');
+            break;
+        case 71:
+            triggerKey(keysPlayers, 4, 'waves');
+            break;
+        case 72:
+            triggerKey(keysPlayers, 5, 'waves');
+            break;
+        case 74:
+            triggerKey(keysPlayers, 6, 'waves');
+            break;
+        case 75:
+            triggerKey(keysPlayers, 7, 'waves');
+            break;
+        case 76:
+            triggerKey(keysPlayers, 8, 'waves');
+            break;
 
         // R - U samples
-        case 82: triggerKey(dialoguePlayers, 0, 'baton'); break;
-        case 84: triggerKey(dialoguePlayers, 1, 'baton'); break;
-        case 89: triggerKey(dialoguePlayers, 2, 'baton'); break;
-        case 85: triggerKey(dialoguePlayers, 3, 'baton'); break;
+        case 82:
+            triggerKey(dialoguePlayers, 0, 'baton');
+            break;
+        case 84:
+            triggerKey(dialoguePlayers, 1, 'baton');
+            break;
+        case 89:
+            triggerKey(dialoguePlayers, 2, 'baton');
+            break;
+        case 85:
+            triggerKey(dialoguePlayers, 3, 'baton');
+            break;
         default:
             return;
     }
@@ -386,7 +401,7 @@ function handleKeyPress(e) {
 // triggers sound and corresponding animation
 function triggerKey(array, index, animation) {
     array[index].start();
-    
+
     if (animation === 'waves') {
         animateWave();
     }
@@ -425,7 +440,7 @@ function animateCounter() {
             resetCount();
             counters[1].classList.add('on');
             break;
-        case 9: 
+        case 9:
             resetCount();
             counters[2].classList.add('on');
             break;
@@ -440,16 +455,16 @@ function animateCounter() {
     function resetCount() {
         eachNode(counters, function(el) {
             el.classList.remove('on');
-        });    
+        });
     }
 }
 
 function randomize(arrayLength) {
-    return Math.floor (Math.random() * arrayLength);
+    return Math.floor(Math.random() * arrayLength);
 }
 
 function createWaveAnimations() {
-    eachNode(qsa('.waves'), function (el, index) {
+    eachNode(qsa('.waves'), function(el, index) {
         wavesArray[index] = anime({
             targets: '#' + el.id + ' path',
             strokeDashoffset: [anime.setDashoffset, 0],
@@ -473,7 +488,7 @@ function animateWave(intro) {
     if (intro) {
         index = 0;
     } else {
-        index = randomize(wavesArray.length)
+        index = randomize(wavesArray.length);
     }
 
     resetWaves();
@@ -487,7 +502,7 @@ function animateWave(intro) {
 
 function setOrangeCircle() {
     var orangeCircle = qs('#orange-circle');
-    
+
     var circleCoords = [
         [-20, 530],
         [340, 60],
@@ -501,7 +516,7 @@ function setOrangeCircle() {
         [160, 580]
     ];
 
-    var index = randomize(circleCoords.length)
+    var index = randomize(circleCoords.length);
 
     function setPosition(topPosition, leftPosition) {
         orangeCircle.style.top = topPosition + 'px';
@@ -511,13 +526,13 @@ function setOrangeCircle() {
     setPosition.apply(null, circleCoords[index]);
 }
 
-var grayCircle = anime({                     
+var grayCircle = anime({
     targets: '#gray-circle',
     scale: 1.2,
     direction: 'alternate',
     duration: 200,
     easing: 'easeInOutCirc',
-    autoplay: false,
+    autoplay: false
 });
 
 var animBaton = anime({
@@ -588,7 +603,7 @@ function toggleIntroduction(on) {
     if (on) {
         eachNode(intro, function(el) {
             el.classList.add('fadeIn');
-        });;
+        });
 
         animateWave(true);
     } else {

@@ -3,6 +3,7 @@
 A minimal sound sequencer and animation experiment. My first javascript project.
 
 Inspired by:
+
 * [László Moholy-Nagy](https://www.google.com/search?q=Laszlo+Moholy-nagy&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjpiOu78OXWAhVr4oMKHZuPAqgQ_AUICigB&biw=1434&bih=877#imgrc=PgdaK6oM3CkTCM:)
 * [Patatap](http://www.patatap.com)
 * [Shiny Drum Machine](http://webaudiodemos.appspot.com/MIDIDrums/index.html)
@@ -15,7 +16,6 @@ Inspired by:
 ## Known Issues and Limitations
 
 * IE and Edge not supported
-* Bug that keeps app from loading in earlier versions of Firefox
 
 ## Todo
 

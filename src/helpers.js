@@ -19,9 +19,8 @@ function handleCompatibility() {
     // ie/edge
     if (/Edge/.test(navigator.userAgent) || document.documentMode) {
         qs('#spinner').style.display = 'none';
-        qs(
-            '.loader-text'
-        ).innerHTML = 'Sorry, this application uses features that your browser does not support at the moment';
+        qs('.loader-text').innerHTML =
+            'Sorry, this application uses features that your browser does not support at the moment';
         isCompatible = false;
     }
 
