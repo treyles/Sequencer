@@ -297,7 +297,7 @@ body,
     border-bottom: 4px solid #bebdbd;
 }
 
-.control > * {
+.control > a {
     margin-bottom: 15px;
     color: inherit;
     text-decoration: none;

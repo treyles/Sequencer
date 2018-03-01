@@ -13,23 +13,11 @@ var allowKeypress;
 /**
  * Handle Sounds
  */
-var drumPlayers;
-var loopPlayers;
-var dialoguePlayers;
-var keysPlayers;
+var sounds;
+var soundSwitch;
 
-var defaultDrums;
-var alternateDrums;
-var defaultKeys;
-var alternateKeysB;
-var alternateKeysC;
-
-var sounds = {
+var soundName = {
     // arrays of file names
-    drums: ['kick', 'clap', 'hat', 'hat-open', 'tom-1', 'tom-2'],
-
-    altDrums: ['lofikick', 'lofisnare', 'lofihat'],
-
     loops: [
         'reverse',
         'alicepad1',
@@ -38,6 +26,10 @@ var sounds = {
         'bass-line2'
     ],
 
+    drums: ['kick', 'clap', 'hat', 'hat-open', 'tom-1', 'tom-2'],
+
+    altDrums: ['lofikick', 'lofisnare', 'lofihat'],
+
     dialogues: ['dream', 'high', 'horizon', 'lights'],
 
     // array of directories
@@ -45,7 +37,7 @@ var sounds = {
 };
 
 function createPaths(group, keys) {
-    var currentGroup = sounds[group];
+    var currentGroup = soundName[group];
     var path = 'sounds/' + group + '/';
 
     // if directory from 'keys'
@@ -84,22 +76,22 @@ function createBuffers(array, loop) {
     return buffers;
 }
 
-function changeDrumSound(array, index) {
+function changeDrumSound(sound, index) {
     if (index === 3) return;
 
-    if (array === alternateDrums) {
-        drumPlayers[index] = alternateDrums[index];
+    if (sound === 'altDrums') {
+        soundSwitch.drums[index] = sounds.altDrums[index];
     } else {
-        drumPlayers[index] = defaultDrums[index];
+        soundSwitch.drums[index] = sounds.drums[index];
     }
 }
 
 function changeKeysSound(change, index) {
-    if (change && index === 0) keysPlayers = alternateKeysB;
-    if (change && index === 1) keysPlayers = alternateKeysC;
-    if (change && index === 2) keysPlayers = defaultKeys;
-    if (change && index === 3) keysPlayers = defaultKeys;
-    if (!change) keysPlayers = defaultKeys;
+    if (change && index === 0) soundSwitch.keys = sounds.altKeysB;
+    if (change && index === 1) soundSwitch.keys = sounds.altKeysC;
+    if (change && index === 2) soundSwitch.keys = sounds.keys;
+    if (change && index === 3) soundSwitch.keys = sounds.keys;
+    if (!change) soundSwitch.keys = sounds.keys;
 }
 
 function initTransport() {
@@ -108,22 +100,21 @@ function initTransport() {
 }
 
 function initSounds() {
-    /**
-     * copy 'drumsPlayers' and 'keysPlayers' arrays
-     * with slice to restore defaults instantly without
-     * having to re-load buffers
-     */
-    drumPlayers = createBuffers(createPaths('drums'));
-    defaultDrums = drumPlayers.slice(0);
-    keysPlayers = createBuffers(createPaths('keysA', true));
-    defaultKeys = keysPlayers.slice(0);
-    loopPlayers = createBuffers(createPaths('loops'), true);
-    dialoguePlayers = createBuffers(createPaths('dialogues'));
+    sounds = {
+        drums: createBuffers(createPaths('drums')),
+        keys: createBuffers(createPaths('keysA', true)),
+        loops: createBuffers(createPaths('loops'), true),
+        dialogues: createBuffers(createPaths('dialogues')),
+        altDrums: createBuffers(createPaths('altDrums')),
+        altKeysB: createBuffers(createPaths('keysB', true)),
+        altKeysC: createBuffers(createPaths('keysC', true))
+    };
 
-    // store alternate sound buffers
-    alternateDrums = createBuffers(createPaths('altDrums'));
-    alternateKeysB = createBuffers(createPaths('keysB', true));
-    alternateKeysC = createBuffers(createPaths('keysC', true));
+    soundSwitch = {
+        // copy arrays from 'sounds' object
+        drums: Object.assign([], sounds.drums),
+        keys: Object.assign([], sounds.keys)
+    };
 
     initTransport();
 }
@@ -135,10 +126,10 @@ function createGrid() {
     var grid = qs('#grid');
 
     // make div for each sound
-    for (var i = 0; i < sounds.drums.length; i++) {
+    for (var i = 0; i < soundName.drums.length; i++) {
         var soundDiv = document.createElement('div');
 
-        soundDiv.setAttribute('id', sounds.drums[i]);
+        soundDiv.setAttribute('id', soundName.drums[i]);
         grid.appendChild(soundDiv);
     }
 
@@ -147,14 +138,14 @@ function createGrid() {
         for (var j = 1; j < ticks + 1; j++) {
             var btn = document.createElement('div');
 
-            btn.classList.add('beat', sounds.drums[i], j);
+            btn.classList.add('beat', soundName.drums[i], j);
             grid.children[i].appendChild(btn);
         }
     }
 }
 
 function createSequence() {
-    var sequence = new Tone.Sequence(sequenceEvent, sounds.drums, '8n');
+    var sequence = new Tone.Sequence(sequenceEvent, soundName.drums, '8n');
     sequence.start();
 }
 
@@ -173,16 +164,16 @@ function sequenceEvent(time) {
         }
     }
 
-    for (var i = 0; i < sounds.drums.length; i++) {
+    for (var i = 0; i < soundName.drums.length; i++) {
         for (var j = 0; j < beatOn.length; j++) {
             var hasStep = beatOn[j].classList.contains(stepNum);
             var hasSoundName = beatOn[j].classList.contains(
-                sounds.drums[i]
+                soundName.drums[i]
             );
 
             // play sounds
             if (hasSoundName && hasStep) {
-                drumPlayers[i].start(time);
+                soundSwitch.drums[i].start(time);
             }
         }
     }
@@ -259,35 +250,33 @@ function handleMenuClicks() {
     if (!this.classList.contains('play')) {
         if (loopUl) {
             // play loop to start at second measure
-            loopPlayers[index].start('@2m');
+            sounds.loops[index].start('@2m');
             animateRadioButton(true, index, radios);
         }
 
         if (drumsUl) {
             makeTempoSwing(true, index);
 
-            // change to 'alternateDrums' sound
-            changeDrumSound(alternateDrums, index);
+            changeDrumSound('altDrums', index);
             radios[index].classList.toggle('on');
         }
 
         if (keysUl) {
             keysMenuReset();
 
-            // keysPlayers = alternateKeysB;
             changeKeysSound(true, index);
             radios[index].classList.toggle('on');
         }
     } else {
         if (loopUl) {
-            loopPlayers[index].stop();
+            sounds.loops[index].stop();
             animateRadioButton(false, index, radios);
         }
 
         if (drumsUl) {
             makeTempoSwing(false, index);
 
-            changeDrumSound(defaultDrums, index);
+            changeDrumSound('drums', index);
             radios[index].classList.toggle('on');
         }
 
@@ -337,7 +326,7 @@ function animateRadioButton(play, index, radios) {
     // recursively call every 100ms until play state returns 'started'
     // then disable blinking and set
     function handleQueue(index) {
-        if (loopPlayers[index].state !== 'started') {
+        if (sounds.loops[index].state !== 'started') {
             setTimeout(handleQueue.bind(null, index), 100);
         } else {
             radios[index].style.webkitAnimation = '';
@@ -353,45 +342,45 @@ function handleKeyPress(e) {
     switch (e.which) {
         // A - L notes
         case 65:
-            triggerKey(keysPlayers, 0, 'waves');
+            triggerKey(soundSwitch.keys, 0, 'waves');
             break;
         case 83:
-            triggerKey(keysPlayers, 1, 'waves');
+            triggerKey(soundSwitch.keys, 1, 'waves');
             break;
         case 68:
-            triggerKey(keysPlayers, 2, 'waves');
+            triggerKey(soundSwitch.keys, 2, 'waves');
             break;
         case 70:
-            triggerKey(keysPlayers, 3, 'waves');
+            triggerKey(soundSwitch.keys, 3, 'waves');
             break;
         case 71:
-            triggerKey(keysPlayers, 4, 'waves');
+            triggerKey(soundSwitch.keys, 4, 'waves');
             break;
         case 72:
-            triggerKey(keysPlayers, 5, 'waves');
+            triggerKey(soundSwitch.keys, 5, 'waves');
             break;
         case 74:
-            triggerKey(keysPlayers, 6, 'waves');
+            triggerKey(soundSwitch.keys, 6, 'waves');
             break;
         case 75:
-            triggerKey(keysPlayers, 7, 'waves');
+            triggerKey(soundSwitch.keys, 7, 'waves');
             break;
         case 76:
-            triggerKey(keysPlayers, 8, 'waves');
+            triggerKey(soundSwitch.keys, 8, 'waves');
             break;
 
         // R - U samples
         case 82:
-            triggerKey(dialoguePlayers, 0, 'baton');
+            triggerKey(sounds.dialogues, 0, 'baton');
             break;
         case 84:
-            triggerKey(dialoguePlayers, 1, 'baton');
+            triggerKey(sounds.dialogues, 1, 'baton');
             break;
         case 89:
-            triggerKey(dialoguePlayers, 2, 'baton');
+            triggerKey(sounds.dialogues, 2, 'baton');
             break;
         case 85:
-            triggerKey(dialoguePlayers, 3, 'baton');
+            triggerKey(sounds.dialogues, 3, 'baton');
             break;
         default:
             return;
@@ -645,6 +634,7 @@ function init() {
 
     function loadApp() {
         if (samplesLoaded !== 45 || isCompatible !== true) {
+            // if (!samplesLoaded > 45 || isCompatible !== true) {
             setTimeout(loadApp, 2000);
         } else {
             qs('#lobby').classList.add('fadeOutLobby');
