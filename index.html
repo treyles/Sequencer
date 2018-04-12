@@ -2,91 +2,177 @@
 <html>
 
 <head>
-	<title>Polytone</title>
-	<link rel="stylesheet" href="style/style.css">
-	<script src="third-party/Tone.min.js"></script>
-	<script src="third-party/anime.min.js"></script>
+  <title>Polytone</title>
+  <link rel="stylesheet" href="style/style.css">
+  <script src="third-party/Tone.min.js"></script>
+  <script src="third-party/anime.min.js"></script>
 </head>
 
 <body>
-	<div id="container">
-	 	<div id="multiply-mask"></div>
-		<div class="count-div">
-			<div class="count">01</div>
-			<div class="count">02</div>
-			<div class="count">03</div>
-			<div class="count">04</div>
-		</div>
-		<div id="grid"></div>
-		<div id="menu">
-			<div class="logo">
-				<p>Polytone</p>
-				<div class="control">
-					<a class="clear">Clear</a>
-					<a href="https://github.com/treyles/polytone" target="blank">About</a>
-				</div>
-			</div>
-			<div class="loop">
-				<ul id="loop-ul">
-					<li class="vinyl"><span class="radio"></span>Vinyl Crackle</li>
-					<li class="melody"><span class="radio"></span>Harp Melody</li>
-					<li class="bass-line"><span class="radio"></span>Bass Line</li>
-					<li class="something"><span class="radio"></span>Forest</li>
-				</ul>
-			</div>
-			<div class="drums">
-				<ul id="drums-ul">
-					<li class="kick-alt"><span class="radio"></span>Kick Bass</li>
-					<li class="snare-alt"><span class="radio"></span>Snare Reverb</li>
-					<li class="hat-alt"><span class="radio"></span>Hi-hat Delay</li>
-					<li class="swing"><span class="radio"></span>Swing Tempo</li>
-				</ul>
-			</div>
-			<div class="keyboard">
-				<ul id="keys-ul">
-					<li class ="keyA"><span class="radio"></span>Roland</li>
-					<li class ="keyB"><span class="radio"></span>Odyssey</li>
-					<li class ="keyC"><span class="radio"></span>Polysix</li>
-					<li class ="keyD"><span class="radio"></span>MicroKorg</li>
-				</ul>
-			</div>
-		</div>
-		<div id="animations">
-	        <svg id="wave-a1" class="waves" viewBox="0 0 877 162" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M20.38,39.9c30.61,0,30.61,130,61.21,130s30.6-130,61.21-130,30.6,130,61.21,130,30.61-130,61.21-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.21-130,30.61,130,61.22,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.22-130" transform="translate(-4.88 -12.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g> <path d="M9.38,16.9c30.61,0,30.61,130,61.21,130s30.6-130,61.21-130,30.6,130,61.21,130,30.61-130,61.21-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.21-130,30.61,130,61.22,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.22-130" transform="translate(-4.88 -12.4)" fill="none" stroke="#194ca0" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="wave-a2" class="waves" viewBox="0 0 877 162" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M882.89,40.91c-30.61,0-30.61,130-61.21,130s-30.6-130-61.21-130-30.6,130-61.21,130-30.61-130-61.21-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.21-130-30.61,130-61.22,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.22-130" transform="translate(-10.39 -13.41)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/></g> <path d="M871.89,17.91c-30.61,0-30.61,130-61.21,130s-30.6-130-61.21-130-30.6,130-61.21,130-30.61-130-61.21-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.21-130-30.61,130-61.22,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.22-130" transform="translate(-10.39 -13.41)" fill="none" stroke="#194ca0" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="wave-b1" class="waves" viewBox="0 0 858 239" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M29.5,31.5c34.79,0,34.79,214,69.58,214s34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214S412.2,31.5,447,31.5s34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.59-214,34.79,214,69.59,214,34.79-214,69.59-214" transform="translate(-11 -11)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g> <path d="M15.5,15.5c34.79,0,34.79,214,69.58,214s34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214S398.2,15.5,433,15.5s34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.59-214,34.79,214,69.59,214,34.79-214,69.59-214" transform="translate(-11 -11)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="wave-b2" class="waves" viewBox="0 0 855 244" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M863.5,43.5c-34.79,0-34.79,214-69.58,214s-34.79-214-69.58-214-34.79,214-69.58,214S620,43.5,585.18,43.5s-34.79,214-69.58,214S480.8,43.5,446,43.5s-34.79,214-69.58,214-34.79-214-69.58-214-34.79,214-69.58,214-34.79-214-69.59-214-34.79,214-69.59,214S63.29,43.5,28.5,43.5" transform="translate(-13 -18)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g> <path d="M852.5,22.5c-34.79,0-34.79,214-69.58,214s-34.79-214-69.58-214-34.79,214-69.58,214S609,22.5,574.18,22.5s-34.79,214-69.58,214S469.8,22.5,435,22.5s-34.79,214-69.58,214-34.79-214-69.58-214-34.79,214-69.58,214-34.79-214-69.59-214-34.79,214-69.59,214S52.29,22.5,17.5,22.5" transform="translate(-13 -18)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="wave-c1" class="waves" viewBox="0 0 825 192" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M24.5,37.5c20.12,0,20.12,160,40.24,160S84.87,37.5,105,37.5s20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.26,160,20.13-160,40.26-160" transform="translate(-9 -10)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g> <path d="M13.5,14.5c20.12,0,20.12,160,40.24,160S73.87,14.5,94,14.5s20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.26,160,20.13-160,40.26-160" transform="translate(-9 -10)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="wave-c2" class="waves" viewBox="0 0 825 192" xmlns="http://www.w3.org/2000/svg"> <g style="isolation: isolate"> <g opacity="0.08" style="mix-blend-mode: multiply"> <path d="M829.5,37.5c-20.13,0-20.13,160-40.26,160S769.11,37.5,749,37.5s-20.13,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S608.1,37.5,588,37.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S447.1,37.5,427,37.5s-20.12,160-40.25,160-20.12-160-40.25-160-20.12,160-40.25,160S286.1,37.5,266,37.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.12,160-40.25,160S125.11,37.5,105,37.5s-20.12,160-40.24,160S44.62,37.5,24.5,37.5" transform="translate(-9 -10)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g> <path d="M818.5,14.5c-20.13,0-20.13,160-40.26,160S758.11,14.5,738,14.5s-20.13,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S597.1,14.5,577,14.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S436.1,14.5,416,14.5s-20.12,160-40.25,160-20.12-160-40.25-160-20.12,160-40.25,160S275.1,14.5,255,14.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.12,160-40.25,160S114.11,14.5,94,14.5s-20.12,160-40.24,160S33.62,14.5,13.5,14.5" transform="translate(-9 -10)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"/> </g></svg>
-	        <svg id="baton" class="intro" viewBox="0 0 465.34 465.34" xmlns="http://www.w3.org/2000/svg" width="465.34" height="465.34"> <rect x="-75.52" y="239.33" width="637.66" height="1" transform="translate(-108.76 234.92) rotate(-45)" fill="#808080"/> <circle cx="4.92" cy="460.42" r="4.92" fill="#454545"/> <circle cx="460.42" cy="4.92" r="4.92" fill="#454545"/></svg>
-	        <div id="gray-circle" class="intro"></div> 
-	        <div id="orange-circle" class="intro"></div>
-	    </div>
-	</div>
+  <div id="container">
+    <div id="multiply-mask"></div>
+    <div class="count-div">
+      <div class="count">01</div>
+      <div class="count">02</div>
+      <div class="count">03</div>
+      <div class="count">04</div>
+    </div>
+    <div id="grid"></div>
+    <div id="menu">
+      <div class="logo">
+        <p>Polytone</p>
+        <div class="control">
+          <a class="clear">Clear</a>
+          <a href="https://github.com/treyles/polytone" target="blank">About</a>
+        </div>
+      </div>
+      <div class="loop">
+        <ul id="loop-ul">
+          <li class="vinyl">
+            <span class="radio"></span>Vinyl Crackle</li>
+          <li class="melody">
+            <span class="radio"></span>Harp Melody</li>
+          <li class="bass-line">
+            <span class="radio"></span>Bass Line</li>
+          <li class="something">
+            <span class="radio"></span>Forest</li>
+        </ul>
+      </div>
+      <div class="drums">
+        <ul id="drums-ul">
+          <li class="kick-alt">
+            <span class="radio"></span>Kick Bass</li>
+          <li class="snare-alt">
+            <span class="radio"></span>Snare Reverb</li>
+          <li class="hat-alt">
+            <span class="radio"></span>Hi-hat Delay</li>
+          <li class="swing">
+            <span class="radio"></span>Swing Tempo</li>
+        </ul>
+      </div>
+      <div class="keyboard">
+        <ul id="keys-ul">
+          <li class="keyA">
+            <span class="radio"></span>Roland</li>
+          <li class="keyB">
+            <span class="radio"></span>Odyssey</li>
+          <li class="keyC">
+            <span class="radio"></span>Polysix</li>
+          <li class="keyD">
+            <span class="radio"></span>MicroKorg</li>
+        </ul>
+      </div>
+    </div>
+    <div id="animations">
+      <svg id="wave-a1" class="waves" viewBox="0 0 877 162" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M20.38,39.9c30.61,0,30.61,130,61.21,130s30.6-130,61.21-130,30.6,130,61.21,130,30.61-130,61.21-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.21-130,30.61,130,61.22,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.22-130"
+              transform="translate(-4.88 -12.4)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+            /> </g>
+          <path d="M9.38,16.9c30.61,0,30.61,130,61.21,130s30.6-130,61.21-130,30.6,130,61.21,130,30.61-130,61.21-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.21,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.21-130,30.61,130,61.22,130,30.61-130,61.22-130,30.61,130,61.22,130,30.61-130,61.22-130"
+            transform="translate(-4.88 -12.4)" fill="none" stroke="#194ca0" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+          /> </g>
+      </svg>
+      <svg id="wave-a2" class="waves" viewBox="0 0 877 162" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M882.89,40.91c-30.61,0-30.61,130-61.21,130s-30.6-130-61.21-130-30.6,130-61.21,130-30.61-130-61.21-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.21-130-30.61,130-61.22,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.22-130"
+              transform="translate(-10.39 -13.41)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10"
+              stroke-width="9" />
+          </g>
+          <path d="M871.89,17.91c-30.61,0-30.61,130-61.21,130s-30.6-130-61.21-130-30.6,130-61.21,130-30.61-130-61.21-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.21,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.21-130-30.61,130-61.22,130-30.61-130-61.22-130-30.61,130-61.22,130-30.61-130-61.22-130"
+            transform="translate(-10.39 -13.41)" fill="none" stroke="#194ca0" stroke-linecap="round" stroke-miterlimit="10"
+            stroke-width="9" /> </g>
+      </svg>
+      <svg id="wave-b1" class="waves" viewBox="0 0 858 239" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M29.5,31.5c34.79,0,34.79,214,69.58,214s34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214S412.2,31.5,447,31.5s34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.59-214,34.79,214,69.59,214,34.79-214,69.59-214"
+              transform="translate(-11 -11)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+            /> </g>
+          <path d="M15.5,15.5c34.79,0,34.79,214,69.58,214s34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214S398.2,15.5,433,15.5s34.79,214,69.58,214,34.79-214,69.58-214,34.79,214,69.58,214,34.79-214,69.59-214,34.79,214,69.59,214,34.79-214,69.59-214"
+            transform="translate(-11 -11)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+          /> </g>
+      </svg>
+      <svg id="wave-b2" class="waves" viewBox="0 0 855 244" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M863.5,43.5c-34.79,0-34.79,214-69.58,214s-34.79-214-69.58-214-34.79,214-69.58,214S620,43.5,585.18,43.5s-34.79,214-69.58,214S480.8,43.5,446,43.5s-34.79,214-69.58,214-34.79-214-69.58-214-34.79,214-69.58,214-34.79-214-69.59-214-34.79,214-69.59,214S63.29,43.5,28.5,43.5"
+              transform="translate(-13 -18)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+            /> </g>
+          <path d="M852.5,22.5c-34.79,0-34.79,214-69.58,214s-34.79-214-69.58-214-34.79,214-69.58,214S609,22.5,574.18,22.5s-34.79,214-69.58,214S469.8,22.5,435,22.5s-34.79,214-69.58,214-34.79-214-69.58-214-34.79,214-69.58,214-34.79-214-69.59-214-34.79,214-69.59,214S52.29,22.5,17.5,22.5"
+            transform="translate(-13 -18)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+          /> </g>
+      </svg>
+      <svg id="wave-c1" class="waves" viewBox="0 0 825 192" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M24.5,37.5c20.12,0,20.12,160,40.24,160S84.87,37.5,105,37.5s20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.26,160,20.13-160,40.26-160"
+              transform="translate(-9 -10)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+            /> </g>
+          <path d="M13.5,14.5c20.12,0,20.12,160,40.24,160S73.87,14.5,94,14.5s20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.12,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.12-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.25,160,20.13-160,40.25-160,20.13,160,40.26,160,20.13-160,40.26-160"
+            transform="translate(-9 -10)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+          /> </g>
+      </svg>
+      <svg id="wave-c2" class="waves" viewBox="0 0 825 192" xmlns="http://www.w3.org/2000/svg">
+        <g style="isolation: isolate">
+          <g opacity="0.08" style="mix-blend-mode: multiply">
+            <path d="M829.5,37.5c-20.13,0-20.13,160-40.26,160S769.11,37.5,749,37.5s-20.13,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S608.1,37.5,588,37.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S447.1,37.5,427,37.5s-20.12,160-40.25,160-20.12-160-40.25-160-20.12,160-40.25,160S286.1,37.5,266,37.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.12,160-40.25,160S125.11,37.5,105,37.5s-20.12,160-40.24,160S44.62,37.5,24.5,37.5"
+              transform="translate(-9 -10)" fill="none" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+            /> </g>
+          <path d="M818.5,14.5c-20.13,0-20.13,160-40.26,160S758.11,14.5,738,14.5s-20.13,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S597.1,14.5,577,14.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.13,160-40.25,160S436.1,14.5,416,14.5s-20.12,160-40.25,160-20.12-160-40.25-160-20.12,160-40.25,160S275.1,14.5,255,14.5s-20.12,160-40.25,160-20.13-160-40.25-160-20.12,160-40.25,160S114.11,14.5,94,14.5s-20.12,160-40.24,160S33.62,14.5,13.5,14.5"
+            transform="translate(-9 -10)" fill="none" stroke="#1a4f9e" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9"
+          /> </g>
+      </svg>
+      <svg id="baton" class="intro" viewBox="0 0 465.34 465.34" xmlns="http://www.w3.org/2000/svg" width="465.34" height="465.34">
+        <rect x="-75.52" y="239.33" width="637.66" height="1" transform="translate(-108.76 234.92) rotate(-45)" fill="#808080" />
+        <circle cx="4.92" cy="460.42" r="4.92" fill="#454545" />
+        <circle cx="460.42" cy="4.92" r="4.92" fill="#454545" />
+      </svg>
+      <div id="gray-circle" class="intro"></div>
+      <div id="orange-circle" class="intro"></div>
+    </div>
+  </div>
 
-	<div id="overlay">
-		<div class="modal">
-			<h1>Hint</h1>
-			<h2>Use your keyboard to play more sounds</h2>
-			<button class="got-it">okay</button>
-		</div>
-	</div>
+  <div id="overlay">
+    <div class="modal">
+      <h1>Hint</h1>
+      <h2>Use your keyboard to play more sounds</h2>
+      <button class="got-it">okay</button>
+    </div>
+  </div>
 
-	<div id="lobby">
-		<div id="loader">
-			<img id="spinner" src="images/spinner.png" width="30px" height="30px"></img>
-			<p class="loader-text">Best on Chrome and Firefox</p>
-		</div>
-		<div id="on-mobile">
-			<div id="mobile-text">
-				<svg id="mobile-logo" viewBox="0 0 185.52 45.56" xmlns="http://www.w3.org/2000/svg"> <path d="M4.47,37.75V4.68h13.3c3.31,0,5.86,1,7.54,3.07a11.37,11.37,0,0,1,2.54,7.44,11.15,11.15,0,0,1-2.54,7.39c-1.68,2-4.18,3-7.54,3H9.61V37.75H4.47ZM9.61,9.38V21h7.87c7.06,0.34,6.91-11.86.19-11.57H9.61Z" transform="translate(-4.47 -3.14)"/> <path d="M50.45,18.07a11.1,11.1,0,0,1,3.41,8.4A11.25,11.25,0,0,1,50.41,35a11.6,11.6,0,0,1-8.3,3.26A11.6,11.6,0,0,1,33.8,35a11.35,11.35,0,0,1-3.36-8.5,11.07,11.07,0,0,1,3.36-8.4,11.56,11.56,0,0,1,8.3-3.22A11.59,11.59,0,0,1,50.45,18.07ZM47,31.51a6.84,6.84,0,0,0,2-5A6.57,6.57,0,0,0,42.1,19.7a6.71,6.71,0,0,0-4.8,1.87,6.51,6.51,0,0,0-2,4.9,6.83,6.83,0,0,0,2,5A7,7,0,0,0,47,31.51Z" transform="translate(-4.47 -3.14)"/> <path d="M59.33,37.75V3.14h4.94V37.75H59.33Z" transform="translate(-4.47 -3.14)"/> <path d="M92.41,15.33L78.53,48.7H73.35l4.85-12L69.32,15.33H74.6L80.84,30.7l6.29-15.36h5.28Z" transform="translate(-4.47 -3.14)"/> <path d="M105.12,6.84v8.5h4.75v4.08h-4.75V37.75h-4.94V19.42h-4V15.33h4V6.84h4.94Z" transform="translate(-4.47 -3.14)"/> <path d="M133.73,18.07a11.1,11.1,0,0,1,3.41,8.4,11.25,11.25,0,0,1-3.46,8.5,12.2,12.2,0,0,1-16.61,0,11.35,11.35,0,0,1-3.36-8.5,11.07,11.07,0,0,1,3.36-8.4A12.39,12.39,0,0,1,133.73,18.07Zm-3.5,13.44a6.84,6.84,0,0,0,2-5,6.57,6.57,0,0,0-6.82-6.77,6.71,6.71,0,0,0-4.8,1.87,6.51,6.51,0,0,0-2,4.9,6.83,6.83,0,0,0,2,5A7,7,0,0,0,130.23,31.51Z" transform="translate(-4.47 -3.14)"/> <path d="M146.6,37.75h-4.94V15.33h4.94v3.36c1.2-2.45,4.18-3.84,6.86-3.84,5.42,0,8.54,3.5,8.54,9.84V37.75h-4.94V25.27c0-3.5-1.82-5.57-4.7-5.57-3.26,0-5.76,1.92-5.76,6v12Z" transform="translate(-4.47 -3.14)"/> <path d="M189.94,28.3H172.13c0.43,3.46,3.22,5.62,6.86,5.62a6.86,6.86,0,0,0,6.1-3.22l4,1.78c-1.92,3.79-5.9,5.76-10.37,5.76a11.25,11.25,0,0,1-11.52-11.76,11.06,11.06,0,0,1,3.31-8.4,11.26,11.26,0,0,1,8.21-3.22,10.78,10.78,0,0,1,8.06,3.22,11.33,11.33,0,0,1,3.17,8.4A16.33,16.33,0,0,1,189.94,28.3Zm-4.8-3.6a6.06,6.06,0,0,0-6.38-5.52c-3.5,0-6.19,2.11-6.62,5.52h13Z" transform="translate(-4.47 -3.14)"/></svg>
-				<p class="loader-text mobile">A mobile version of this app is under construction</p>
-			</div>
-		</div>
-	</div>
+  <div id="lobby">
+    <div id="loader">
+      <img id="spinner" src="images/spinner.png" width="30px" height="30px"></img>
+      <p class="loader-text">Best on Chrome and Firefox</p>
+    </div>
+    <div id="on-mobile">
+      <div id="mobile-text">
+        <svg id="mobile-logo" viewBox="0 0 185.52 45.56" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.47,37.75V4.68h13.3c3.31,0,5.86,1,7.54,3.07a11.37,11.37,0,0,1,2.54,7.44,11.15,11.15,0,0,1-2.54,7.39c-1.68,2-4.18,3-7.54,3H9.61V37.75H4.47ZM9.61,9.38V21h7.87c7.06,0.34,6.91-11.86.19-11.57H9.61Z"
+            transform="translate(-4.47 -3.14)" />
+          <path d="M50.45,18.07a11.1,11.1,0,0,1,3.41,8.4A11.25,11.25,0,0,1,50.41,35a11.6,11.6,0,0,1-8.3,3.26A11.6,11.6,0,0,1,33.8,35a11.35,11.35,0,0,1-3.36-8.5,11.07,11.07,0,0,1,3.36-8.4,11.56,11.56,0,0,1,8.3-3.22A11.59,11.59,0,0,1,50.45,18.07ZM47,31.51a6.84,6.84,0,0,0,2-5A6.57,6.57,0,0,0,42.1,19.7a6.71,6.71,0,0,0-4.8,1.87,6.51,6.51,0,0,0-2,4.9,6.83,6.83,0,0,0,2,5A7,7,0,0,0,47,31.51Z"
+            transform="translate(-4.47 -3.14)" />
+          <path d="M59.33,37.75V3.14h4.94V37.75H59.33Z" transform="translate(-4.47 -3.14)" />
+          <path d="M92.41,15.33L78.53,48.7H73.35l4.85-12L69.32,15.33H74.6L80.84,30.7l6.29-15.36h5.28Z" transform="translate(-4.47 -3.14)"
+          />
+          <path d="M105.12,6.84v8.5h4.75v4.08h-4.75V37.75h-4.94V19.42h-4V15.33h4V6.84h4.94Z" transform="translate(-4.47 -3.14)" />
+          <path d="M133.73,18.07a11.1,11.1,0,0,1,3.41,8.4,11.25,11.25,0,0,1-3.46,8.5,12.2,12.2,0,0,1-16.61,0,11.35,11.35,0,0,1-3.36-8.5,11.07,11.07,0,0,1,3.36-8.4A12.39,12.39,0,0,1,133.73,18.07Zm-3.5,13.44a6.84,6.84,0,0,0,2-5,6.57,6.57,0,0,0-6.82-6.77,6.71,6.71,0,0,0-4.8,1.87,6.51,6.51,0,0,0-2,4.9,6.83,6.83,0,0,0,2,5A7,7,0,0,0,130.23,31.51Z"
+            transform="translate(-4.47 -3.14)" />
+          <path d="M146.6,37.75h-4.94V15.33h4.94v3.36c1.2-2.45,4.18-3.84,6.86-3.84,5.42,0,8.54,3.5,8.54,9.84V37.75h-4.94V25.27c0-3.5-1.82-5.57-4.7-5.57-3.26,0-5.76,1.92-5.76,6v12Z"
+            transform="translate(-4.47 -3.14)" />
+          <path d="M189.94,28.3H172.13c0.43,3.46,3.22,5.62,6.86,5.62a6.86,6.86,0,0,0,6.1-3.22l4,1.78c-1.92,3.79-5.9,5.76-10.37,5.76a11.25,11.25,0,0,1-11.52-11.76,11.06,11.06,0,0,1,3.31-8.4,11.26,11.26,0,0,1,8.21-3.22,10.78,10.78,0,0,1,8.06,3.22,11.33,11.33,0,0,1,3.17,8.4A16.33,16.33,0,0,1,189.94,28.3Zm-4.8-3.6a6.06,6.06,0,0,0-6.38-5.52c-3.5,0-6.19,2.11-6.62,5.52h13Z"
+            transform="translate(-4.47 -3.14)" />
+        </svg>
+        <p class="loader-text mobile">A mobile version of this app is under construction</p>
+      </div>
+    </div>
+  </div>
 
-	<script type="text/javascript" src="src/helpers.js"></script>
-	<script type="text/javascript" src="src/app.js"></script>
+  <script type="text/javascript" src="src/helpers.js"></script>
+  <script type="text/javascript" src="src/app.js"></script>
 </body>
 
 </html>
