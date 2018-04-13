@@ -16,8 +16,3 @@ Inspired by:
 ## Known Issues and Limitations
 
 * IE and Edge not supported
-
-## Todo
-
-* Replace placeholder sounds
-* Build mobile version of app
