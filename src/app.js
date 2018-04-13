@@ -307,10 +307,10 @@ function makeTempoSwing(on, index) {
 
 function keysMenuReset() {
   var keysChildren = document.querySelector('#keys-ul').children;
-
+  
   eachNode(keysChildren, function(el) {
     el.classList.remove('play');
-    el.firstChild.classList.remove('on');
+    el.firstElementChild.classList.remove('on');
   });
 }
 
