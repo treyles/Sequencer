@@ -1,6 +1,6 @@
 # Polytone
 
-A minimal sound sequencer and animation experiment. My first javascript project.
+A music sequencer and animation experiment. My first javascript project.
 
 Inspired by:
 
