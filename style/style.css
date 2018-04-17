@@ -116,9 +116,9 @@ body,
   text-align: center;
 }
 
-#mobile-logo {
+/* #mobile-logo {
   width: 90%;
-}
+} */
 
 #spinner {
   -webkit-animation: spin 0.4s linear infinite;
