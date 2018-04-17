@@ -18,18 +18,18 @@ var soundSwitch; // rename to soundHub?
 
 var soundName = {
   // arrays of file names
-  loops: ['reverse', 'alicepad1', 'alicepad2', 'bass-line1', 'bass-line2'],
+  loops: ['arpeggio', 'chords', 'percussion', 'bass-line'],
 
-  drums: ['kick', 'clap', 'hat', 'hat-open', 'tom-1', 'tom-2'],
+  drums: ['kick', 'snap', 'hat', 'hat-open', 'percussion-delay', 'shaker'],
 
-  altDrums: ['lofikick', 'lofisnare', 'lofihat'],
+  altDrums: ['kick-reverb', 'snare', 'hat-filter'],
 
   drumRack: [
     'car-keys',
     'door',
     'tongue',
     'drop',
-    'percussion',
+    'percussion-hit',
     'reverb-hit',
     'dream',
     'high',
@@ -573,6 +573,7 @@ function initTransition() {
     clearTimeout(modal);
 
     toggleAnimationElements(false);
+
     main = setTimeout(toggleAnimationElements, 2500, true);
   }
 
@@ -657,7 +658,7 @@ function init() {
   loadApp();
 
   function loadApp() {
-    if (samplesLoaded !== 69 || isCompatible !== true) {
+    if (samplesLoaded !== 68 || isCompatible !== true) {
       // if (!samplesLoaded > 45 || isCompatible !== true) {
       setTimeout(loadApp, 2000);
     } else {
