@@ -123,8 +123,6 @@ function initSounds() {
     drums: Object.assign([], sounds.drums),
     keys: Object.assign([], sounds.keys)
   };
-
-  initTransport();
 }
 
 /**
@@ -222,7 +220,20 @@ function initControls() {
   document.addEventListener('keydown', handleKeyPress);
 
   // let's have user play around first before triggering animations!
-  document.addEventListener('click', handleTransition);
+  document.addEventListener('click', initInteraction);
+}
+
+function initInteraction() {
+  if (countClicks === 0) {
+    Tone.context.resume();
+    initTransport();
+  }
+
+  countClicks++
+  if (countClicks === 5) {
+    initTransition();
+    createWaveAnimations();
+  }
 }
 
 function handleClear() {
@@ -425,14 +436,6 @@ function triggerKey(array, index, animation) {
 
   // modal gets canceled when keys are pressed
   keysPressed = true;
-}
-
-function handleTransition() {
-  countClicks++;
-  if (countClicks > 5) {
-    initTransition();
-    createWaveAnimations();
-  }
 }
 
 /**
@@ -649,7 +652,6 @@ function init() {
   handleCompatibility();
 
   initSounds();
-  initTransport();
   initSequencer();
   initControls();
 
