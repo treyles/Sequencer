@@ -23,8 +23,7 @@ body,
 #container,
 #on-mobile,
 #multiply-mask {
-  background-color: #e3e3e3;
-  /*background-color: #e2e2e0;*/
+  background-color: #ececec;
 }
 
 /* center elements */
@@ -78,10 +77,9 @@ body,
   border-radius: 5px;
   font-family: 'sofiapro-light', sans-serif;
   font-size: 13px;
-  color: #909090;
+  color: #7f7f7f;
   -webkit-animation: fadeText 1s ease-in;
   animation: fadeText 1s ease-in;
-  /* line-height: 20px; */
 }
 
 .loader-text.mobile {
@@ -116,10 +114,6 @@ body,
   text-align: center;
 }
 
-/* #mobile-logo {
-  width: 90%;
-} */
-
 #spinner {
   -webkit-animation: spin 0.4s linear infinite;
   animation: spin 0.4s linear infinite;
@@ -151,16 +145,14 @@ body,
  * Counter
  */
 .count-div {
-  /*position: relative;*/
   height: 40px;
   padding: 0px;
   font-family: 'PT Mono', monospace;
   font-size: 16px;
-  color: #909090;
+  color: #989898;
 }
 
 .count-div > * {
-  /*position: relative;*/
   display: inline-block;
   -moz-transition: 0.5s;
   -webkit-transition: 0.5s;
@@ -190,13 +182,11 @@ body,
  */
 #grid {
   width: 835px;
-  /*text-align: center;*/
 }
 
 .beat {
   display: inline-block;
   position: relative;
-  /*background-color: #b1b1b1;*/
   background-color: #989898;
   width: 4px;
   height: 4px;
@@ -212,13 +202,13 @@ body,
 .beat:hover {
   -webkit-transform: scale(4);
   transform: scale(4);
-  background-color: #404040;
+  background-color: #000;
 }
 
 .beat.on {
   -webkit-transform: scale(4);
   transform: scale(4);
-  background-color: #404040;
+  background-color: #000;
   -webkit-box-shadow: 0px 1px 2.5px 0.5px rgba(0, 0, 0, 0.04);
   -moz-box-shadow: 0px 1px 2.5px 0.5px rgba(0, 0, 0, 0.04);
   box-shadow: 0px 1px 2.5px 0.5px rgba(0, 0, 0, 0.04);
@@ -227,12 +217,9 @@ body,
 .beat.on.step {
   -webkit-transform: scale(10);
   transform: scale(10);
-  background-color: #404040;
+  background-color: #000;
 }
 
-/*.step {
-    background-color: transparent;
-}*/
 
 /**
  * Menu
@@ -242,7 +229,6 @@ body,
   padding-right: 25px;
   padding-left: 22px;
   height: 150px;
-  /*background-color: peru;*/
 }
 
 /*TODO: all font-family in one*/
@@ -254,16 +240,8 @@ body,
   float: left;
   width: 22.6%;
   height: 100%;
-  /*height: 130px;*/
-  /*padding: 8px 0px 0px 0px;*/
   font-family: 'sofiapro-book', sans-serif;
-  /*font-size: 18px;*/
-  /*font-size: 20px;*/
-  /*font-size: 16px;*/
-  /*color: #3c3c3c;*/
-  /*color: #333333;*/
-  color: #4c4c4c;
-  /*background-color: peru;*/
+  color: #000;
 }
 
 .logo {
@@ -272,14 +250,10 @@ body,
   font-family: 'sofiapro-book', sans-serif;
   width: 32%;
   padding: 0px;
-  /*font-size: 27px;*/
   font-size: 24px;
-  /*letter-spacing: .4px;*/
   letter-spacing: 0.5px;
-  /*color: #3c3c3c;*/
-  color: #333333;
+  color: #000;
   height: 100%;
-  /*background-color: red;*/
 }
 
 .control {
@@ -290,12 +264,10 @@ body,
   bottom: 0;
   left: 0;
   font-family: 'sofiapro-book', sans-serif;
-  font-size: 14px;
-  color: #727272;
+  font-size: 16px;
+  color: #676767;
   width: 120px;
-  /*height: 70px;*/
-  /*background-color: #fff;*/
-  border-bottom: 4px solid #bebdbd;
+  border-bottom: 4px solid #aeaeae;
 }
 
 .control > a {
@@ -311,13 +283,8 @@ a:hover {
 }
 
 ul {
-  /*padding-top: 10px;*/
-  /*font-family: 'sofiapro-book', sans-serif;*/
-  /*font-size: 16px;*/
-  /*font-size: 17px;*/
-  font-size: 15px;
+  font-size: 16px;
   list-style: none;
-  /*line-height: 27px;*/
   line-height: 30px;
   cursor: pointer;
 }
@@ -343,7 +310,7 @@ u {
 .radio {
   display: inline-block; /*remove? span is default inline apparently*/
   /*position: relative;*/
-  background-color: #404040;
+  background-color: #000;
   width: 6px;
   height: 6px;
   margin: 0 17px 3px 0;
@@ -460,7 +427,7 @@ u {
  */
 #orange-circle {
   position: absolute;
-  background-color: #d76e20;
+  background-color: #e36c14;
   width: 165px;
   height: 165px;
   top: -30px;
@@ -558,11 +525,17 @@ u {
   padding: 15px;
   font-size: 14px;
   font-family: 'sofiapro-book', sans-serif;
-  color: #404040;
+  color: #000;
   text-align: center;
   line-height: 40px;
   -webkit-animation: showModal 0.2s ease-in;
   animation: showModal 0.3s ease-in;
+}
+
+.modal > h2 {
+  font-family: 'sofiapro-light', sans-serif;
+  color: #7f7f7f;
+  font-size: 13px;
 }
 
 @-webkit-keyframes showModal {
@@ -585,7 +558,7 @@ u {
 
 .got-it {
   position: relative;
-  background-color: #404040;
+  background-color: #000;
   width: 70px;
   height: 28px;
   margin-top: 15px;
