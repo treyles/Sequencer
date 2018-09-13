@@ -229,7 +229,7 @@ function initInteraction() {
     initTransport();
   }
 
-  countClicks++
+  countClicks++;
   if (countClicks === 5) {
     initTransition();
     createWaveAnimations();
@@ -318,7 +318,7 @@ function makeTempoSwing(on, index) {
 
 function keysMenuReset() {
   var keysChildren = document.querySelector('#keys-ul').children;
-  
+
   eachNode(keysChildren, function(el) {
     el.classList.remove('play');
     el.firstElementChild.classList.remove('on');
