@@ -14,7 +14,7 @@ var allowKeypress;
  * Sounds
  */
 var sounds;
-var soundSwitch; // rename to soundHub?
+var soundSwitch;
 
 var soundName = {
   // arrays of file names

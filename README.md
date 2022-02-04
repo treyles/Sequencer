@@ -1,8 +1,8 @@
 # Polytone
 
-[polyt.one](http://polyt.one)
+[https://polytone-app.firebaseapp.com/](https://polytone-app.firebaseapp.com/)
 
-A music sequencer and animation experiment. My first javascript project.
+First javascript project.
 
 ![screenshot](https://i.imgur.com/DCpHtfl.jpg)
 
